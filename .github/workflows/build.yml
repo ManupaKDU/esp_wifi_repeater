@@ -14,8 +14,9 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build firmware using Docker
       run: |
+        chmod -R 777 ${{ github.workspace }}
         docker run --rm -v ${{ github.workspace }}:/home/esp/esp_wifi_repeater martinfger/iot_devel:1.0 /bin/bash -c "cd /home/esp/esp_wifi_repeater && make"
