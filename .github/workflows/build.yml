@@ -1,0 +1,21 @@
+name: Build Firmware
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build firmware using Docker
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/home/esp/esp_wifi_repeater martinfger/iot_devel:1.0 /bin/bash -c "cd /home/esp/esp_wifi_repeater && make"
