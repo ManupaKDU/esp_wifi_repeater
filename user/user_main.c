@@ -3746,19 +3746,26 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                            config.automesh_mode == AUTOMESH_OPERATIONAL ? config.AP_MAC_address[2] : 0,
                            wifi_softap_get_station_num());
 
+                // Bolt: Optimize string building. Instead of recalculating the string length
+                // on each iteration (O(N^2) "Schlemiel the Painter's algorithm"), we maintain
+                // a 'len' variable to incrementally track the end of the buffer (O(N)).
+                int len = os_strlen(buffer);
                 struct station_info *station = wifi_softap_get_station_info();
                 bool do_colon = false;
                 while (station)
                 {
-                    if (do_colon)
-                        os_sprintf(&buffer[os_strlen(buffer)], ",");
+                    if (do_colon) {
+                        os_sprintf(&buffer[len], ",");
+                        len += 1;
+                    }
                     do_colon = true;
                     mac_2_buff(sta_mac, station->bssid);
-                    os_sprintf(&buffer[os_strlen(buffer)], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
+                    os_sprintf(&buffer[len], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
+                    len += os_strlen(&buffer[len]);
                     station = STAILQ_NEXT(station, next);
                 }
                 wifi_softap_free_station_info();
-                os_sprintf(&buffer[os_strlen(buffer)], "]}");
+                os_sprintf(&buffer[len], "]}");
 
                 mqtt_publish_str(MQTT_TOPIC_TOPOLOGY, "Topology", buffer);
                 os_free(buffer);

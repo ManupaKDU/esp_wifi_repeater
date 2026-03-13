@@ -212,6 +212,9 @@ int i;
 acl_entry *my_entry;
 uint8_t line[80], addr1[21], addr2[21], port1[6], port2[6];
 
+    // Bolt: Optimize string building by keeping track of the buffer's
+    // length (O(N) operation instead of O(N^2)).
+    int len = 0;
     buf[0] = 0;
 
     if (acl_no >= MAX_NO_ACLS)
@@ -236,6 +239,8 @@ uint8_t line[80], addr1[21], addr2[21], port1[6], port2[6];
 		(my_entry->allow & ACL_ALLOW)?"allow":"deny",
 		(my_entry->allow & ACL_MONITOR)?"_monitor":"",
 		my_entry->hit_count);
-        os_memcpy(&buf[os_strlen(buf)], line, os_strlen(line)+1);
+        int line_len = os_strlen(line);
+        os_memcpy(&buf[len], line, line_len + 1);
+        len += line_len;
     }
 }
