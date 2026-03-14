@@ -1,7 +1,9 @@
 #define CONFIG_PAGE "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n\
 <html>\
-<head></head>\
+<head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
+<title>ESP WiFi NAT Router Config</title>\
+</head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
 <div id='config'>\
@@ -17,15 +19,16 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table>\
 <tr>\
-<td>SSID:</td>\
-<td><input type='text' name='ssid' value='%s'/></td>\
+<td><label for='sta_ssid'>SSID:</label></td>\
+<td><input id='sta_ssid' type='text' name='ssid' value='%s'/></td>\
 </tr>\
 <tr>\
-<td>Password:</td>\
-<td><input type='password' name='password' value='%s'/></td>\
+<td><label for='sta_password'>Password:</label></td>\
+<td><input id='sta_password' type='password' name='password' value='%s'/></td>\
 </tr>\
-<td>Automesh:</td>\
-<td><input type='checkbox' name='am' value='mesh' %s></td>\
+<tr>\
+<td><label for='sta_am'>Automesh:</label></td>\
+<td><input id='sta_am' type='checkbox' name='am' value='mesh' %s></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -39,25 +42,25 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table>\
 <tr>\
-<td>SSID:</td>\
-<td><input type='text' name='ap_ssid' value='%s'/></td>\
+<td><label for='ap_ssid'>SSID:</label></td>\
+<td><input id='ap_ssid' type='text' name='ap_ssid' value='%s'/></td>\
 </tr>\
 <tr>\
-<td>Password:</td>\
-<td><input type='text' name='ap_password' value='%s'/></td>\
+<td><label for='ap_password'>Password:</label></td>\
+<td><input id='ap_password' type='text' name='ap_password' value='%s'/></td>\
 </tr>\
 <tr>\
-<td>Security:</td>\
+<td><label for='ap_open'>Security:</label></td>\
 <td>\
- <select name='ap_open'>\
+ <select id='ap_open' name='ap_open'>\
  <option value='open'%s>Open</option>\
  <option value='wpa2'%s>WPA2</option>\
 </select>\
 </td>\
 </tr>\
 <tr>\
-<td>Subnet:</td>\
-<td><input type='text' name='network' value='%d.%d.%d.%d'/></td>\
+<td><label for='ap_network'>Subnet:</label></td>\
+<td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d'/></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -73,8 +76,8 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table>\
 <tr>\
-<td>Lock Device:</td>\
-<td><input type='checkbox' name='lock' value='l'></td>\
+<td><label for='lock_device'>Lock Device:</label></td>\
+<td><input id='lock_device' type='checkbox' name='lock' value='l'></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -99,8 +102,10 @@ setTimeout(\"location.href = '/'\",10000);\
 
 #define LOCK_PAGE "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n\
 <html>\
-<head></head>\
+<head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
+<title>ESP WiFi NAT Router Config</title>\
+</head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
 <div id='config'>\
@@ -116,8 +121,8 @@ setTimeout(\"location.href = '/'\",1000);\
 <form autocomplete='off' action='' method='GET'>\
 <table>\
 <tr>\
-<td>Password:</td>\
-<td><input type='password' name='unlock_password'/></td>\
+<td><label for='unlock_password'>Password:</label></td>\
+<td><input id='unlock_password' type='password' name='unlock_password'/></td>\
 </tr>\
 <tr>\
 <td></td>\

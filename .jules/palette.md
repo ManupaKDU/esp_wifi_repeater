@@ -1,0 +1,3 @@
+## 2024-05-24 - [Embedded HTML Accessibility]
+**Learning:** Found that embedded HTML interfaces (like ESP8266 C macros) often lack basic accessibility (like `<label>` tags) and have malformed document structures (missing `<title>`, `<meta>` in body, missing table tags like `<tr>`). These are common blindspots in IoT devices.
+**Action:** Always verify basic HTML structure and accessibility attributes (especially form labels) when editing embedded raw HTML strings.
