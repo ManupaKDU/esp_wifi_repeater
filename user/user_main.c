@@ -3760,8 +3760,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                     }
                     do_colon = true;
                     mac_2_buff(sta_mac, station->bssid);
-                    os_sprintf(&buffer[len], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
-                    len += os_strlen(&buffer[len]);
+                    len += os_sprintf(&buffer[len], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
                     station = STAILQ_NEXT(station, next);
                 }
                 wifi_softap_free_station_info();
