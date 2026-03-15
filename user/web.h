@@ -91,7 +91,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <table>\
 <tr>\
 <td>Reset Device:</td>\
-<td><input type='submit' name='reset' value='Restart'/></td>\
+<td><input type='submit' name='reset' value='Restart' onclick='return confirm(\"Are you sure you want to restart the device?\");'/></td>\
 </tr>\
 </table>\
 </form>\
