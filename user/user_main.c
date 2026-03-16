@@ -1554,15 +1554,14 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             os_sprintf_flash(response, "Routing table:\r\nNetwork              Dest\r\n");
             to_console(response);
 
+            // Bolt: Optimize string padding by replacing looping and separate
+            // string length recalculations with a single formatted string build.
+            // This replaces up to 22 calls to to_console with a single call,
+            // dropping O(N^2) strlen recalculations down to O(1).
             for (i = 0; ip_get_route(i, &ip, &mask, &gw); i++)
             {
                 addr2str(buf, ip.addr, mask.addr);
-                os_sprintf(response, buf);
-                to_console(response);
-                int j = 21 - os_strlen(buf);
-                for (; j > 0; j--)
-                    to_console(" ");
-                os_sprintf(response, IPSTR "\r\n", IP2STR(&gw));
+                os_sprintf(response, "%-21s" IPSTR "\r\n", buf, IP2STR(&gw));
                 to_console(response);
             }
 
@@ -1571,12 +1570,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (!netif_is_up(nif))
                     continue;
                 addr2str(buf, nif->ip_addr.addr & nif->netmask.addr, nif->netmask.addr);
-                os_sprintf(response, buf);
-                to_console(response);
-                int j = 21 - os_strlen(buf);
-                for (; j > 0; j--)
-                    to_console(" ");
-                os_sprintf(response, "%c%c%d\r\n", nif->name[0], nif->name[1], nif->num);
+                os_sprintf(response, "%-21s%c%c%d\r\n", buf, nif->name[0], nif->name[1], nif->num);
                 to_console(response);
             }
 
