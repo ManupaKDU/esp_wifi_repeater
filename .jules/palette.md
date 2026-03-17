@@ -4,3 +4,6 @@
 ## 2026-03-15 - [Destructive Action Confirmation]
 **Learning:** Embedded IoT web interfaces often lack basic UX safety rails like confirmation dialogs for destructive actions (e.g. device reboots, locking).
 **Action:** Add inline JS `confirm()` dialogs to buttons executing destructive actions to prevent accidental clicks. Especially important on mobile where fat-fingering is common.
+## 2026-04-18 - [Disable Mobile Text Modifications on Embedded Config Inputs]
+**Learning:** Mobile operating systems aggressively auto-capitalize and spell-check text fields, which is disastrous for exact-string inputs in embedded configuration interfaces like SSIDs, passwords, and IP addresses.
+**Action:** Always add `autocorrect='off'`, `autocapitalize='none'`, and `spellcheck='false'` to text input fields for exact strings to prevent unwanted modifications.
