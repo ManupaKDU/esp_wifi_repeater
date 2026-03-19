@@ -1,5 +1,5 @@
 #define CONFIG_PAGE "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n\
-<html>\
+<html lang='en'>\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <title>ESP WiFi NAT Router Config</title>\
@@ -47,7 +47,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='ap_password'>Password:</label></td>\
-<td><input id='ap_password' type='text' name='ap_password' value='%s' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='ap_password' type='text' name='ap_password' value='%s' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
@@ -67,7 +67,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <td><input type='submit' value='Set' /></td>\
 </tr>\
 </table>\
-<small>\
+<small id='ap_pwd_help'>\
 <i>Password: </i>min. 8 chars<br />\
 </small>\
 </form>\
@@ -101,7 +101,7 @@ setTimeout(\"location.href = '/'\",10000);\
 "
 
 #define LOCK_PAGE "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n\
-<html>\
+<html lang='en'>\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <title>ESP WiFi NAT Router Config</title>\
@@ -122,7 +122,7 @@ setTimeout(\"location.href = '/'\",1000);\
 <table>\
 <tr>\
 <td><label for='unlock_password'>Password:</label></td>\
-<td><input id='unlock_password' type='password' name='unlock_password' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='unlock_password' type='password' name='unlock_password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -130,8 +130,8 @@ setTimeout(\"location.href = '/'\",1000);\
 </tr>\
 \
 </table>\
-<small>\
-<i>Default: STA password to unlock<br />\
+<small id='unlock_help'>\
+<i>Default:</i> STA password to unlock<br />\
 </small>\
 </form>\
 </div>\
