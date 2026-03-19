@@ -7,3 +7,6 @@
 ## 2026-03-22 - [Mobile Input UX for Exact Strings]
 **Learning:** For embedded web interfaces configuring exact string values like SSIDs, passwords, and IP addresses, mobile OS text modifications (auto-capitalization, auto-correction, spell-checking) can cause frustrating and subtle connection failures.
 **Action:** Always apply `autocorrect='off'`, `autocapitalize='none'`, and `spellcheck='false'` attributes to text input fields for these exact values to prevent unwanted mobile OS text modifications.
+## 2024-05-20 - Adding Core HTML Accessibility Attributes to Embedded Macros
+**Learning:** Even in extremely constrained embedded interfaces that generate web pages via static C string macros, basic HTML accessibility features like `lang='en'` on the `<html>` tag and `aria-describedby` to link inputs to their helper text (e.g., minimum password lengths) are critical. They incur virtually zero overhead in the C binary size but dramatically improve screen reader experience.
+**Action:** When working on embedded web interfaces (like ESP8266/ESP32 web configs), always prioritize standard HTML attributes (`lang`, `aria-describedby`) and ensure semantic tags are properly closed to build an accessible foundation.
