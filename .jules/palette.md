@@ -1,12 +1,3 @@
-## 2024-05-24 - [Embedded HTML Accessibility]
-**Learning:** Found that embedded HTML interfaces (like ESP8266 C macros) often lack basic accessibility (like `<label>` tags) and have malformed document structures (missing `<title>`, `<meta>` in body, missing table tags like `<tr>`). These are common blindspots in IoT devices.
-**Action:** Always verify basic HTML structure and accessibility attributes (especially form labels) when editing embedded raw HTML strings.
-## 2026-03-15 - [Destructive Action Confirmation]
-**Learning:** Embedded IoT web interfaces often lack basic UX safety rails like confirmation dialogs for destructive actions (e.g. device reboots, locking).
-**Action:** Add inline JS `confirm()` dialogs to buttons executing destructive actions to prevent accidental clicks. Especially important on mobile where fat-fingering is common.
-## 2026-03-22 - [Mobile Input UX for Exact Strings]
-**Learning:** For embedded web interfaces configuring exact string values like SSIDs, passwords, and IP addresses, mobile OS text modifications (auto-capitalization, auto-correction, spell-checking) can cause frustrating and subtle connection failures.
-**Action:** Always apply `autocorrect='off'`, `autocapitalize='none'`, and `spellcheck='false'` attributes to text input fields for these exact values to prevent unwanted mobile OS text modifications.
-## 2024-05-20 - Adding Core HTML Accessibility Attributes to Embedded Macros
-**Learning:** Even in extremely constrained embedded interfaces that generate web pages via static C string macros, basic HTML accessibility features like `lang='en'` on the `<html>` tag and `aria-describedby` to link inputs to their helper text (e.g., minimum password lengths) are critical. They incur virtually zero overhead in the C binary size but dramatically improve screen reader experience.
-**Action:** When working on embedded web interfaces (like ESP8266/ESP32 web configs), always prioritize standard HTML attributes (`lang`, `aria-describedby`) and ensure semantic tags are properly closed to build an accessible foundation.
+## 2025-01-28 - Dynamic disable for irrelevant form fields
+**Learning:** In router configuration interfaces, allowing users to enter a password when the security mode is set to "Open" is a common source of confusion. Similarly, silent backend generation of random WPA2 passwords when the user input is too short is a poor UX pattern. Client-side validation is important even in embedded devices.
+**Action:** Always dynamically disable irrelevant input fields based on the state of related controls (e.g., disable password when security is "Open"). Use HTML5 validation attributes like `minlength` to enforce backend constraints on the client-side to provide immediate feedback to the user before submission.
