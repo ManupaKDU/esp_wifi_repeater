@@ -47,12 +47,12 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='ap_password'>Password:</label></td>\
-<td><input id='ap_password' type='text' name='ap_password' value='%s' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='ap_password' type='text' name='ap_password' value='%s' minlength='8' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
 <td>\
- <select id='ap_open' name='ap_open'>\
+ <select id='ap_open' name='ap_open' onchange=\"document.getElementById('ap_password').disabled = (this.value === 'open');\">\
  <option value='open'%s>Open</option>\
  <option value='wpa2'%s>WPA2</option>\
 </select>\
@@ -70,6 +70,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <small id='ap_pwd_help'>\
 <i>Password: </i>min. 8 chars<br />\
 </small>\
+<script>document.getElementById('ap_password').disabled = (document.getElementById('ap_open').value === 'open');</script>\
 </form>\
 \
 <h2>Lock Config</h2>\
