@@ -1518,8 +1518,12 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             to_console(response);
 #endif
             if (config.ap_on)
-                os_sprintf(response, "%d Station%s connected to SoftAP\r\n", wifi_softap_get_station_num(),
-                           wifi_softap_get_station_num() == 1 ? "" : "s");
+            {
+                /* ⚡ Bolt: Cache wifi_softap_get_station_num() to avoid redundant API call */
+                int station_num = wifi_softap_get_station_num();
+                os_sprintf(response, "%d Station%s connected to SoftAP\r\n", station_num,
+                           station_num == 1 ? "" : "s");
+            }
             else
                 os_sprintf(response, "AP disabled\r\n");
             to_console(response);
