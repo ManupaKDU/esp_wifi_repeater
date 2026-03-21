@@ -1,3 +1,7 @@
 ## 2025-01-28 - Dynamic disable for irrelevant form fields
 **Learning:** In router configuration interfaces, allowing users to enter a password when the security mode is set to "Open" is a common source of confusion. Similarly, silent backend generation of random WPA2 passwords when the user input is too short is a poor UX pattern. Client-side validation is important even in embedded devices.
 **Action:** Always dynamically disable irrelevant input fields based on the state of related controls (e.g., disable password when security is "Open"). Use HTML5 validation attributes like `minlength` to enforce backend constraints on the client-side to provide immediate feedback to the user before submission.
+
+## 2023-10-27 - Inline Validation for Embedded Systems
+**Learning:** In constrained embedded web interfaces where backend error handling might result in a confusing generic error page or silent truncation, client-side input validation is crucial. Relying on HTML5 attributes like `maxlength`, `pattern`, and `title` provides immediate feedback to the user and prevents malformed data from ever reaching the device, improving both UX and device stability.
+**Action:** Use standard HTML5 validation attributes (`maxlength`, `minlength`, `pattern`) whenever adding or modifying configuration inputs for embedded interfaces to ensure inputs conform to expected formats (e.g., IPv4 addresses, SSID lengths).
