@@ -1,3 +1,7 @@
 ## 2025-01-28 - Dynamic disable for irrelevant form fields
 **Learning:** In router configuration interfaces, allowing users to enter a password when the security mode is set to "Open" is a common source of confusion. Similarly, silent backend generation of random WPA2 passwords when the user input is too short is a poor UX pattern. Client-side validation is important even in embedded devices.
 **Action:** Always dynamically disable irrelevant input fields based on the state of related controls (e.g., disable password when security is "Open"). Use HTML5 validation attributes like `minlength` to enforce backend constraints on the client-side to provide immediate feedback to the user before submission.
+
+## 2025-01-28 - HTML5 minlength validation insight
+**Learning:** HTML5 validation attributes like `minlength` will not be evaluated if the field is empty unless the `required` attribute is also present. This is particularly relevant when input fields (like passwords) are dynamically enabled or disabled based on other settings. Without `required`, an empty field with `minlength='8'` is considered valid and will allow submission, which can lead to silent failures or backend-generated defaults.
+**Action:** When enforcing minimum length constraints on input fields, especially those that can be disabled conditionally, always pair `minlength` with the `required` attribute to ensure proper client-side validation when the field is enabled.
