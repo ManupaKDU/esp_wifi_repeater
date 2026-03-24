@@ -4,3 +4,6 @@
 ## 2024-05-24 - HTML5 Validation inside C Macros
 **Learning:** When embedding HTML within C macro strings (like in embedded firmware web servers), HTML5 regex `pattern` attributes must avoid characters that could trigger escape sequences or require complex escaping (e.g., using `[.]` instead of `\.` for literal dots). Using `inputmode='decimal'` triggers numeric keypads on mobile while keeping `type='text'` compatible with IP address patterns.
 **Action:** Prefer regex character classes like `[.]` over escape sequences like `\.` to keep HTML validation strings robust and readable when embedded in C macros. Use `inputmode` to improve mobile UX for specific text formats.
+## 2025-01-28 - Structural Tables Need Presentation Role
+**Learning:** The embedded web interface in `user/web.h` heavily relies on HTML `<table>` elements purely for the visual layout of forms. Since external CSS is not used, this is a reasonable compromise for embedded devices, but it introduces major accessibility issues as screen readers will unnecessarily announce row and column semantics.
+**Action:** Always apply `role='presentation'` to structural layout tables to prevent screen readers from announcing unnecessary tabular data, making form navigation much cleaner for visually impaired users.
