@@ -17,7 +17,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </script>\
 <h2>STA Settings</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td><label for='sta_ssid'>SSID:</label></td>\
 <td><input id='sta_ssid' type='text' name='ssid' value='%s' maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
@@ -40,7 +40,7 @@ setTimeout(\"location.href = '/'\",10000);\
 \
 <h2>AP Settings</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td><label for='ap_ssid'>SSID:</label></td>\
 <td><input id='ap_ssid' type='text' name='ap_ssid' value='%s' maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
@@ -75,7 +75,7 @@ setTimeout(\"location.href = '/'\",10000);\
 \
 <h2>Lock Config</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td><label for='lock_device'>Lock Device:</label></td>\
 <td><input id='lock_device' type='checkbox' name='lock' value='l'></td>\
@@ -89,7 +89,7 @@ setTimeout(\"location.href = '/'\",10000);\
 \
 <h2>Device Management</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td>Reset Device:</td>\
 <td><input type='submit' name='reset' value='Restart' onclick='return confirm(\"Are you sure you want to restart the device?\");'/></td>\
@@ -120,7 +120,7 @@ setTimeout(\"location.href = '/'\",1000);\
 </script>\
 <h2>Config Locked</h2>\
 <form autocomplete='off' action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td><label for='unlock_password'>Password:</label></td>\
 <td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
