@@ -7,3 +7,6 @@
 ## 2025-01-28 - Structural Tables Need Presentation Role
 **Learning:** The embedded web interface in `user/web.h` heavily relies on HTML `<table>` elements purely for the visual layout of forms. Since external CSS is not used, this is a reasonable compromise for embedded devices, but it introduces major accessibility issues as screen readers will unnecessarily announce row and column semantics.
 **Action:** Always apply `role='presentation'` to structural layout tables to prevent screen readers from announcing unnecessary tabular data, making form navigation much cleaner for visually impaired users.
+## 2024-05-28 - Leveraging Native Form Validation
+**Learning:** Native HTML5 validation attributes (like `required`, `minlength`) provide robust, accessible client-side feedback without the overhead of custom JavaScript. A particularly useful pattern is combining `required` with dynamic `disabled` states: a browser natively ignores validation constraints on disabled fields. This perfectly handles conditionally required fields (like a password only required when security is not "Open").
+**Action:** Always prefer native HTML validation attributes over custom JavaScript validation. Use dynamic `disabled` states for conditionally required inputs to let the browser automatically manage validation logic.
