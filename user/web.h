@@ -20,7 +20,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='sta_ssid'>SSID:</label></td>\
-<td><input id='sta_ssid' type='text' name='ssid' value='%s' maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='sta_ssid' type='text' name='ssid' value='%s' required maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='sta_password'>Password:</label></td>\
@@ -43,11 +43,11 @@ setTimeout(\"location.href = '/'\",10000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='ap_ssid'>SSID:</label></td>\
-<td><input id='ap_ssid' type='text' name='ap_ssid' value='%s' maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='ap_ssid' type='text' name='ap_ssid' value='%s' required maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='ap_password'>Password:</label></td>\
-<td><input id='ap_password' type='text' name='ap_password' value='%s' minlength='8' maxlength='63' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='ap_password' type='text' name='ap_password' value='%s' required minlength='8' maxlength='63' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
