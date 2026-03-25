@@ -3706,7 +3706,11 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
         mqtt_publish_int(MQTT_TOPIC_BYTES, "Bout", "%d", (uint32_t)(Bytes_out / 1024));
         mqtt_publish_int(MQTT_TOPIC_PACKETS, "Ppsin", "%d", (Packets_in - Packets_in_last) / t_diff);
         mqtt_publish_int(MQTT_TOPIC_PACKETS, "Ppsout", "%d", (Packets_out - Packets_out_last) / t_diff);
-        mqtt_publish_int(MQTT_TOPIC_NOSTATIONS, "NoStations", "%d", config.ap_on ? wifi_softap_get_station_num() : 0);
+
+        // ⚡ Bolt: Cache redundant API call for station count to avoid multiple hardware state queries
+        uint8_t current_station_num = config.ap_on ? wifi_softap_get_station_num() : 0;
+
+        mqtt_publish_int(MQTT_TOPIC_NOSTATIONS, "NoStations", "%d", current_station_num);
         mqtt_publish_int(MQTT_TOPIC_BPS, "Bpsin", "%d", (uint32_t)(Bytes_in - Bytes_in_last) / t_diff);
         mqtt_publish_int(MQTT_TOPIC_BPS, "Bpsout", "%d", (uint32_t)(Bytes_out - Bytes_out_last) / t_diff);
 #if DAILY_LIMIT
@@ -3739,7 +3743,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                            IP2STR(&my_ap_ip), IP2STR(&my_ip),
                            wifi_station_get_rssi(),
                            config.automesh_mode == AUTOMESH_OPERATIONAL ? config.AP_MAC_address[2] : 0,
-                           wifi_softap_get_station_num());
+                           current_station_num);
 
                 // Bolt: Optimize string building. Instead of recalculating the string length
                 // on each iteration (O(N^2) "Schlemiel the Painter's algorithm"), we maintain
