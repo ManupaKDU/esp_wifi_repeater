@@ -19,12 +19,12 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table role='presentation'>\
 <tr>\
-<td><label for='sta_ssid'>SSID:</label></td>\
-<td><input id='sta_ssid' type='text' name='ssid' value='%s' required maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><label for='sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><input id='sta_ssid' type='text' name='ssid' value='%s' required maxlength='32' placeholder='WiFi Name' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='sta_password'>Password:</label></td>\
-<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='Leave blank if open' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='sta_am'>Automesh:</label></td>\
@@ -42,12 +42,12 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table role='presentation'>\
 <tr>\
-<td><label for='ap_ssid'>SSID:</label></td>\
-<td><input id='ap_ssid' type='text' name='ap_ssid' value='%s' required maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><label for='ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><input id='ap_ssid' type='text' name='ap_ssid' value='%s' required maxlength='32' placeholder='e.g., ESP_Repeater' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
-<td><label for='ap_password'>Password:</label></td>\
-<td><input id='ap_password' type='text' name='ap_password' value='%s' required minlength='8' maxlength='63' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><label for='ap_password'>Password <span aria-hidden='true'>*</span>:</label></td>\
+<td><input id='ap_password' type='text' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 characters' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
@@ -60,7 +60,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='ap_network'>Subnet:</label></td>\
-<td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d' pattern='^([0-9]{1,3}[.]){3}[0-9]{1,3}$' title='Valid IP Address (e.g., 192.168.4.1)' inputmode='decimal' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d' pattern='^([0-9]{1,3}[.]){3}[0-9]{1,3}$' title='Valid IP Address (e.g., 192.168.4.1)' placeholder='e.g., 192.168.4.1' inputmode='decimal' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -123,7 +123,7 @@ setTimeout(\"location.href = '/'\",1000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='unlock_password'>Password:</label></td>\
-<td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' placeholder='Unlock password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td></td>\
