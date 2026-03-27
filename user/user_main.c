@@ -2064,6 +2064,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (++i >= MAX_DHCP)
                     break;
             }
+            // ⚡ Bolt: Free station info to prevent memory leak
+            wifi_softap_free_station_info();
 
             /*	for (i = 0; i<MAX_DHCP && (p = dhcps_get_mapping(i)); i++) {
 	  os_memcpy(&config.dhcps_p[i], p, sizeof(struct dhcps_pool));
