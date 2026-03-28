@@ -13,3 +13,6 @@
 ## 2025-01-28 - Testing HTML embedded in C macros with static files
 **Learning:** When attempting to visually verify frontend UI changes (like adding placeholders) using tools like Playwright on static HTML extracted from C format macros (e.g., `user/web.h`), any C format specifiers embedded in `value` attributes (like `value='%s'`) will render as literal strings. Because an `input` with a value will hide its `placeholder`, this prevents visual verification of the new placeholders.
 **Action:** When extracting embedded HTML macros for static testing, manually clear `value` attributes that contain C format specifiers (e.g., using `sed "s/value='%s'/value=''/g" test_ui.html`) to ensure placeholders and empty states can be accurately verified.
+## 2025-01-28 - Accessible Visual Indicators for Required Fields
+**Learning:** For unconditionally required fields, visually denote them with an asterisk wrapped in `<span aria-hidden='true'>*</span>`. This informs sighted users of the requirement without causing redundant screen reader announcements, as the native `required` attribute already handles screen reader logic.
+**Action:** Use `<span aria-hidden='true'>*</span>` to add visual required indicators when native `required` attributes are already providing accessibility context to screen readers.
