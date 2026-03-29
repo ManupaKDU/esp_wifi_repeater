@@ -222,7 +222,8 @@ static void ICACHE_FLASH_ATTR upgrade_connect_cb(void *arg) {
 		rboot_ota_deinit();
 		return;
 	}
-	os_sprintf((char*)request,
+	// ⚡ Bolt: Cache string length returned by os_sprintf to avoid O(N) os_strlen scan
+	int request_len = os_sprintf((char*)request,
 		"GET /%s HTTP/1.0\r\nHost: %s\r\n%s",
 		(upgrade->rom_slot == FLASH_BY_ADDR ? OTA_FILE : (upgrade->rom_slot == 0 ? OTA_ROM0 : OTA_ROM1)),
 		config.ota_host, HTTP_HEADER);
@@ -230,7 +231,7 @@ static void ICACHE_FLASH_ATTR upgrade_connect_cb(void *arg) {
 	// send the http request, with timeout for reply
 	os_timer_setfn(&ota_timer, (os_timer_func_t *)rboot_ota_deinit, 0);
 	os_timer_arm(&ota_timer, OTA_NETWORK_TIMEOUT, 0);
-	espconn_sent(upgrade->conn, request, os_strlen((char*)request));
+	espconn_sent(upgrade->conn, request, request_len);
 	os_free(request);
 }
 

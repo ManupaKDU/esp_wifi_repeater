@@ -3536,14 +3536,16 @@ static void ICACHE_FLASH_ATTR web_config_client_connected_cb(void *arg)
         uint8_t *page_buf = (char *)os_malloc(slen + 200);
         if (page_buf == NULL)
             return;
-        os_sprintf(page_buf, config_page, config.ssid, config.password,
+
+        // ⚡ Bolt: Cache string length returned by os_sprintf to avoid O(N) os_strlen scan
+        int page_len = os_sprintf(page_buf, config_page, config.ssid, config.password,
                    config.automesh_mode != AUTOMESH_OFF ? "checked" : "",
                    config.ap_ssid, config.ap_password,
                    config.ap_open ? " selected" : "", config.ap_open ? "" : " selected",
                    IP2STR(&config.network_addr));
         os_free(config_page);
 
-        espconn_send(pespconn, page_buf, os_strlen(page_buf));
+        espconn_send(pespconn, page_buf, page_len);
 
         os_free(page_buf);
     }
