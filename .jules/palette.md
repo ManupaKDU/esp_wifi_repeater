@@ -13,3 +13,7 @@
 ## 2025-01-28 - Testing HTML embedded in C macros with static files
 **Learning:** When attempting to visually verify frontend UI changes (like adding placeholders) using tools like Playwright on static HTML extracted from C format macros (e.g., `user/web.h`), any C format specifiers embedded in `value` attributes (like `value='%s'`) will render as literal strings. Because an `input` with a value will hide its `placeholder`, this prevents visual verification of the new placeholders.
 **Action:** When extracting embedded HTML macros for static testing, manually clear `value` attributes that contain C format specifiers (e.g., using `sed "s/value='%s'/value=''/g" test_ui.html`) to ensure placeholders and empty states can be accurately verified.
+
+## 2024-05-24 - Visual Required Indicators for Native HTML Validation
+**Learning:** This embedded web interface relies on native HTML `required` attributes for form validation, but it lacks visual indicators for sighted users. Since external CSS is not used, a simple visual asterisk `*` can be added, but it needs to be hidden from screen readers using `aria-hidden='true'` to prevent them from reading the asterisk out loud, as the screen reader will already announce the `required` attribute.
+**Action:** When adding visual indicators for fields that are natively validated with HTML constraints, wrap the visual cue in an `aria-hidden` element to avoid redundant screen reader announcements.
