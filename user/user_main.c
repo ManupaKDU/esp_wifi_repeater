@@ -3536,14 +3536,15 @@ static void ICACHE_FLASH_ATTR web_config_client_connected_cb(void *arg)
         uint8_t *page_buf = (char *)os_malloc(slen + 200);
         if (page_buf == NULL)
             return;
-        os_sprintf(page_buf, config_page, config.ssid, config.password,
+        /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
+        int page_len = os_sprintf(page_buf, config_page, config.ssid, config.password,
                    config.automesh_mode != AUTOMESH_OFF ? "checked" : "",
                    config.ap_ssid, config.ap_password,
                    config.ap_open ? " selected" : "", config.ap_open ? "" : " selected",
                    IP2STR(&config.network_addr));
         os_free(config_page);
 
-        espconn_send(pespconn, page_buf, os_strlen(page_buf));
+        espconn_send(pespconn, page_buf, page_len);
 
         os_free(page_buf);
     }
@@ -3740,7 +3741,8 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 
                 mac_2_buff(bssid_mac, uplink_bssid);
 
-                os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"%s\",\"sta_mac\":\"%s\",\"uplink_bssid\":\"%s\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
+                /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
+                int len = os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"%s\",\"sta_mac\":\"%s\",\"uplink_bssid\":\"%s\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
                            config.sta_hostname, ap_mac, sta_mac, bssid_mac,
                            IP2STR(&my_ap_ip), IP2STR(&my_ip),
                            wifi_station_get_rssi(),
@@ -3750,7 +3752,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                 // Bolt: Optimize string building. Instead of recalculating the string length
                 // on each iteration (O(N^2) "Schlemiel the Painter's algorithm"), we maintain
                 // a 'len' variable to incrementally track the end of the buffer (O(N)).
-                int len = os_strlen(buffer);
                 struct station_info *station = wifi_softap_get_station_info();
                 bool do_colon = false;
                 while (station)
