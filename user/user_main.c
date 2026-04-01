@@ -3369,10 +3369,11 @@ static void ICACHE_FLASH_ATTR handle_set_cmd(void *arg, char *cmd, char *val)
     {
         val[max_current_cmd_size] = '\0';
     }
-    os_sprintf(cmd_line, "%s %s", cmd, val);
+    /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
+    int cmd_len = os_sprintf(cmd_line, "%s %s", cmd, val);
     //os_printf("web_config_client_recv_cb(): cmd line:%s\n",cmd_line);
 
-    ringbuf_memcpy_into(console_rx_buffer, cmd_line, os_strlen(cmd_line));
+    ringbuf_memcpy_into(console_rx_buffer, cmd_line, cmd_len);
     console_handle_command(pespconn);
 }
 
