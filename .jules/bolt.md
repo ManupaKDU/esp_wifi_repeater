@@ -7,3 +7,7 @@
 ## 2026-03-14 - Cache os_sprintf Return Value
 **Learning:** Codebase performance pattern: Avoid redundant `os_strlen()` calls on buffers immediately after writing to them with `os_sprintf()`. Because `os_sprintf()` returns the number of characters written, capture and use this return value directly to prevent unnecessary O(N) string traversals.
 **Action:** Always capture the return value of `os_sprintf` when the string length is needed immediately afterwards.
+
+## 2024-05-14 - [Replace runtime `os_strlen` on literal strings with compile-time `sizeof`]
+**Learning:** Calling `os_strlen("literal")` or `os_strlen(array_literal)` forces the C string length to be recalculated at runtime (O(N) operation) because `os_strlen` might not be optimized like `strlen` in this toolchain.
+**Action:** Replace `os_strlen("literal")` and `os_strlen(array_literal)` with `sizeof("literal") - 1` to resolve the length evaluation safely at compile time, eliminating the runtime overhead.

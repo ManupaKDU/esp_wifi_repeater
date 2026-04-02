@@ -189,7 +189,8 @@ static void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
     mqtt_connected = true;
 
     os_sprintf(buf, "%s/status", config.mqtt_prefix);
-    MQTT_Publish(client, buf, "online", os_strlen("online"), config.mqtt_qos, 1);
+    /* ⚡ Bolt: Replace runtime os_strlen with compile-time sizeof for string literal */
+    MQTT_Publish(client, buf, "online", sizeof("online") - 1, config.mqtt_qos, 1);
 
     os_sprintf(buf, IPSTR, IP2STR(&my_ip));
     mqtt_publish_str(MQTT_TOPIC_IP, "IP", buf);
@@ -3351,7 +3352,8 @@ static void ICACHE_FLASH_ATTR tcp_client_connected_cb(void *arg)
 
     char send_data[] = "Welcome to WiFi Repeater " ESP_REPEATER_VERSION "\r\n"
             "Enter 'help' to get help.\r\nCMD>";
-    espconn_send(pespconn, (uint8_t *) send_data, os_strlen(send_data));
+    /* ⚡ Bolt: Replace runtime os_strlen with compile-time sizeof for array literal */
+    espconn_send(pespconn, (uint8_t *) send_data, sizeof(send_data) - 1);
 #if ACLS
     deny_cb_conn = pespconn;
 #endif
@@ -3483,7 +3485,8 @@ static void ICACHE_FLASH_ATTR web_config_client_recv_cb(void *arg,
         if (do_reset == true)
         {
             do_reset = false;
-            ringbuf_memcpy_into(console_rx_buffer, "reset", os_strlen("reset"));
+            /* ⚡ Bolt: Replace runtime os_strlen with compile-time sizeof for string literal */
+            ringbuf_memcpy_into(console_rx_buffer, "reset", sizeof("reset") - 1);
             console_handle_command(pespconn);
         }
     }
