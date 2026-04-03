@@ -24,7 +24,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='sta_password'>Password:</label></td>\
-<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('sta_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
 <td><label for='sta_am'>Automesh:</label></td>\
@@ -47,7 +47,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='ap_password'>Password:</label></td>\
-<td><input id='ap_password' type='text' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('ap_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
@@ -123,7 +123,7 @@ setTimeout(\"location.href = '/'\",1000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='unlock_password'>Password:</label></td>\
-<td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
 <td></td>\
