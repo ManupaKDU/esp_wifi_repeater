@@ -16,3 +16,6 @@
 ## 2025-01-28 - Visual indicator for required fields without screen reader redundancy
 **Learning:** For unconditionally required fields, visually denoting them with an asterisk informs sighted users of the requirement. However, appending an asterisk to the label directly will cause screen readers to announce it, creating redundant or confusing audio output, because the native HTML `required` attribute already correctly handles the screen reader logic for required fields.
 **Action:** Wrap the required asterisk in a `<span aria-hidden='true'>*</span>` to visually denote the required field without causing redundant screen reader announcements.
+## 2025-01-28 - Show Password Toggle for improved usability and security
+**Learning:** For embedded device web interfaces, default password inputs to `type='password'` for security, and pair them with an adjacent 'Show Password' toggle (e.g., a checkbox with an inline `onclick` handler). This allows users to easily verify their input without exposing it by default.
+**Action:** When adding or modifying password fields, ensure they are of type password and consider adding an adjacent show password toggle, especially for fields prone to typos like WiFi passwords.
