@@ -189,7 +189,8 @@ static void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
     mqtt_connected = true;
 
     os_sprintf(buf, "%s/status", config.mqtt_prefix);
-    MQTT_Publish(client, buf, "online", os_strlen("online"), config.mqtt_qos, 1);
+    /* ⚡ Bolt: Resolve literal string length at compile-time instead of runtime O(N) evaluation */
+    MQTT_Publish(client, buf, "online", (sizeof("online") - 1), config.mqtt_qos, 1);
 
     os_sprintf(buf, IPSTR, IP2STR(&my_ip));
     mqtt_publish_str(MQTT_TOPIC_IP, "IP", buf);
@@ -3483,7 +3484,8 @@ static void ICACHE_FLASH_ATTR web_config_client_recv_cb(void *arg,
         if (do_reset == true)
         {
             do_reset = false;
-            ringbuf_memcpy_into(console_rx_buffer, "reset", os_strlen("reset"));
+            /* ⚡ Bolt: Resolve literal string length at compile-time instead of runtime O(N) evaluation */
+            ringbuf_memcpy_into(console_rx_buffer, "reset", (sizeof("reset") - 1));
             console_handle_command(pespconn);
         }
     }
