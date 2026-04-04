@@ -19,3 +19,7 @@
 ## 2025-01-28 - Show Password Toggle for improved usability and security
 **Learning:** For embedded device web interfaces, default password inputs to `type='password'` for security, and pair them with an adjacent 'Show Password' toggle (e.g., a checkbox with an inline `onclick` handler). This allows users to easily verify their input without exposing it by default.
 **Action:** When adding or modifying password fields, ensure they are of type password and consider adding an adjacent show password toggle, especially for fields prone to typos like WiFi passwords.
+
+## 2024-05-15 - Prevent empty lock submissions & add lock help text
+**Learning:** Destructive or highly impactful actions (like locking a device interface) that require an explicit user confirmation via a checkbox can be confusing if the associated submit button remains active. Users may accidentally submit the form empty. Additionally, failing to inform the user beforehand which password will be needed to unlock creates anxiety and bad UX.
+**Action:** Disable the submit button natively via an inline `disabled` attribute and dynamically enable it using `onchange="document.getElementById('lock_submit').disabled = !this.checked;"`. Add explicit `aria-describedby` helper text explaining the unlock mechanism *before* the user locks themselves out.
