@@ -78,13 +78,16 @@ setTimeout(\"location.href = '/'\",10000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='lock_device'>Lock Device:</label></td>\
-<td><input id='lock_device' type='checkbox' name='lock' value='l'></td>\
+<td><input id='lock_device' type='checkbox' name='lock' value='l' onchange=\"document.getElementById('lock_submit').disabled = !this.checked;\" aria-describedby='lock_help'></td>\
 </tr>\
 <tr>\
 <td></td>\
-<td><input type='submit' name='dolock' value='Lock'/></td>\
+<td><input id='lock_submit' type='submit' name='dolock' value='Lock' disabled/></td>\
 </tr>\
 </table>\
+<small id='lock_help'>\
+<i>Info:</i> Locking requires STA password to unlock<br />\
+</small>\
 </form>\
 \
 <h2>Device Management</h2>\
