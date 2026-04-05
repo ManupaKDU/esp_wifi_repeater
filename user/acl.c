@@ -226,20 +226,20 @@ uint8_t line[80], addr1[21], addr2[21], port1[6], port2[6];
 	port2str(port1, my_entry->s_port);
 	addr2str(addr2, my_entry->dest, my_entry->d_mask);
 	port2str(port2, my_entry->d_port);
+	int line_len;
 	if (my_entry->proto != 0)
-	    os_sprintf(line, "%s %s:%s %s:%s %s%s (%d hits)\r\n",
+	    line_len = os_sprintf(line, "%s %s:%s %s:%s %s%s (%d hits)\r\n",
 		my_entry->proto==IP_PROTO_TCP?"TCP":"UDP", 
 		addr1, port1, addr2, port2,
 		(my_entry->allow & ACL_ALLOW)?"allow":"deny",
 		(my_entry->allow & ACL_MONITOR)?"_monitor":"",
 		my_entry->hit_count);
 	else 
-	    os_sprintf(line, "IP %s %s %s%s (%d hits)\r\n",
+	    line_len = os_sprintf(line, "IP %s %s %s%s (%d hits)\r\n",
 		addr1, addr2,
 		(my_entry->allow & ACL_ALLOW)?"allow":"deny",
 		(my_entry->allow & ACL_MONITOR)?"_monitor":"",
 		my_entry->hit_count);
-        int line_len = os_strlen(line);
         os_memcpy(&buf[len], line, line_len + 1);
         len += line_len;
     }
