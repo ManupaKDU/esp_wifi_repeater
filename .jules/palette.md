@@ -19,3 +19,7 @@
 ## 2025-01-28 - Show Password Toggle for improved usability and security
 **Learning:** For embedded device web interfaces, default password inputs to `type='password'` for security, and pair them with an adjacent 'Show Password' toggle (e.g., a checkbox with an inline `onclick` handler). This allows users to easily verify their input without exposing it by default.
 **Action:** When adding or modifying password fields, ensure they are of type password and consider adding an adjacent show password toggle, especially for fields prone to typos like WiFi passwords.
+
+## 2024-04-05 - Disable buttons by default for critical actions
+**Learning:** For important or destructive actions (like locking device configuration), users can accidentally trigger them if the submit button is available while a confirmation or prerequisites are unhandled. Simple checkbox checks on submit can still fail if JavaScript is disabled or bypassed.
+**Action:** In addition to JavaScript checks, disable submit buttons for important/destructive forms by default in the HTML (using `disabled`). Use dynamic `onchange` event listeners to enable the button only when necessary prerequisites (like a confirmation checkbox) are met. Always pair these required checks with contextual `aria-describedby` helper text explaining the consequences of the action.
