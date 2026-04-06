@@ -23,3 +23,6 @@
 ## 2024-05-15 - Prevent empty lock submissions & add lock help text
 **Learning:** Destructive or highly impactful actions (like locking a device interface) that require an explicit user confirmation via a checkbox can be confusing if the associated submit button remains active. Users may accidentally submit the form empty. Additionally, failing to inform the user beforehand which password will be needed to unlock creates anxiety and bad UX.
 **Action:** Disable the submit button natively via an inline `disabled` attribute and dynamically enable it using `onchange="document.getElementById('lock_submit').disabled = !this.checked;"`. Add explicit `aria-describedby` helper text explaining the unlock mechanism *before* the user locks themselves out.
+## 2025-01-28 - Autofocus on single-input gate pages
+**Learning:** When users encounter a gate or interstitial page (like a lock screen or login) that features only a single input field, forcing them to manually click or tab into the input before typing introduces unnecessary friction. Similarly, submitting the form without a required value leads to frustration and empty requests.
+**Action:** Always add the `autofocus` and `required` attributes to the primary input field on single-input gate pages to ensure the user can begin typing immediately upon load and is prevented from submitting empty forms.
