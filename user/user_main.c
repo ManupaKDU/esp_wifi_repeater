@@ -195,7 +195,8 @@ static void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
     mqtt_connected = true;
 
     os_sprintf(buf, "%s/status", config.mqtt_prefix);
-    MQTT_Publish(client, buf, "online", os_strlen("online"), config.mqtt_qos, 1);
+    /* ⚡ Bolt: Resolve literal string length at compile-time instead of runtime O(N) evaluation */
+    MQTT_Publish(client, buf, "online", (sizeof("online") - 1), config.mqtt_qos, 1);
 
     os_sprintf(buf, IPSTR, IP2STR(&my_ip));
     mqtt_publish_str(MQTT_TOPIC_IP, "IP", buf);
@@ -1986,6 +1987,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (++i >= MAX_DHCP)
                     break;
             }
+            // ⚡ Bolt: Free station info to prevent memory leak
+            wifi_softap_free_station_info();
 
             /*	for (i = 0; i<MAX_DHCP && (p = dhcps_get_mapping(i)); i++) {
 	  os_memcpy(&config.dhcps_p[i], p, sizeof(struct dhcps_pool));
@@ -2138,7 +2141,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
         }
         if (nTokens == 1)
         {
-            if (os_strlen(config.lock_password) == 0)
+            if (config.lock_password[0] == '\0')
             {
                 os_sprintf_flash(response, "No password defined\r\n");
                 goto command_handled;
@@ -3271,7 +3274,7 @@ static void ICACHE_FLASH_ATTR tcp_client_connected_cb(void *arg)
 
     char send_data[] = "Welcome to WiFi Repeater " ESP_REPEATER_VERSION "\r\n"
             "Enter 'help' to get help.\r\nCMD>";
-    espconn_send(pespconn, (uint8_t *) send_data, os_strlen(send_data));
+    espconn_send(pespconn, (uint8_t *) send_data, sizeof(send_data) - 1);
 #if ACLS
     deny_cb_conn = pespconn;
 #endif
@@ -3289,10 +3292,11 @@ static void ICACHE_FLASH_ATTR handle_set_cmd(void *arg, char *cmd, char *val)
     {
         val[max_current_cmd_size] = '\0';
     }
-    os_sprintf(cmd_line, "%s %s", cmd, val);
+    /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
+    int cmd_len = os_sprintf(cmd_line, "%s %s", cmd, val);
     //os_printf("web_config_client_recv_cb(): cmd line:%s\n",cmd_line);
 
-    ringbuf_memcpy_into(console_rx_buffer, cmd_line, os_strlen(cmd_line));
+    ringbuf_memcpy_into(console_rx_buffer, cmd_line, cmd_len);
     console_handle_command(pespconn);
 }
 
@@ -3402,7 +3406,8 @@ static void ICACHE_FLASH_ATTR web_config_client_recv_cb(void *arg,
         if (do_reset == true)
         {
             do_reset = false;
-            ringbuf_memcpy_into(console_rx_buffer, "reset", os_strlen("reset"));
+            /* ⚡ Bolt: Resolve literal string length at compile-time instead of runtime O(N) evaluation */
+            ringbuf_memcpy_into(console_rx_buffer, "reset", (sizeof("reset") - 1));
             console_handle_command(pespconn);
         }
     }
@@ -3456,14 +3461,15 @@ static void ICACHE_FLASH_ATTR web_config_client_connected_cb(void *arg)
         uint8_t *page_buf = (char *)os_malloc(slen + 200);
         if (page_buf == NULL)
             return;
-        os_sprintf(page_buf, config_page, config.ssid, config.password,
+        /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
+        int page_len = os_sprintf(page_buf, config_page, config.ssid, config.password,
                    config.automesh_mode != AUTOMESH_OFF ? "checked" : "",
                    config.ap_ssid, config.ap_password,
                    config.ap_open ? " selected" : "", config.ap_open ? "" : " selected",
                    IP2STR(&config.network_addr));
         os_free(config_page);
 
-        espconn_send(pespconn, page_buf, os_strlen(page_buf));
+        espconn_send(pespconn, page_buf, page_len);
 
         os_free(page_buf);
     }
@@ -3660,7 +3666,8 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 
                 mac_2_buff(bssid_mac, uplink_bssid);
 
-                os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"%s\",\"sta_mac\":\"%s\",\"uplink_bssid\":\"%s\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
+                /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
+                int len = os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"%s\",\"sta_mac\":\"%s\",\"uplink_bssid\":\"%s\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
                            config.sta_hostname, ap_mac, sta_mac, bssid_mac,
                            IP2STR(&my_ap_ip), IP2STR(&my_ip),
                            wifi_station_get_rssi(),
@@ -3670,7 +3677,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                 // Bolt: Optimize string building. Instead of recalculating the string length
                 // on each iteration (O(N^2) "Schlemiel the Painter's algorithm"), we maintain
                 // a 'len' variable to incrementally track the end of the buffer (O(N)).
-                int len = os_strlen(buffer);
                 struct station_info *station = wifi_softap_get_station_info();
                 bool do_colon = false;
                 while (station)
