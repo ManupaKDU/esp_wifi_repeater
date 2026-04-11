@@ -131,6 +131,11 @@ void ICACHE_FLASH_ATTR to_console(char *str)
     ringbuf_memcpy_into(console_tx_buffer, str, os_strlen(str));
 }
 
+void ICACHE_FLASH_ATTR to_console_len(char *str, uint16_t len)
+{
+    ringbuf_memcpy_into(console_tx_buffer, str, len);
+}
+
 void ICACHE_FLASH_ATTR mac_2_buff(char *buf, uint8_t mac[6])
 {
     os_sprintf(buf, "%02x:%02x:%02x:%02x:%02x:%02x",
@@ -827,10 +832,10 @@ void ICACHE_FLASH_ATTR scan_done(void *arg, STATUS status)
         ringbuf_memcpy_into(console_tx_buffer, "\r", 1);
         while (bss_link != NULL)
         {
-            os_sprintf(response, "%d,\"%s\",%d,\"" MACSTR "\",%d\r\n",
+            uint16_t len = os_sprintf(response, "%d,\"%s\",%d,\"" MACSTR "\",%d\r\n",
                        bss_link->authmode, bss_link->ssid, bss_link->rssi,
                        MAC2STR(bss_link->bssid), bss_link->channel);
-            to_console(response);
+            to_console_len(response, len);
 #if MQTT_CLIENT
             mqtt_publish_str(MQTT_TOPIC_SCANRESULT, "ScanResult", response);
 #endif
@@ -1528,8 +1533,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             {
                 uint8_t sta_mac[20];
                 mac_2_buff(sta_mac, station->bssid);
-                os_sprintf(response, "Station: %s - " IPSTR "\r\n", sta_mac, IP2STR(&station->ip));
-                to_console(response);
+                uint16_t len = os_sprintf(response, "Station: %s - " IPSTR "\r\n", sta_mac, IP2STR(&station->ip));
+                to_console_len(response, len);
                 station = STAILQ_NEXT(station, next);
             }
             wifi_softap_free_station_info();
@@ -1601,10 +1606,10 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             to_console(response);
             for (i = 0; (p = dhcps_get_mapping(i)); i++)
             {
-                os_sprintf(response, "%02x:%02x:%02x:%02x:%02x:%02x - " IPSTR " - %d\r\n",
+                uint16_t len = os_sprintf(response, "%02x:%02x:%02x:%02x:%02x:%02x - " IPSTR " - %d\r\n",
                            p->mac[0], p->mac[1], p->mac[2], p->mac[3], p->mac[4], p->mac[5],
                            IP2STR(&p->ip), p->lease_timer);
-                to_console(response);
+                to_console_len(response, len);
             }
             goto command_handled_2;
         }
