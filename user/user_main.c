@@ -131,6 +131,12 @@ void ICACHE_FLASH_ATTR to_console(char *str)
     ringbuf_memcpy_into(console_tx_buffer, str, os_strlen(str));
 }
 
+// ⚡ Bolt: Cache redundant os_strlen() call by reusing the length returned by os_sprintf/os_sprintf_flash
+void ICACHE_FLASH_ATTR to_console_len(char *str, uint16_t len)
+{
+    ringbuf_memcpy_into(console_tx_buffer, str, len);
+}
+
 void ICACHE_FLASH_ATTR mac_2_buff(char *buf, uint8_t mac[6])
 {
     os_sprintf(buf, "%02x:%02x:%02x:%02x:%02x:%02x",
@@ -252,16 +258,17 @@ static void ICACHE_FLASH_ATTR dns_resolved(const char *name, ip_addr_t *ip, void
 {
     char response[128];
 
+    int len;
     if (ip == 0)
     {
-        os_sprintf(response, "DNS lookup failed for: %s\r\n", name);
+        len = os_sprintf(response, "DNS lookup failed for: %s\r\n", name);
     }
     else
     {
-        os_sprintf(response, "DNS lookup for %s: " IPSTR "\r\n", name, IP2STR(ip));
+        len = os_sprintf(response, "DNS lookup for %s: " IPSTR "\r\n", name, IP2STR(ip));
     }
 
-    to_console(response);
+    to_console_len(response, len);
     system_os_post(0, SIG_CONSOLE_TX, (ETSParam)currentconn);
 }
 
@@ -275,17 +282,18 @@ void ICACHE_FLASH_ATTR user_ping_recv(void *arg, void *pdata)
     struct ping_option *ping_opt = arg;
     char response[128];
 
+    int len;
     if (ping_resp->ping_err == -1)
     {
-        os_sprintf(response, "ping failed\r\n");
+        len = os_sprintf(response, "ping failed\r\n");
     }
     else
     {
-        os_sprintf(response, "ping recv bytes: %d time: %d ms\r\n", ping_resp->bytes, ping_resp->resp_time);
+        len = os_sprintf(response, "ping recv bytes: %d time: %d ms\r\n", ping_resp->bytes, ping_resp->resp_time);
         ping_success_count++;
     }
 
-    to_console(response);
+    to_console_len(response, len);
     system_os_post(0, SIG_CONSOLE_TX_RAW, (ETSParam)currentconn);
 }
 
@@ -293,8 +301,7 @@ void ICACHE_FLASH_ATTR user_ping_sent(void *arg, void *pdata)
 {
     char response[128];
 
-    os_sprintf(response, "ping finished (%d/%d)\r\n", ping_success_count, ping_opt.count);
-    to_console(response);
+    to_console_len(response, os_sprintf(response, "ping finished (%d/%d)\r\n", ping_success_count, ping_opt.count));
     system_os_post(0, SIG_CONSOLE_TX, (ETSParam)currentconn);
 }
 
@@ -304,8 +311,7 @@ void ICACHE_FLASH_ATTR user_do_ping(const char *name, ip_addr_t *ipaddr, void *a
     {
         char response[128+os_strlen(name)];
 
-        os_sprintf(response, "DNS lookup failed for: %s\r\n", name);
-        to_console(response);
+        to_console_len(response, os_sprintf(response, "DNS lookup failed for: %s\r\n", name));
         system_os_post(0, SIG_CONSOLE_TX, (ETSParam)currentconn);
         return;
     }
@@ -827,10 +833,9 @@ void ICACHE_FLASH_ATTR scan_done(void *arg, STATUS status)
         ringbuf_memcpy_into(console_tx_buffer, "\r", 1);
         while (bss_link != NULL)
         {
-            os_sprintf(response, "%d,\"%s\",%d,\"" MACSTR "\",%d\r\n",
+            to_console_len(response, os_sprintf(response, "%d,\"%s\",%d,\"" MACSTR "\",%d\r\n",
                        bss_link->authmode, bss_link->ssid, bss_link->rssi,
-                       MAC2STR(bss_link->bssid), bss_link->channel);
-            to_console(response);
+                       MAC2STR(bss_link->bssid), bss_link->channel));
 #if MQTT_CLIENT
             mqtt_publish_str(MQTT_TOPIC_SCANRESULT, "ScanResult", response);
 #endif
@@ -839,8 +844,7 @@ void ICACHE_FLASH_ATTR scan_done(void *arg, STATUS status)
     }
     else
     {
-        os_sprintf(response, "scan fail !!!\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf(response, "scan fail !!!\r\n"));
     }
     system_os_post(0, SIG_CONSOLE_TX, (ETSParam)currentconn);
 }
@@ -885,7 +889,7 @@ uint8_t acl_deny_cb(uint8_t proto, uint32_t saddr, uint16_t s_port, uint32_t dad
     )
         return allow;
 
-    os_sprintf(response, "\rdeny: %s Src: %d.%d.%d.%d:%d Dst: %d.%d.%d.%d:%d\r\n",
+    int len = os_sprintf(response, "\rdeny: %s Src: %d.%d.%d.%d:%d Dst: %d.%d.%d.%d:%d\r\n",
                proto == IP_PROTO_TCP ? "TCP" : proto == IP_PROTO_UDP ? "UDP" : "IP4",
                IP2STR((ip_addr_t *)&saddr), s_port, IP2STR((ip_addr_t *)&daddr), d_port);
 
@@ -894,7 +898,7 @@ uint8_t acl_deny_cb(uint8_t proto, uint32_t saddr, uint16_t s_port, uint32_t dad
 #endif
     if (acl_debug)
     {
-        to_console(response);
+        to_console_len(response, len);
         system_os_post(0, SIG_CONSOLE_TX, (ETSParam)deny_cb_conn);
     }
     return allow;
@@ -1156,7 +1160,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 
     if (strcmp(tokens[0], "help") == 0)
     {
-        os_sprintf(response, "show [config|stats|route|dhcp%s]\r\n",
+        to_console_len(response, os_sprintf(response, "show [config|stats|route|dhcp%s]\r\n",
 #if ACLS
                    "|acl"
 #else
@@ -1176,95 +1180,65 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                    "|ota"
 #else
                    ""
-#endif
-        );
-        to_console(response);
+#endif));
 
-        os_sprintf_flash(response, "set [ssid|password|auto_connect|ap_ssid|ap_password|ap_on|ap_open|nat] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [ssid|password|auto_connect|ap_ssid|ap_password|ap_on|ap_open|nat] <val>\r\n"));
 #if WPA2_PEAP
-        os_sprintf_flash(response, "set [use_peap|peap_identity|peap_username|peap_password] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [use_peap|peap_identity|peap_username|peap_password] <val>\r\n"));
 #endif
-        os_sprintf_flash(response, "set [ap_mac|sta_mac|ssid_hidden|sta_hostname|max_clients] <val>\r\nset [network|dns|ip|netmask|gw] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [ap_mac|sta_mac|ssid_hidden|sta_hostname|max_clients] <val>\r\nset [network|dns|ip|netmask|gw] <val>\r\n"));
 #if HAVE_ENC28J60
 #if DCHPSERVER_ENC28J60
-        os_sprintf_flash(response, "set [eth_dhcpd] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [eth_dhcpd] <val>\r\n"));
 #endif
-        os_sprintf_flash(response, "set [eth_enable|eth_ip|eth_netmask|eth_gw|eth_mac] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [eth_enable|eth_ip|eth_netmask|eth_gw|eth_mac] <val>\r\n"));
 #endif
-        os_sprintf_flash(response, "set [max_nat|max_portmap|tcp_timeout|udp_timeout] <val>\r\nroute clear|route add <network> <gw>|route delete <network>\r\ninterface <int> [up|down]\r\nportmap [add|remove] [TCP|UDP] <ext_port> <int_addr> <int_port>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [max_nat|max_portmap|tcp_timeout|udp_timeout] <val>\r\nroute clear|route add <network> <gw>|route delete <network>\r\ninterface <int> [up|down]\r\nportmap [add|remove] [TCP|UDP] <ext_port> <int_addr> <int_port>\r\n"));
 #if ACLS
-        os_sprintf_flash(response, "show acl|acl [from_sta|to_sta|from_ap|to_ap] [IP|TCP|UDP] <src_addr> [<src_port>] <dest_addr> [<dest_port>] [allow|deny|allow_monitor|deny_monitor]\r\nacl [from_sta|to_sta|from_ap|to_ap] clear\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "show acl|acl [from_sta|to_sta|from_ap|to_ap] [IP|TCP|UDP] <src_addr> [<src_port>] <dest_addr> [<dest_port>] [allow|deny|allow_monitor|deny_monitor]\r\nacl [from_sta|to_sta|from_ap|to_ap] clear\r\n"));
 #endif
 #if DAILY_LIMIT
-        os_sprintf_flash(response, "set [daily_limit|timezone] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [daily_limit|timezone] <val>\r\n"));
 #endif
-        os_sprintf_flash(response, "nslookup <name>");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "nslookup <name>"));
 #if ALLOW_PING
-        os_sprintf_flash(response, "|ping <ip_addr>");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "|ping <ip_addr>"));
 #endif
-        os_sprintf_flash(response, "\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "\r\n"));
 #if REMOTE_MONITORING
-        os_sprintf_flash(response, "monitor [on|off] <portnumber>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "monitor [on|off] <portnumber>\r\n"));
 #endif
 #if TOKENBUCKET
-        os_sprintf_flash(response, "set [upstream_kbps|downstream_kbps] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [upstream_kbps|downstream_kbps] <val>\r\n"));
 #endif
-        os_sprintf_flash(response, "set [automesh|am_threshold");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [automesh|am_threshold"));
 #if ALLOW_SLEEP
-        os_sprintf_flash(response, "|am_scan_time|am_sleep_time");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "|am_scan_time|am_sleep_time"));
 #endif
-        os_sprintf_flash(response, "] <val>\r\n");
-        to_console(response);
-        os_sprintf_flash(response, "set [speed|status_led|hw_reset|config_port|config_access|web_port] <val>\r\nsave [config|dhcp]\r\nconnect|disconnect|reset [factory]|lock|unlock <password>|quit\r\n");
-        to_console(response);
-        os_sprintf_flash(response, "set [client_watchdog|ap_watchdog] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "] <val>\r\n"));
+        to_console_len(response, os_sprintf_flash(response, "set [speed|status_led|hw_reset|config_port|config_access|web_port] <val>\r\nsave [config|dhcp]\r\nconnect|disconnect|reset [factory]|lock|unlock <password>|quit\r\n"));
+        to_console_len(response, os_sprintf_flash(response, "set [client_watchdog|ap_watchdog] <val>\r\n"));
 #if ALLOW_SCANNING
-        os_sprintf_flash(response, "scan\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "scan\r\n"));
 #endif
 #if PHY_MODE
-        os_sprintf_flash(response, "set phy_mode [1|2|3]\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set phy_mode [1|2|3]\r\n"));
 #endif
 #if ALLOW_SLEEP
-        os_sprintf_flash(response, "sleep <secs>\r\nset [vmin|vmin_sleep] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "sleep <secs>\r\nset [vmin|vmin_sleep] <val>\r\n"));
 #endif
 #if MQTT_CLIENT
-        os_sprintf_flash(response, "set [mqtt_host|mqtt_port|mqtt_user|mqtt_password|mqtt_id|mqtt_qos|mqtt_prefix|mqtt_command_topic|mqtt_interval] <val>\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "set [mqtt_host|mqtt_port|mqtt_user|mqtt_password|mqtt_id|mqtt_qos|mqtt_prefix|mqtt_command_topic|mqtt_interval] <val>\r\n"));
 #endif
 #if GPIO_CMDS
-        os_sprintf_flash(response, "gpio [0-16] mode [out|in|in_pullup]\r\n");
-        to_console(response);
-        os_sprintf_flash(response, "gpio [0-16] set [high|low]\r\n");
-        to_console(response);
-        os_sprintf_flash(response, "gpio [0-16] get\r\n");
-        to_console(response);
-        os_sprintf_flash(response, "gpio [0-16] trigger [0-16] [monostable_NC|monostable_NO|bistable]\r\n");
-        to_console(response);
-        os_sprintf_flash(response, "gpio [0-16] trigger none\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "gpio [0-16] mode [out|in|in_pullup]\r\n"));
+        to_console_len(response, os_sprintf_flash(response, "gpio [0-16] set [high|low]\r\n"));
+        to_console_len(response, os_sprintf_flash(response, "gpio [0-16] get\r\n"));
+        to_console_len(response, os_sprintf_flash(response, "gpio [0-16] trigger [0-16] [monostable_NC|monostable_NO|bistable]\r\n"));
+        to_console_len(response, os_sprintf_flash(response, "gpio [0-16] trigger none\r\n"));
 #endif
 #if OTAUPDATE
-        os_sprintf_flash(response, "ota [switch|update]\r\n");
-        to_console(response);
+        to_console_len(response, os_sprintf_flash(response, "ota [switch|update]\r\n"));
 #endif
         goto command_handled_2;
     }
@@ -1277,75 +1251,66 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 
         if (nTokens == 1 || (nTokens == 2 && strcmp(tokens[1], "config") == 0))
         {
-            os_sprintf(response, "Version %s (build: %s)\r\n", ESP_REPEATER_VERSION, __TIMESTAMP__);
-            to_console(response);
-            os_sprintf(response, "SKD Version %s\r\n", system_get_sdk_version());
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "Version %s (build: %s)\r\n", ESP_REPEATER_VERSION, __TIMESTAMP__));
+            to_console_len(response, os_sprintf(response, "SKD Version %s\r\n", system_get_sdk_version()));
 
-            os_sprintf(response, "STA: SSID:%s PW:%s%s\r\n",
+            to_console_len(response, os_sprintf(response, "STA: SSID:%s PW:%s%s\r\n",
                        config.ssid,
                        config.locked ? "***" : (char *)config.password,
-                       config.auto_connect ? "" : " [AutoConnect:0]");
-            to_console(response);
+                       config.auto_connect ? "" : " [AutoConnect:0]"));
             if (*(int *)config.bssid != 0)
             {
-                os_sprintf(response, "BSSID: %02x:%02x:%02x:%02x:%02x:%02x\r\n",
+                to_console_len(response, os_sprintf(response, "BSSID: %02x:%02x:%02x:%02x:%02x:%02x\r\n",
                            config.bssid[0], config.bssid[1], config.bssid[2],
-                           config.bssid[3], config.bssid[4], config.bssid[5]);
-                to_console(response);
+                           config.bssid[3], config.bssid[4], config.bssid[5]));
             }
 #if WPA2_PEAP
             if (config.use_PEAP)
             {
-                os_sprintf(response, "PEAP: Identity:%s Username:%s Password: %s\r\n",
+                to_console_len(response, os_sprintf(response, "PEAP: Identity:%s Username:%s Password: %s\r\n",
                            config.PEAP_identity, config.PEAP_username,
-                           config.locked ? "***" : (char *)config.PEAP_password);
-                to_console(response);
+                           config.locked ? "***" : (char *)config.PEAP_password));
             }
 #endif
             // if static IP, add it
-            os_sprintf(response, config.my_addr.addr ? "STA: IP: %d.%d.%d.%d Netmask: %d.%d.%d.%d Gateway: %d.%d.%d.%d\r\n" : "",
-                       IP2STR(&config.my_addr), IP2STR(&config.my_netmask), IP2STR(&config.my_gw));
-            to_console(response);
+            to_console_len(response, os_sprintf(response, config.my_addr.addr ? "STA: IP: %d.%d.%d.%d Netmask: %d.%d.%d.%d Gateway: %d.%d.%d.%d\r\n" : "",
+                       IP2STR(&config.my_addr), IP2STR(&config.my_netmask), IP2STR(&config.my_gw)));
             // if static DNS, add it
-            os_sprintf(response, config.dns_addr.addr ? " DNS: %d.%d.%d.%d\r\n" : "", IP2STR(&config.dns_addr));
-            to_console(response);
+            to_console_len(response, os_sprintf(response, config.dns_addr.addr ? " DNS: %d.%d.%d.%d\r\n" : "", IP2STR(&config.dns_addr)));
 
             if (config.automesh_mode != AUTOMESH_OFF)
             {
-                os_sprintf(response, "Automesh: on (%s) Level: %d Threshold: -%d\r\n",
+                to_console_len(response, os_sprintf(response, "Automesh: on (%s) Level: %d Threshold: -%d\r\n",
                            config.automesh_mode == AUTOMESH_LEARNING ? "learning" : "operational",
                            config.automesh_mode == AUTOMESH_OPERATIONAL ? config.AP_MAC_address[2] : -1,
-                           config.automesh_threshold);
-                to_console(response);
+                           config.automesh_threshold));
             }
 #if ALLOW_SLEEP
             if (config.am_scan_time != 0 && config.automesh_mode != AUTOMESH_OFF)
             {
-                os_sprintf(response, "Automesh: Scan time: %d Sleep time: %d s\r\n", config.am_scan_time, config.am_sleep_time);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "Automesh: Scan time: %d Sleep time: %d s\r\n", config.am_scan_time, config.am_sleep_time));
             }
 #endif
-            os_sprintf(response, "AP:  SSID:%s%s PW:%s%s%s IP:%d.%d.%d.%d/24%s\r\n",
+            to_console_len(response, os_sprintf(response, "AP:  SSID:%s%s PW:%s%s%s IP:%d.%d.%d.%d/24%s\r\n",
                        config.ap_ssid,
                        config.ssid_hidden ? " [hidden]" : "",
                        config.locked ? "***" : (char *)config.ap_password,
                        config.ap_open ? " [open]" : "",
                        config.ap_on ? "" : " [disabled]",
                        IP2STR(&config.network_addr),
-                       config.nat_enable ? " [NAT]" : "");
-            to_console(response);
+                       config.nat_enable ? " [NAT]" : ""));
 
 #if HAVE_ENC28J60
+            int len;
             if (config.eth_enable)
             {
-                os_sprintf(response, config.eth_addr.addr ? "ETH IP: %d.%d.%d.%d Netmask: %d.%d.%d.%d Gateway: %d.%d.%d.%d\r\n" : "ETH: DHCP\r\n", IP2STR(&config.eth_addr), IP2STR(&config.eth_netmask), IP2STR(&config.eth_gw));
+                len = os_sprintf(response, config.eth_addr.addr ? "ETH IP: %d.%d.%d.%d Netmask: %d.%d.%d.%d Gateway: %d.%d.%d.%d\r\n" : "ETH: DHCP\r\n", IP2STR(&config.eth_addr), IP2STR(&config.eth_netmask), IP2STR(&config.eth_gw));
             }
             else
             {
-                os_sprintf_flash(response, "ETH: disabled\r\n");
+                len = os_sprintf_flash(response, "ETH: disabled\r\n");
             }
-            to_console(response);
+            to_console_len(response, len);
 #endif
 
             uint8_t mac_buf[20];
@@ -1361,71 +1326,61 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             {
                 mac_2_buff(mac_buf, config.STA_MAC_address);
             }
-            os_sprintf(response, "STA MAC: %s%s\r\n", mac_buf, rand);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "STA MAC: %s%s\r\n", mac_buf, rand));
             mac_2_buff(mac_buf, config.AP_MAC_address);
-            os_sprintf(response, "AP MAC:  %s\r\n", mac_buf);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "AP MAC:  %s\r\n", mac_buf));
 #if HAVE_ENC28J60
             if (config.eth_enable)
             {
                 mac_2_buff(mac_buf, config.ETH_MAC_address);
-                os_sprintf(response, "ETH MAC: %s\r\n", mac_buf);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "ETH MAC: %s\r\n", mac_buf));
             }
 #endif
-            os_sprintf(response, "STA hostname: %s\r\n", config.sta_hostname);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "STA hostname: %s\r\n", config.sta_hostname));
             if (config.max_clients != MAX_CLIENTS)
             {
-                os_sprintf(response, "Max WiFi clients: %d\r\n", config.max_clients);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "Max WiFi clients: %d\r\n", config.max_clients));
             }
 
             if (config.max_nat != IP_NAPT_MAX || config.tcp_timeout || config.udp_timeout)
             {
-                os_sprintf(response, "NAPT table size: %d\r\nNAPT timeouts: TCP %ds UDP %ds\r\n",
+                to_console_len(response, os_sprintf(response, "NAPT table size: %d\r\nNAPT timeouts: TCP %ds UDP %ds\r\n",
                            config.max_nat,
                            config.tcp_timeout ? config.tcp_timeout : IP_NAPT_TIMEOUT_MS_TCP / 1000,
-                           config.udp_timeout ? config.udp_timeout : IP_NAPT_TIMEOUT_MS_UDP / 1000);
-                to_console(response);
+                           config.udp_timeout ? config.udp_timeout : IP_NAPT_TIMEOUT_MS_UDP / 1000));
             }
 
 #if REMOTE_CONFIG
+            int len;
             if (config.config_port == 0 || config.config_access == 0)
             {
-                os_sprintf_flash(response, "No network console access\r\n");
+                len = os_sprintf_flash(response, "No network console access\r\n");
             }
             else
             {
-                os_sprintf(response, "Network console access on port %d (mode %d)\r\n", config.config_port, config.config_access);
+                len = os_sprintf(response, "Network console access on port %d (mode %d)\r\n", config.config_port, config.config_access);
             }
-            to_console(response);
+            to_console_len(response, len);
 #endif
 
-            os_sprintf(response, "Clock speed: %d\r\n", config.clock_speed);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "Clock speed: %d\r\n", config.clock_speed));
 #if TOKENBUCKET
             if (config.kbps_ds != 0)
             {
-                os_sprintf(response, "Downstream limit: %d kbps\r\n", config.kbps_ds);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "Downstream limit: %d kbps\r\n", config.kbps_ds));
             }
             if (config.kbps_us != 0)
             {
-                os_sprintf(response, "Upstream limit: %d kbps\r\n", config.kbps_us);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "Upstream limit: %d kbps\r\n", config.kbps_us));
             }
 #endif
 #if MQTT_CLIENT
-            os_sprintf(response, "MQTT: %s\r\n", mqtt_enabled ? "enabled" : "disabled");
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "MQTT: %s\r\n", mqtt_enabled ? "enabled" : "disabled"));
 #endif
 #if ALLOW_SLEEP
             if (config.Vmin != 0)
             {
-                os_sprintf(response, "Vmin: %d mV Sleep time: %d s\r\n", config.Vmin, config.Vmin_sleep);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "Vmin: %d mV Sleep time: %d s\r\n", config.Vmin, config.Vmin_sleep));
             }
 #endif
             for (i = 0; i < config.max_portmap; i++)
@@ -1434,17 +1389,15 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (p->valid)
                 {
                     i_ip.addr = p->daddr;
-                    os_sprintf(response, "Portmap: %s: " IPSTR ":%d -> " IPSTR ":%d\r\n",
+                    to_console_len(response, os_sprintf(response, "Portmap: %s: " IPSTR ":%d -> " IPSTR ":%d\r\n",
                                p->proto == IP_PROTO_TCP ? "TCP" : p->proto == IP_PROTO_UDP ? "UDP" : "???",
-                               IP2STR(&my_ip), ntohs(p->mport), IP2STR(&i_ip), ntohs(p->dport));
-                    to_console(response);
+                               IP2STR(&my_ip), ntohs(p->mport), IP2STR(&i_ip), ntohs(p->dport)));
                 }
             }
 #if REMOTE_MONITORING
             if (!config.locked && monitor_port != 0)
             {
-                os_sprintf(response, "Monitor (mode %s) started on port %d\r\n", acl_monitoring ? "acl" : "all", monitor_port);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "Monitor (mode %s) started on port %d\r\n", acl_monitoring ? "acl" : "all", monitor_port));
             }
 #endif
             goto command_handled_2;
@@ -1456,66 +1409,56 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             int16_t i;
             enum phy_mode phy;
 
-            os_sprintf(response, "System uptime: %d:%02d:%02d\r\n", time / 3600, (time % 3600) / 60, time % 60);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "System uptime: %d:%02d:%02d\r\n", time / 3600, (time % 3600) / 60, time % 60));
 #if DAILY_LIMIT
             uint32_t current_stamp = sntp_get_current_timestamp();
-            os_sprintf(response, "Local time: %s\r", current_stamp ? sntp_get_real_time(current_stamp) : "no NTP sync\n");
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "Local time: %s\r", current_stamp ? sntp_get_real_time(current_stamp) : "no NTP sync\n"));
 #endif
-            os_sprintf(response, "%d KiB in (%d packets)\r\n%d KiB out (%d packets)\r\n",
+            to_console_len(response, os_sprintf(response, "%d KiB in (%d packets)\r\n%d KiB out (%d packets)\r\n",
                        (uint32_t)(Bytes_in / 1024), Packets_in,
-                       (uint32_t)(Bytes_out / 1024), Packets_out);
-            to_console(response);
+                       (uint32_t)(Bytes_out / 1024), Packets_out));
 #if DAILY_LIMIT
             if (config.daily_limit != 0)
             {
-                os_sprintf(response, "%d KiB of %d per day used\r\n",
-                           (uint32_t)(Bytes_per_day / 1024), config.daily_limit);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "%d KiB of %d per day used\r\n",
+                           (uint32_t)(Bytes_per_day / 1024), config.daily_limit));
             }
 #endif
-            os_sprintf(response, "Power supply: %d.%03d V\r\n", Vdd / 1000, Vdd % 1000);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "Power supply: %d.%03d V\r\n", Vdd / 1000, Vdd % 1000));
 #ifdef USER_GPIO_OUT
-            os_sprintf(response, "GPIO output status: %d\r\n", config.gpio_out_status);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "GPIO output status: %d\r\n", config.gpio_out_status));
 #endif
 #if PHY_MODE
             phy = wifi_get_phy_mode();
-            os_sprintf(response, "Phy mode: %c\r\n", phy == PHY_MODE_11B ? 'b' : phy == PHY_MODE_11G ? 'g' : 'n');
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "Phy mode: %c\r\n", phy == PHY_MODE_11B ? 'b' : phy == PHY_MODE_11G ? 'g' : 'n'));
 #endif
-            os_sprintf(response, "Free mem: %d\r\n", system_get_free_heap_size());
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "Free mem: %d\r\n", system_get_free_heap_size()));
 
             if (connected)
             {
                 uint8_t buf[20];
                 struct netif *sta_nf = (struct netif *)eagle_lwip_getif(0);
                 addr2str(buf, sta_nf->ip_addr.addr, sta_nf->netmask.addr);
-                os_sprintf(response, "STA IP: %s GW: %d.%d.%d.%d\r\n", buf, IP2STR(&sta_nf->gw));
-                to_console(response);
-                os_sprintf(response, "STA RSSI: %d\r\n", wifi_station_get_rssi());
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "STA IP: %s GW: %d.%d.%d.%d\r\n", buf, IP2STR(&sta_nf->gw)));
+                to_console_len(response, os_sprintf(response, "STA RSSI: %d\r\n", wifi_station_get_rssi()));
             }
             else
             {
-                os_sprintf_flash(response, "STA not connected\r\n");
-                to_console(response);
+                to_console_len(response, os_sprintf_flash(response, "STA not connected\r\n"));
             }
 #if HAVE_ENC28J60
+            int len;
             if (eth_netif)
             {
                 uint8_t buf[20];
                 addr2str(buf, eth_netif->ip_addr.addr, eth_netif->netmask.addr);
-                os_sprintf(response, "ETH IP: %s GW: %d.%d.%d.%d\r\n", buf, IP2STR(&eth_netif->gw));
+                len = os_sprintf(response, "ETH IP: %s GW: %d.%d.%d.%d\r\n", buf, IP2STR(&eth_netif->gw));
             }
             else
             {
-                os_sprintf_flash(response, "ETH not initialized\r\n");
+                len = os_sprintf_flash(response, "ETH not initialized\r\n");
             }
-            to_console(response);
+            to_console_len(response, len);
 #endif
             if (config.ap_on) {
                 // Bolt: Cache redundant API call
@@ -1524,23 +1467,20 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                            num_stations == 1 ? "" : "s");
             }
             else
-                os_sprintf(response, "AP disabled\r\n");
-            to_console(response);
+                to_console_len(response, os_sprintf(response, "AP disabled\r\n"));
             struct station_info *station = wifi_softap_get_station_info();
             while (station)
             {
                 uint8_t sta_mac[20];
                 mac_2_buff(sta_mac, station->bssid);
-                os_sprintf(response, "Station: %s - " IPSTR "\r\n", sta_mac, IP2STR(&station->ip));
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "Station: %s - " IPSTR "\r\n", sta_mac, IP2STR(&station->ip)));
                 station = STAILQ_NEXT(station, next);
             }
             wifi_softap_free_station_info();
 
             if (config.ap_watchdog >= 0 || config.client_watchdog >= 0)
             {
-                os_sprintf(response, "AP watchdog: %d Client watchdog: %d\r\n", ap_watchdog_cnt, client_watchdog_cnt);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "AP watchdog: %d Client watchdog: %d\r\n", ap_watchdog_cnt, client_watchdog_cnt));
             }
             goto command_handled_2;
         }
@@ -1554,15 +1494,13 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             ip_addr_t gw;
             uint8_t buf[20];
 
-            os_sprintf_flash(response, "Routing table:\r\nNetwork              Dest\r\n");
-            to_console(response);
+            to_console_len(response, os_sprintf_flash(response, "Routing table:\r\nNetwork              Dest\r\n"));
 
             for (i = 0; ip_get_route(i, &ip, &mask, &gw); i++)
             {
                 addr2str(buf, ip.addr, mask.addr);
                 /* ⚡ Bolt: Replace manual padding loop and multiple I/O calls with a single padded os_sprintf */
-                os_sprintf(response, "%-21s" IPSTR "\r\n", buf, IP2STR(&gw));
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "%-21s" IPSTR "\r\n", buf, IP2STR(&gw)));
             }
 
             for (nif = netif_list; nif != NULL; nif = nif->next)
@@ -1571,8 +1509,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                     continue;
                 addr2str(buf, nif->ip_addr.addr & nif->netmask.addr, nif->netmask.addr);
                 /* ⚡ Bolt: Replace manual padding loop and multiple I/O calls with a single padded os_sprintf */
-                os_sprintf(response, "%-21s%c%c%d\r\n", buf, nif->name[0], nif->name[1], nif->num);
-                to_console(response);
+                to_console_len(response, os_sprintf(response, "%-21s%c%c%d\r\n", buf, nif->name[0], nif->name[1], nif->num));
             }
 
             /* On the ESP the STA netif is the hardcoded default */
@@ -1586,10 +1523,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 
             if ((default_nf != NULL) && (netif_is_up(default_nf)))
             {
-                os_sprintf_flash(response, "default              ");
-                to_console(response);
-                os_sprintf(response, IPSTR "\r\n", IP2STR(&default_nf->gw));
-                to_console(response);
+                to_console_len(response, os_sprintf_flash(response, "default              "));
+                to_console_len(response, os_sprintf(response, IPSTR "\r\n", IP2STR(&default_nf->gw)));
             }
             goto command_handled_2;
         }
@@ -1598,16 +1533,13 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
         {
             int i;
             struct dhcps_pool *p;
-            os_sprintf(response, "DHCP lease time: %dmin\r\n", config.dhcps_lease_time);
-            to_console(response);
-            os_sprintf_flash(response, "DHCP table:\r\n");
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "DHCP lease time: %dmin\r\n", config.dhcps_lease_time));
+            to_console_len(response, os_sprintf_flash(response, "DHCP table:\r\n"));
             for (i = 0; (p = dhcps_get_mapping(i)); i++)
             {
-                os_sprintf(response, "%02x:%02x:%02x:%02x:%02x:%02x - " IPSTR " - %d\r\n",
+                to_console_len(response, os_sprintf(response, "%02x:%02x:%02x:%02x:%02x:%02x - " IPSTR " - %d\r\n",
                            p->mac[0], p->mac[1], p->mac[2], p->mac[3], p->mac[4], p->mac[5],
-                           IP2STR(&p->ip), p->lease_timer);
-                to_console(response);
+                           IP2STR(&p->ip), p->lease_timer));
             }
             goto command_handled_2;
         }
@@ -1620,13 +1552,11 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (!acl_is_empty(i))
                 {
                     ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
-                    acl_show(i, response);
-                    to_console(response);
+                    acl_show(i, response));
                 }
             }
-            os_sprintf(response, "Packets denied: %d Packets allowed: %d\r\n",
-                       acl_deny_count, acl_allow_count);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "Packets denied: %d Packets allowed: %d\r\n",
+                       acl_deny_count, acl_allow_count));
             goto command_handled_2;
         }
 #endif
@@ -1635,18 +1565,14 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
         {
             if (os_strcmp(config.mqtt_host, "none") == 0)
             {
-                os_sprintf_flash(response, "MQTT not enabled (no mqtt_host)\r\n");
-                to_console(response);
+                to_console_len(response, os_sprintf_flash(response, "MQTT not enabled (no mqtt_host)\r\n"));
                 goto command_handled_2;
             }
-            os_sprintf(response, "MQTT client %s\r\n", mqtt_connected ? "connected" : "disconnected");
-            to_console(response);
-            os_sprintf(response, "MQTT host: %s\r\nMQTT port: %d\r\nMQTT user: %s\r\nMQTT password: %s\r\n",
-                       config.mqtt_host, config.mqtt_port, config.mqtt_user, config.locked ? "***" : (char *)config.mqtt_password);
-            to_console(response);
-            os_sprintf(response, "MQTT id: %s\r\nMQTT prefix: %s\r\nMQTT QoS: %d\r\nMQTT command topic: %s\r\nMQTT gpio_out topic: %s\r\nMQTT interval: %d s\r\nMQTT mask: %04x\r\n",
-                       config.mqtt_id, config.mqtt_prefix, config.mqtt_qos, config.mqtt_command_topic, config.mqtt_gpio_out_topic, config.mqtt_interval, config.mqtt_topic_mask);
-            to_console(response);
+            to_console_len(response, os_sprintf(response, "MQTT client %s\r\n", mqtt_connected ? "connected" : "disconnected"));
+            to_console_len(response, os_sprintf(response, "MQTT host: %s\r\nMQTT port: %d\r\nMQTT user: %s\r\nMQTT password: %s\r\n",
+                       config.mqtt_host, config.mqtt_port, config.mqtt_user, config.locked ? "***" : (char *)config.mqtt_password));
+            to_console_len(response, os_sprintf(response, "MQTT id: %s\r\nMQTT prefix: %s\r\nMQTT QoS: %d\r\nMQTT command topic: %s\r\nMQTT gpio_out topic: %s\r\nMQTT interval: %d s\r\nMQTT mask: %04x\r\n",
+                       config.mqtt_id, config.mqtt_prefix, config.mqtt_qos, config.mqtt_command_topic, config.mqtt_gpio_out_topic, config.mqtt_interval, config.mqtt_topic_mask));
             goto command_handled_2;
         }
 #endif
@@ -1677,12 +1603,10 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                         if (config.gpio_trigger_type[pin] == BISTABLE_NO)
                             type = "bistable normally open";
                     }
-                    os_sprintf(response, "GPIO %d: %s", pin, mode);
-                    to_console(response);
+                    to_console_len(response, os_sprintf(response, "GPIO %d: %s", pin, mode));
                     if (type)
                     {
-                        os_sprintf(response, ", triggers GPIO %d as a %s", config.gpio_trigger_pin[pin], type);
-                        to_console(response);
+                        to_console_len(response, os_sprintf(response, ", triggers GPIO %d as a %s", config.gpio_trigger_pin[pin], type));
                     }
                     to_console("\r\n");
                 }
@@ -1693,11 +1617,9 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 #if OTAUPDATE
         if (nTokens == 2 && strcmp(tokens[1], "ota") == 0)
         {
-            os_sprintf_flash(response, "Currently running rom %d\r\n", rboot_get_current_rom());
-            to_console(response);
-            os_sprintf(response, "Firmware update: %s:%d/%s\r\n", config.ota_host, config.ota_port,
-                       rboot_get_current_rom() ? OTA_ROM0 : OTA_ROM1);
-            to_console(response);
+            to_console_len(response, os_sprintf_flash(response, "Currently running rom %d\r\n", rboot_get_current_rom()));
+            to_console_len(response, os_sprintf(response, "Firmware update: %s:%d/%s\r\n", config.ota_host, config.ota_port,
+                       rboot_get_current_rom() ? OTA_ROM0 : OTA_ROM1));
             goto command_handled_2;
         }
 #endif
@@ -3250,10 +3172,10 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 #endif
 
     /* Control comes here only if the tokens[0] command is not handled */
-    os_sprintf_flash(response, "\r\nInvalid Command\r\n");
+    int len = os_sprintf_flash(response, "\r\nInvalid Command\r\n");
 
 command_handled:
-    to_console(response);
+    to_console_len(response, len);
 command_handled_2:
     system_os_post(0, SIG_CONSOLE_TX, (ETSParam)pespconn);
     return;
