@@ -13,3 +13,6 @@
 ## 2024-04-03 - Compile-time String Literal Length Evaluation
 **Learning:** Codebase performance pattern: Calling `os_strlen()` on string literals (e.g., `os_strlen("online")`) introduces an unnecessary O(N) runtime evaluation overhead. Because the ESP8266 `os_strlen` is often an external library function rather than an intrinsic mapped by the compiler, it can't always be optimized out by the compiler like the standard `strlen` can.
 **Action:** Replace `os_strlen("literal")` with `(sizeof("literal") - 1)` to guarantee that string length evaluation is completely resolved at compile-time, saving CPU cycles and instruction memory. Note: Do not apply this to fixed-size array buffers where the runtime string length may differ from the maximum array size.
+## 2026-03-14 - Pre-calculate literal lengths for arrays of string literals
+**Learning:** Codebase performance pattern: When iterating over arrays of string literals, dynamically calling `os_strlen()` inside the loop introduces O(N) runtime evaluations for each element.
+**Action:** Pre-calculate their lengths at compile-time into a parallel array (e.g., `const uint8_t txt_len[] = {sizeof("...") - 1, ...}`) to convert O(N) runtime length evaluations inside loops into O(1) array lookups.
