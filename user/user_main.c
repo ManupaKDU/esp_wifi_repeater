@@ -1554,7 +1554,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (!acl_is_empty(i))
                 {
                     ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
-                    to_console_len(response, acl_show(i, response));
+                    acl_show(i, response);
+                    to_console_len(response, os_strlen(response));
                 }
             }
             to_console_len(response, os_sprintf(response, "Packets denied: %d Packets allowed: %d\r\n",
