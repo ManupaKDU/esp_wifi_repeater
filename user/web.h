@@ -125,8 +125,8 @@ setTimeout(\"location.href = '/'\",1000);\
 <form autocomplete='off' action='' method='GET'>\
 <table role='presentation'>\
 <tr>\
-<td><label for='unlock_password'>Password <span aria-hidden='true'>*</span>:</label></td>\
-<td><input id='unlock_password' type='password' name='unlock_password' required autofocus maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><label for='unlock_password'>Password:</label></td>\
+<td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
 <td></td>\
