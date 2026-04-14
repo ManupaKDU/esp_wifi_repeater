@@ -57,15 +57,15 @@
 #endif
 
 #define os_sprintf_flash(str, fmt, ...)                                    \
-    do                                                                     \
-    {                                                                      \
+    ({                                                                     \
         static const char flash_str[] ICACHE_RODATA_ATTR STORE_ATTR = fmt; \
         int flen = (sizeof(flash_str) + 4) & ~3;                           \
         char *f = (char *)os_malloc(flen);                                 \
         os_memcpy(f, flash_str, flen);                                     \
-        ets_vsprintf(str, f, ##__VA_ARGS__);                               \
+        int ret = ets_vsprintf(str, f, ##__VA_ARGS__);                     \
         os_free(f);                                                        \
-    } while (0)
+        ret;                                                               \
+    })
 
 uint32_t Vdd;
 
@@ -1242,6 +1242,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
         to_console_len(response, os_sprintf_flash(response, "ota [switch|update]\r\n"));
 #endif
         goto command_handled_2;
+        ;
     }
 
     if (strcmp(tokens[0], "show") == 0)
@@ -1553,7 +1554,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (!acl_is_empty(i))
                 {
                     ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
-                    acl_show(i, response));
+                    acl_show(i, response);
                 }
             }
             to_console_len(response, os_sprintf(response, "Packets denied: %d Packets allowed: %d\r\n",
