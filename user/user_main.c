@@ -1548,12 +1548,14 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
         if (nTokens == 2 && strcmp(tokens[1], "acl") == 0)
         {
             char *txt[] = {"From STA:\r\n", "To STA:\r\n", "From AP:\r\n", "To AP:\r\n"};
+            /* ⚡ Bolt: Pre-calculate array of literal lengths at compile time to convert O(N) os_strlen inside loop to O(1) */
+            const uint8_t txt_len[] = {sizeof("From STA:\r\n") - 1, sizeof("To STA:\r\n") - 1, sizeof("From AP:\r\n") - 1, sizeof("To AP:\r\n") - 1};
             for (i = 0; i < MAX_NO_ACLS; i++)
             {
                 if (!acl_is_empty(i))
                 {
-                    ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
-                    acl_show(i, response));
+                    ringbuf_memcpy_into(console_tx_buffer, txt[i], txt_len[i]);
+                    acl_show(i, response);
                 }
             }
             to_console_len(response, os_sprintf(response, "Packets denied: %d Packets allowed: %d\r\n",
