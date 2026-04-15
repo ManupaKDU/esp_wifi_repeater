@@ -1161,27 +1161,31 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 
     if (strcmp(tokens[0], "help") == 0)
     {
-        to_console_len(response, os_sprintf(response, "show [config|stats|route|dhcp%s]\r\n",
+        to_console_len(response, os_sprintf(response, "show [config|stats|route|dhcp%s%s%s%s]\r\n",
 #if ACLS
                    "|acl"
 #else
                    ""
 #endif
+,
 #if MQTT_CLIENT
                    "|mqtt"
 #else
                    ""
 #endif
+,
 #if GPIO_CMDS
                    "|gpio"
 #else
                    ""
 #endif
+,
 #if OTAUPDATE
                    "|ota"
 #else
                    ""
-#endif));
+#endif
+));
 
         to_console_len(response, os_sprintf_flash(response, "set [ssid|password|auto_connect|ap_ssid|ap_password|ap_on|ap_open|nat] <val>\r\n"));
 #if WPA2_PEAP
@@ -1553,7 +1557,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (!acl_is_empty(i))
                 {
                     ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
-                    acl_show(i, response));
+                    acl_show(i, response);
                 }
             }
             to_console_len(response, os_sprintf(response, "Packets denied: %d Packets allowed: %d\r\n",
