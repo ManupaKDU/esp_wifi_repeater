@@ -16,3 +16,6 @@
 ## 2026-04-16 - Pre-calculated Literal Length Evaluation in Loops
 **Learning:** Codebase performance pattern: When iterating over arrays of string literals, pre-calculate their lengths at compile-time into a parallel array (e.g., `const uint8_t txt_len[] = {sizeof("...") - 1, ...}`) to convert O(N) runtime `os_strlen` length evaluations inside loops into O(1) array lookups.
 **Action:** When you see an array of strings iterated in a loop, pre-calculate lengths to eliminate repeated `os_strlen` evaluations.
+## 2026-04-16 - Macro Statement Expressions
+**Learning:** Codebase pattern: To make multi-statement C macros return a value (such as the length of a formatted string from `ets_vsprintf`) in the ESP8266 toolchain, use GNU C statement expressions `({ ... })` instead of `do { ... } while(0)` blocks. This prevents 'expected expression before do' compilation errors when the macro is passed as a function argument.
+**Action:** When modifying a macro like `os_sprintf_flash` to be passed directly as a function argument, convert it from a `do/while` loop to a GNU C statement expression so it returns the evaluated length correctly.
