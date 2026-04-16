@@ -57,15 +57,15 @@
 #endif
 
 #define os_sprintf_flash(str, fmt, ...)                                    \
-    ({                                                                     \
+    do                                                                     \
+    {                                                                      \
         static const char flash_str[] ICACHE_RODATA_ATTR STORE_ATTR = fmt; \
         int flen = (sizeof(flash_str) + 4) & ~3;                           \
         char *f = (char *)os_malloc(flen);                                 \
         os_memcpy(f, flash_str, flen);                                     \
-        int len = ets_vsprintf(str, f, ##__VA_ARGS__);                     \
+        ets_vsprintf(str, f, ##__VA_ARGS__);                               \
         os_free(f);                                                        \
-        len;                                                               \
-    })
+    } while (0)
 
 uint32_t Vdd;
 
