@@ -10,7 +10,7 @@
 <script>\
 if (window.location.search.substr(1) != '')\
 {\
-document.getElementById('config').display = 'none';\
+document.getElementById('config').style.display = 'none';\
 document.body.innerHTML ='<h1>ESP WiFi NAT Router Config</h1>The new settings have been sent to the device...';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -116,7 +116,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <script>\
 if (window.location.search.substr(1) != '')\
 {\
-document.getElementById('config').display = 'none';\
+document.getElementById('config').style.display = 'none';\
 document.body.innerHTML ='<h1>ESP WiFi NAT Router Config</h1>Unlock request has been sent to the device...';\
 setTimeout(\"location.href = '/'\",1000);\
 }\
@@ -126,7 +126,7 @@ setTimeout(\"location.href = '/'\",1000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='unlock_password'>Password:</label></td>\
-<td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><input id='unlock_password' type='password' name='unlock_password' maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false' autofocus required/> <label><input type='checkbox' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
 <td></td>\
