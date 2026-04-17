@@ -1182,7 +1182,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                    "|ota"
 #else
                    ""
-#endif));
+#endif
+        ));
 
         to_console_len(response, os_sprintf_flash(response, "set [ssid|password|auto_connect|ap_ssid|ap_password|ap_on|ap_open|nat] <val>\r\n"));
 #if WPA2_PEAP
