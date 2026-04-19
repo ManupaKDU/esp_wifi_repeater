@@ -19,3 +19,6 @@
 ## 2024-05-18 - C Macro Variable Shadowing
 **Learning:** When defining multi-statement C macros using statement expressions `({ ... })` that declare local variables, those variable names must be unique (e.g., `__os_sprintf_flash_len`). Using a common name like `len` will shadow any user-provided variables of the same name passed in `__VA_ARGS__`, leading to uninitialized reads or garbage outputs.
 **Action:** Always prefix local variables inside multi-statement macros with unique identifiers (like `__macro_name_var`) to prevent accidental variable shadowing.
+## 2024-05-18 - C Preprocessor Syntax Pitfall
+**Learning:** In C, appending trailing tokens (like parentheses `);`) on the exact same line as an `#endif` macro directive (e.g. `#endif);`) causes a strict compiler failure: "extra tokens at end of #endif directive".
+**Action:** When wrapping preprocessor blocks inside function calls, always put trailing closing syntax (like `));`) on a separate line immediately following the `#endif` directive.
