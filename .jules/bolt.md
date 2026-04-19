@@ -13,3 +13,12 @@
 ## 2024-04-03 - Compile-time String Literal Length Evaluation
 **Learning:** Codebase performance pattern: Calling `os_strlen()` on string literals (e.g., `os_strlen("online")`) introduces an unnecessary O(N) runtime evaluation overhead. Because the ESP8266 `os_strlen` is often an external library function rather than an intrinsic mapped by the compiler, it can't always be optimized out by the compiler like the standard `strlen` can.
 **Action:** Replace `os_strlen("literal")` with `(sizeof("literal") - 1)` to guarantee that string length evaluation is completely resolved at compile-time, saving CPU cycles and instruction memory. Note: Do not apply this to fixed-size array buffers where the runtime string length may differ from the maximum array size.
+## 2024-05-18 - Avoid Micro-Optimizing I/O Bound Paths
+**Learning:** In the context of console command handlers or network output, calculating `os_strlen()` on an 11-byte string literal takes a fraction of a microsecond. The latency of the underlying serial UART or network I/O completely dominates this time. Attempting to optimize such `strlen` calls with parallel arrays of pre-calculated lengths introduces complexity and degrades maintainability without any measurable performance benefit.
+**Action:** Do not apply micro-optimizations (like parallel string length arrays or compile-time `sizeof` macro replacements) to non-critical, I/O-bound paths where the impact cannot be measured. Only apply these patterns in true algorithmic hot paths or large data processing loops.
+## 2024-05-18 - C Macro Variable Shadowing
+**Learning:** When defining multi-statement C macros using statement expressions `({ ... })` that declare local variables, those variable names must be unique (e.g., `__os_sprintf_flash_len`). Using a common name like `len` will shadow any user-provided variables of the same name passed in `__VA_ARGS__`, leading to uninitialized reads or garbage outputs.
+**Action:** Always prefix local variables inside multi-statement macros with unique identifiers (like `__macro_name_var`) to prevent accidental variable shadowing.
+## 2024-05-18 - C Preprocessor Syntax Pitfall
+**Learning:** In C, appending trailing tokens (like parentheses `);`) on the exact same line as an `#endif` macro directive (e.g. `#endif);`) causes a strict compiler failure: "extra tokens at end of #endif directive".
+**Action:** When wrapping preprocessor blocks inside function calls, always put trailing closing syntax (like `));`) on a separate line immediately following the `#endif` directive.

@@ -57,15 +57,15 @@
 #endif
 
 #define os_sprintf_flash(str, fmt, ...)                                    \
-    do                                                                     \
-    {                                                                      \
+    ({                                                                     \
         static const char flash_str[] ICACHE_RODATA_ATTR STORE_ATTR = fmt; \
         int flen = (sizeof(flash_str) + 4) & ~3;                           \
         char *f = (char *)os_malloc(flen);                                 \
         os_memcpy(f, flash_str, flen);                                     \
-        ets_vsprintf(str, f, ##__VA_ARGS__);                               \
+        int __os_sprintf_flash_len = ets_vsprintf(str, f, ##__VA_ARGS__);  \
         os_free(f);                                                        \
-    } while (0)
+        __os_sprintf_flash_len;                                            \
+    })
 
 uint32_t Vdd;
 
@@ -1181,7 +1181,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                    "|ota"
 #else
                    ""
-#endif));
+#endif
+                   ));
 
         to_console_len(response, os_sprintf_flash(response, "set [ssid|password|auto_connect|ap_ssid|ap_password|ap_on|ap_open|nat] <val>\r\n"));
 #if WPA2_PEAP
@@ -1464,8 +1465,9 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             if (config.ap_on) {
                 // Bolt: Cache redundant API call
                 uint8_t num_stations = wifi_softap_get_station_num();
-                os_sprintf(response, "%d Station%s connected to SoftAP\r\n", num_stations,
-                           num_stations == 1 ? "" : "s");
+                /* ⚡ Bolt: Capture return length to avoid redundant os_strlen inside to_console_len and fix missing console output */
+                to_console_len(response, os_sprintf(response, "%d Station%s connected to SoftAP\r\n", num_stations,
+                           num_stations == 1 ? "" : "s"));
             }
             else
                 to_console_len(response, os_sprintf(response, "AP disabled\r\n"));
@@ -1553,7 +1555,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 if (!acl_is_empty(i))
                 {
                     ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
-                    acl_show(i, response));
+                    acl_show(i, response);
                 }
             }
             to_console_len(response, os_sprintf(response, "Packets denied: %d Packets allowed: %d\r\n",
