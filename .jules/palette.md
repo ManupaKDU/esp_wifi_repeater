@@ -27,3 +27,7 @@
 ## 2024-05-18 - Single-Input Gate Auto-Focus
 **Learning:** For interstitial or security "gate" pages (like device lock screens) that contain only a single primary input field, users face unnecessary friction if they must manually focus the field before typing.
 **Action:** Always apply `autofocus` and `required` attributes to the primary input on single-input interstitial pages to reduce friction and prevent empty submissions. Pair with visually hidden asterisks (`aria-hidden='true'`) on labels for sighted users.
+
+## 2024-05-18 - C Preprocessor Token Limits
+**Learning:** When modifying embedded HTML macros in C header files, be incredibly cautious around existing preprocessor directives. Compilers (like xtensa-gcc) will throw fatal errors if syntax (like closing parentheses or semicolons `));`) is placed on the exact same line following an `#endif` directive, because it treats them as illegal extra preprocessor tokens.
+**Action:** Always ensure any closing syntax or logic continues on a new line *after* an `#endif` block when resolving macro strings in C.
