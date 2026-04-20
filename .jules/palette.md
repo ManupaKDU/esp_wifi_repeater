@@ -31,3 +31,7 @@
 ## 2024-05-18 - C Preprocessor Token Limits
 **Learning:** When modifying embedded HTML macros in C header files, be incredibly cautious around existing preprocessor directives. Compilers (like xtensa-gcc) will throw fatal errors if syntax (like closing parentheses or semicolons `));`) is placed on the exact same line following an `#endif` directive, because it treats them as illegal extra preprocessor tokens.
 **Action:** Always ensure any closing syntax or logic continues on a new line *after* an `#endif` block when resolving macro strings in C.
+
+## 2024-05-18 - Nested C Macros Syntax Errors
+**Learning:** Found another syntax error in the same codebase caused by mismatched closing parentheses during refactoring nested macros (`acl_show(i, response));`).
+**Action:** When tracking down CI build failures in C codebases, closely inspect the line for stray tokens when parentheses are chained heavily at the end of statements.
