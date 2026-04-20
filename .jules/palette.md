@@ -23,3 +23,15 @@
 ## 2024-05-15 - Prevent empty lock submissions & add lock help text
 **Learning:** Destructive or highly impactful actions (like locking a device interface) that require an explicit user confirmation via a checkbox can be confusing if the associated submit button remains active. Users may accidentally submit the form empty. Additionally, failing to inform the user beforehand which password will be needed to unlock creates anxiety and bad UX.
 **Action:** Disable the submit button natively via an inline `disabled` attribute and dynamically enable it using `onchange="document.getElementById('lock_submit').disabled = !this.checked;"`. Add explicit `aria-describedby` helper text explaining the unlock mechanism *before* the user locks themselves out.
+
+## 2024-05-18 - Single-Input Gate Auto-Focus
+**Learning:** For interstitial or security "gate" pages (like device lock screens) that contain only a single primary input field, users face unnecessary friction if they must manually focus the field before typing.
+**Action:** Always apply `autofocus` and `required` attributes to the primary input on single-input interstitial pages to reduce friction and prevent empty submissions. Pair with visually hidden asterisks (`aria-hidden='true'`) on labels for sighted users.
+
+## 2024-05-18 - C Preprocessor Token Limits
+**Learning:** When modifying embedded HTML macros in C header files, be incredibly cautious around existing preprocessor directives. Compilers (like xtensa-gcc) will throw fatal errors if syntax (like closing parentheses or semicolons `));`) is placed on the exact same line following an `#endif` directive, because it treats them as illegal extra preprocessor tokens.
+**Action:** Always ensure any closing syntax or logic continues on a new line *after* an `#endif` block when resolving macro strings in C.
+
+## 2024-05-18 - Nested C Macros Syntax Errors
+**Learning:** Found another syntax error in the same codebase caused by mismatched closing parentheses during refactoring nested macros (`acl_show(i, response));`).
+**Action:** When tracking down CI build failures in C codebases, closely inspect the line for stray tokens when parentheses are chained heavily at the end of statements.
