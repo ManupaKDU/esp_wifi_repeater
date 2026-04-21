@@ -35,3 +35,6 @@
 ## 2024-05-18 - Nested C Macros Syntax Errors
 **Learning:** Found another syntax error in the same codebase caused by mismatched closing parentheses during refactoring nested macros (`acl_show(i, response));`).
 **Action:** When tracking down CI build failures in C codebases, closely inspect the line for stray tokens when parentheses are chained heavily at the end of statements.
+## 2024-06-25 - Add native dark mode support to config pages
+**Learning:** Adding `<meta name="color-scheme" content="light dark">` enables native browser dark mode support automatically for unstyled native HTML elements without needing CSS changes. This is highly beneficial for the unstyled embedded web interface of ESP8266 where memory constraints limit custom CSS.
+**Action:** Use the `color-scheme` meta tag early when building highly constrained native interfaces to ensure a base level of accessibility for users preferring dark mode.
