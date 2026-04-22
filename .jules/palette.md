@@ -35,3 +35,6 @@
 ## 2024-05-18 - Nested C Macros Syntax Errors
 **Learning:** Found another syntax error in the same codebase caused by mismatched closing parentheses during refactoring nested macros (`acl_show(i, response));`).
 **Action:** When tracking down CI build failures in C codebases, closely inspect the line for stray tokens when parentheses are chained heavily at the end of statements.
+## 2024-05-14 - Improve inline submission feedback for embedded interfaces
+**Learning:** Destructively replacing `document.body.innerHTML` for submission feedback in single-page embedded interfaces completely removes context for screen readers and breaks layout.
+**Action:** Replace destructive body replacements with pre-rendered, hidden `<div role="status">` elements. Toggle their visibility and prepend "Success - " to `document.title` to ensure the state change is robustly announced by assistive technologies without causing layout shifts.
