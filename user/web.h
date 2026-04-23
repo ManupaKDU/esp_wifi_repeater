@@ -6,12 +6,14 @@
 </head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
+<div id='status' role='status' style='display:none;'>The new settings have been sent to the device...</div>\
 <div id='config'>\
 <script>\
 if (window.location.search.substr(1) != '')\
 {\
-document.getElementById('config').display = 'none';\
-document.body.innerHTML ='<h1>ESP WiFi NAT Router Config</h1>The new settings have been sent to the device...';\
+document.getElementById('config').style.display = 'none';\
+document.getElementById('status').style.display = 'block';\
+document.title = 'Settings Sent - ESP WiFi NAT Router Config';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
 </script>\
@@ -112,12 +114,14 @@ setTimeout(\"location.href = '/'\",10000);\
 </head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
+<div id='status' role='status' style='display:none;'>Unlock request has been sent to the device...</div>\
 <div id='config'>\
 <script>\
 if (window.location.search.substr(1) != '')\
 {\
-document.getElementById('config').display = 'none';\
-document.body.innerHTML ='<h1>ESP WiFi NAT Router Config</h1>Unlock request has been sent to the device...';\
+document.getElementById('config').style.display = 'none';\
+document.getElementById('status').style.display = 'block';\
+document.title = 'Unlock Request Sent - ESP WiFi NAT Router Config';\
 setTimeout(\"location.href = '/'\",1000);\
 }\
 </script>\
