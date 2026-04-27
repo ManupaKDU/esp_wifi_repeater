@@ -39,3 +39,7 @@
 ## 2024-05-18 - Non-destructive Form Feedback
 **Learning:** Overwriting `document.body.innerHTML` to provide feedback after form submission is destructive. It removes all screen reader context, breaks layout, and is an inaccessible pattern, especially in embedded web interfaces without external pages to redirect to.
 **Action:** Use a pre-rendered, visually hidden `<div role='status'>` and toggle its visibility (e.g., via `style.display`) when providing feedback. Update `document.title` to robustly announce state changes without layout shifts.
+
+## 2024-05-20 - Disabled states on auxiliary controls
+**Learning:** When a primary input field (like a password field) is dynamically disabled based on another control's state, auxiliary inline controls directly associated with it (like a "Show Password" toggle) can cause confusion if left enabled. Users may attempt to interact with the toggle, expecting it to affect the disabled input, leading to a disjointed UX.
+**Action:** Always ensure that when writing dynamic disabled logic for primary fields, auxiliary controls tied to that input's value or visibility are also disabled synchronously to maintain a clear and consistent interface state.
