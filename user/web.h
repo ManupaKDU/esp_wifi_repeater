@@ -50,12 +50,12 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='ap_password'>Password:</label></td>\
-<td><input id='ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('ap_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><input id='ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='ap_show_pwd' type='checkbox' onclick=\"document.getElementById('ap_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
 <td>\
- <select id='ap_open' name='ap_open' onchange=\"document.getElementById('ap_password').disabled = (this.value === 'open');\">\
+ <select id='ap_open' name='ap_open' onchange=\"var isOpen = (this.value === 'open'); document.getElementById('ap_password').disabled = isOpen; document.getElementById('ap_show_pwd').disabled = isOpen;\">\
  <option value='open'%s>Open</option>\
  <option value='wpa2'%s>WPA2</option>\
 </select>\
@@ -73,7 +73,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <small id='ap_pwd_help'>\
 <i>Password: </i>8-63 chars<br />\
 </small>\
-<script>document.getElementById('ap_password').disabled = (document.getElementById('ap_open').value === 'open');</script>\
+<script>var isOpen = (document.getElementById('ap_open').value === 'open'); document.getElementById('ap_password').disabled = isOpen; document.getElementById('ap_show_pwd').disabled = isOpen;</script>\
 </form>\
 \
 <h2>Lock Config</h2>\
