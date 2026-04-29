@@ -35,6 +35,12 @@
 #include "ringbuf.h"
 #include "user_config.h"
 #include "config_flash.h"
+#if MDNS_REPEATER
+#include "lwip/mdns.h"
+#endif
+#ifdef REPEATER_MODE
+#include "bridge.h"
+#endif
 #include "sys_time.h"
 #include "sntp.h"
 
@@ -853,7 +859,6 @@ void ICACHE_FLASH_ATTR scan_done(void *arg, STATUS status)
 }
 #endif
 
-#if ACLS
 void ICACHE_FLASH_ATTR parse_IP_addr(uint8_t *str, uint32_t *addr, uint32_t *mask)
 {
     int i;
@@ -878,6 +883,7 @@ void ICACHE_FLASH_ATTR parse_IP_addr(uint8_t *str, uint32_t *addr, uint32_t *mas
     *addr = ipaddr_addr(str);
 }
 
+#if ACLS
 struct espconn *deny_cb_conn = 0;
 uint8_t acl_debug = 0;
 
@@ -1163,7 +1169,7 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 
     if (strcmp(tokens[0], "help") == 0)
     {
-        to_console_len(response, os_sprintf(response, "show [config|stats|route|dhcp%s]\r\n",
+        to_console_len(response, os_sprintf(response, "show [config|stats|route|dhcp|repeater%s]\r\n",
 #if ACLS
                    "|acl"
 #else
@@ -1190,16 +1196,21 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 #if WPA2_PEAP
         to_console_len(response, os_sprintf_flash(response, "set [use_peap|peap_identity|peap_username|peap_password] <val>\r\n"));
 #endif
-        to_console_len(response, os_sprintf_flash(response, "set [ap_mac|sta_mac|ssid_hidden|sta_hostname|max_clients] <val>\r\nset [network|dns|ip|netmask|gw] <val>\r\n"));
-#if HAVE_ENC28J60
+to_console_len(response, os_sprintf_flash(response, "set [ap_mac|sta_mac|ssid_hidden|sta_hostname|max_clients] <val>\r\n"));
+#ifndef REPEATER_MODE
+to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask|gw] <val>\r\n"));
+#endif#if HAVE_ENC28J60
 #if DCHPSERVER_ENC28J60
         to_console_len(response, os_sprintf_flash(response, "set [eth_dhcpd] <val>\r\n"));
 #endif
         to_console_len(response, os_sprintf_flash(response, "set [eth_enable|eth_ip|eth_netmask|eth_gw|eth_mac] <val>\r\n"));
 #endif
+#ifndef REPEATER_MODE
         to_console_len(response, os_sprintf_flash(response, "set [max_nat|max_portmap|tcp_timeout|udp_timeout] <val>\r\nroute clear|route add <network> <gw>|route delete <network>\r\ninterface <int> [up|down]\r\nportmap [add|remove] [TCP|UDP] <ext_port> <int_addr> <int_port>\r\n"));
+#endif
 #if ACLS
         to_console_len(response, os_sprintf_flash(response, "show acl|acl [from_sta|to_sta|from_ap|to_ap] [IP|TCP|UDP] <src_addr> [<src_port>] <dest_addr> [<dest_port>] [allow|deny|allow_monitor|deny_monitor]\r\nacl [from_sta|to_sta|from_ap|to_ap] clear\r\n"));
+#endif
 #endif
 #if DAILY_LIMIT
         to_console_len(response, os_sprintf_flash(response, "set [daily_limit|timezone] <val>\r\n"));
@@ -1215,14 +1226,13 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 #if TOKENBUCKET
         to_console_len(response, os_sprintf_flash(response, "set [upstream_kbps|downstream_kbps] <val>\r\n"));
 #endif
+#ifndef REPEATER_MODE
         to_console_len(response, os_sprintf_flash(response, "set [automesh|am_threshold"));
 #if ALLOW_SLEEP
         to_console_len(response, os_sprintf_flash(response, "|am_scan_time|am_sleep_time"));
 #endif
         to_console_len(response, os_sprintf_flash(response, "] <val>\r\n"));
-        to_console_len(response, os_sprintf_flash(response, "set [speed|status_led|hw_reset|config_port|config_access|web_port] <val>\r\nsave [config|dhcp]\r\nconnect|disconnect|reset [factory]|lock|unlock <password>|quit\r\n"));
-        to_console_len(response, os_sprintf_flash(response, "set [client_watchdog|ap_watchdog] <val>\r\n"));
-#if ALLOW_SCANNING
+#endif#if ALLOW_SCANNING
         to_console_len(response, os_sprintf_flash(response, "scan\r\n"));
 #endif
 #if PHY_MODE
@@ -1468,10 +1478,6 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             {
                 /* ⚡ Bolt: Cache wifi_softap_get_station_num() to avoid redundant API call */
                 uint8_t num_stations = wifi_softap_get_station_num();
-<<<<<<< HEAD
-=======
-                /* ⚡ Bolt: Capture return length to avoid redundant os_strlen inside to_console_len and fix missing console output */
->>>>>>> pr/63
                 to_console_len(response, os_sprintf(response, "%d Station%s connected to SoftAP\r\n", num_stations,
                            num_stations == 1 ? "" : "s"));
             }
@@ -1493,6 +1499,14 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             }
             goto command_handled_2;
         }
+
+#ifdef REPEATER_MODE
+        if (nTokens == 2 && strcmp(tokens[1], "repeater") == 0)
+        {
+            bridge_show_fdb();
+            goto command_handled_2;
+        }
+#endif
 
         if (nTokens == 2 && strcmp(tokens[1], "route") == 0)
         {
@@ -2358,12 +2372,16 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
                 config.nat_enable = atoi(tokens[2]);
                 if (config.nat_enable)
                 {
+#ifndef REPEATER_MODE
                     ip_napt_enable_no(1, 1);
+#endif
                     os_sprintf_flash(response, "NAT enabled\r\n");
                 }
                 else
                 {
+#ifndef REPEATER_MODE
                     ip_napt_enable_no(1, 0);
+#endif
                     os_sprintf_flash(response, "NAT disabled\r\n");
                 }
                 goto command_handled;
@@ -3280,10 +3298,14 @@ static void ICACHE_FLASH_ATTR tcp_client_connected_cb(void *arg)
     ringbuf_reset(console_rx_buffer);
     ringbuf_reset(console_tx_buffer);
 
-    char send_data[] = "Welcome to WiFi Repeater " ESP_REPEATER_VERSION "\r\n"
-            "Enter 'help' to get help.\r\nCMD>";
-    espconn_send(pespconn, (uint8_t *) send_data, sizeof(send_data) - 1);
-#if ACLS
+char send_data[] = "Welcome to "
+#ifdef REPEATER_MODE
+        "WiFi Repeater "
+#else
+        "WiFi NAT Router "
+#endif
+        ESP_REPEATER_VERSION "\r\nEnter 'help' to get help.\r\nCMD>";
+espconn_send(pespconn, (uint8_t *) send_data, sizeof(send_data) - 1);#if ACLS
     deny_cb_conn = pespconn;
 #endif
 }
@@ -3471,10 +3493,15 @@ static void ICACHE_FLASH_ATTR web_config_client_connected_cb(void *arg)
             return;
         /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
         int page_len = os_sprintf(page_buf, config_page, config.ssid, config.password,
+#ifndef REPEATER_MODE
                    config.automesh_mode != AUTOMESH_OFF ? "checked" : "",
+#endif
                    config.ap_ssid, config.ap_password,
-                   config.ap_open ? " selected" : "", config.ap_open ? "" : " selected",
-                   IP2STR(&config.network_addr));
+                   config.ap_open ? " selected" : "", config.ap_open ? "" : " selected"
+#ifndef REPEATER_MODE
+                   , IP2STR(&config.network_addr)
+#endif
+        );
         os_free(config_page);
 
         espconn_send(pespconn, page_buf, page_len);
@@ -3725,7 +3752,24 @@ static void ICACHE_FLASH_ATTR user_procTask(os_event_t *events)
     switch (events->sig)
     {
     case SIG_START_SERVER:
-        // Anything else to do here, when the repeater has received its IP?
+#if MDNS_REPEATER
+    {
+        static struct mdns_info mdns;
+        os_memset(&mdns, 0, sizeof(mdns));
+        mdns.host_name   = "esp-wifi-repeater";
+        mdns.server_name = "http";
+        mdns.ipAddr      = my_ip.addr;
+#if WEB_CONFIG
+        mdns.server_port = config.web_port;
+#else
+        mdns.server_port = 80;
+#endif
+        wifi_set_broadcast_if(0x03);  /* STA(0x01) | AP(0x02) */
+        espconn_mdns_init(&mdns);
+        os_printf("mDNS: started as esp-wifi-repeater.local (_http._tcp port %d)\r\n",
+                  mdns.server_port);
+    }
+#endif
         break;
 
     case SIG_CONSOLE_TX:
@@ -3824,6 +3868,10 @@ void wifi_handle_event_cb(System_Event_t *evt)
         os_printf("disconnect from ssid %s, reason %d\r\n", evt->event_info.disconnected.ssid, evt->event_info.disconnected.reason);
         connected = false;
 
+#if MDNS_REPEATER
+        espconn_mdns_close();
+#endif
+
 #if MQTT_CLIENT
         if (mqtt_enabled)
             MQTT_Disconnect(&mqttClient);
@@ -3886,7 +3934,27 @@ void wifi_handle_event_cb(System_Event_t *evt)
         my_ip = evt->event_info.got_ip.ip;
         connected = true;
 
+#ifndef REPEATER_MODE
         patch_netif(my_ip, my_input_sta, &orig_input_sta, my_output_sta, &orig_output_sta, false);
+#else
+        {
+            struct netif *sta_nif = NULL, *ap_nif = NULL, *nif;
+            for (nif = netif_list; nif != NULL; nif = nif->next) {
+                os_printf("netif found: %c%c%d\n", nif->name[0], nif->name[1], nif->num);
+                /* Match 'st' or 'st0' for station, 'ap' or 'ap1' for softap. 
+                   Some SDKs use 'st'/'ap', others might use 'en' or 'wl'. */
+                if (nif->name[0] == 's' && nif->name[1] == 't') sta_nif = nif;
+                if (nif->name[0] == 'a' && nif->name[1] == 'p') ap_nif  = nif;
+                /* Fallback for some SDK versions */
+                if (nif->num == 0 && !sta_nif) sta_nif = nif;
+                if (nif->num == 1 && !ap_nif) ap_nif = nif;
+            }
+            if (sta_nif && ap_nif)
+                bridge_init(sta_nif, ap_nif);
+            else
+                os_printf("bridge_init: netif not found\n");
+        }
+#endif
 
         // Update any predefined portmaps to the new IP addr
         for (i = 0; i < config.max_portmap; i++)
@@ -3923,9 +3991,11 @@ void wifi_handle_event_cb(System_Event_t *evt)
 #if MQTT_CLIENT
         mqtt_publish_str(MQTT_TOPIC_JOIN, "join", mac_str);
 #endif
+#ifndef REPEATER_MODE
         ip_addr_t ap_ip = config.network_addr;
         ip4_addr4(&ap_ip) = 1;
         patch_netif(ap_ip, my_input_ap, &orig_input_ap, my_output_ap, &orig_output_ap, config.nat_enable);
+#endif
         break;
 
     case EVENT_SOFTAPMODE_STADISCONNECTED:
@@ -3984,12 +4054,30 @@ void ICACHE_FLASH_ATTR user_set_softap_ip_config(void)
 
     wifi_softap_dhcps_stop();
 
+#ifdef REPEATER_MODE
+    if (os_strcmp(config.ssid, WIFI_SSID) != 0) {
+        /* Bridge mode: Use a dummy subnet to avoid overlap with the bridged network.
+           The bridge logic will handle the actual data plane. */
+        IP4_ADDR(&info.ip, 172, 31, 255, 1);
+        IP4_ADDR(&info.netmask, 255, 255, 255, 0);
+        info.gw = info.ip;
+    } else {
+        /* Config mode: Use the configured address */
+        info.ip = config.network_addr;
+        ip4_addr4(&info.ip) = 1;
+        info.gw = info.ip;
+        IP4_ADDR(&info.netmask, 255, 255, 255, 0);
+    }
+#else
     info.ip = config.network_addr;
     ip4_addr4(&info.ip) = 1;
     info.gw = info.ip;
     IP4_ADDR(&info.netmask, 255, 255, 255, 0);
+#endif
 
     wifi_set_ip_info(nif->num, &info);
+
+    wifi_softap_dhcps_stop();
 
     dhcp_lease.start_ip = config.network_addr;
     ip4_addr4(&dhcp_lease.start_ip) = 2;
@@ -3998,10 +4086,17 @@ void ICACHE_FLASH_ATTR user_set_softap_ip_config(void)
     wifi_softap_set_dhcps_lease(&dhcp_lease);
     wifi_softap_set_dhcps_lease_time(config.dhcps_lease_time); // in minutes
 
+#ifdef REPEATER_MODE
+    if (os_strcmp(config.ssid, WIFI_SSID) == 0) {
+        wifi_softap_dhcps_start();
+        dhcps_set_DNS(&dns_ip);
+    }
+#else
     wifi_softap_dhcps_start();
 
     // Change the DNS server again
     dhcps_set_DNS(&dns_ip);
+#endif
 
     // Enter any saved dhcp enties if they are in this network
     for (i = 0; i < config.dhcps_entries; i++)
@@ -4209,6 +4304,7 @@ void ICACHE_FLASH_ATTR user_init()
 {
     struct ip_info info;
     struct espconn *pCon;
+    int i;
 
     connected = false;
     do_ip_config = false;
@@ -4241,6 +4337,7 @@ void ICACHE_FLASH_ATTR user_init()
     // Load config
     uint8_t config_state = config_load(&config);
     new_portmap = config.max_portmap;
+#ifndef REPEATER_MODE
     ip_napt_init(config.max_nat, config.max_portmap);
     if (config_state == 0)
     {
@@ -4257,10 +4354,10 @@ void ICACHE_FLASH_ATTR user_init()
         ip_napt_set_tcp_timeout(config.tcp_timeout);
     if (config.udp_timeout != 0)
         ip_napt_set_udp_timeout(config.udp_timeout);
+#endif /* !REPEATER_MODE */
 
 #if ACLS
     acl_debug = 0;
-    int i;
     for (i = 0; i < MAX_NO_ACLS; i++)
     {
         acl_clear_stats(i);
