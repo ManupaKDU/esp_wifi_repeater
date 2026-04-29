@@ -1464,11 +1464,12 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             }
             to_console_len(response, len);
 #endif
-            if (config.ap_on) {
-                // Bolt: Cache redundant API call
+            if (config.ap_on)
+            {
+                /* ⚡ Bolt: Cache wifi_softap_get_station_num() to avoid redundant API call */
                 uint8_t num_stations = wifi_softap_get_station_num();
-                os_sprintf(response, "%d Station%s connected to SoftAP\r\n", num_stations,
-                           num_stations == 1 ? "" : "s");
+                to_console_len(response, os_sprintf(response, "%d Station%s connected to SoftAP\r\n", num_stations,
+                           num_stations == 1 ? "" : "s"));
             }
             else
                 to_console_len(response, os_sprintf(response, "AP disabled\r\n"));
