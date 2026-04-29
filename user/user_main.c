@@ -230,7 +230,8 @@ static void ICACHE_FLASH_ATTR mqttDataCb(uint32_t *args, const char *topic, uint
 {
     MQTT_Client *client = (MQTT_Client *)args;
 
-    if (topic_len == os_strlen(config.mqtt_command_topic) && os_strncmp(topic, config.mqtt_command_topic, topic_len) == 0)
+    /* ⚡ Bolt: Replace O(N) string traversal with O(1) bounds and null-terminator check */
+    if (topic_len < sizeof(config.mqtt_command_topic) && config.mqtt_command_topic[topic_len] == '\0' && os_strncmp(topic, config.mqtt_command_topic, topic_len) == 0)
     {
         ringbuf_memcpy_into(console_rx_buffer, data, data_len);
         ringbuf_memcpy_into(console_rx_buffer, "\n", 1);
@@ -239,7 +240,8 @@ static void ICACHE_FLASH_ATTR mqttDataCb(uint32_t *args, const char *topic, uint
         return;
     }
 #ifdef USER_GPIO_OUT
-    if (topic_len == os_strlen(config.mqtt_gpio_out_topic) && os_strncmp(topic, config.mqtt_gpio_out_topic, topic_len) == 0)
+    /* ⚡ Bolt: Replace O(N) string traversal with O(1) bounds and null-terminator check */
+    if (topic_len < sizeof(config.mqtt_gpio_out_topic) && config.mqtt_gpio_out_topic[topic_len] == '\0' && os_strncmp(topic, config.mqtt_gpio_out_topic, topic_len) == 0)
     {
         if (data_len > 0 && data[0] == '0')
             config.gpio_out_status = 0;
