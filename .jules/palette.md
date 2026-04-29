@@ -33,7 +33,7 @@
 **Action:** Always ensure any closing syntax or logic continues on a new line *after* an `#endif` block when resolving macro strings in C.
 
 ## 2024-05-18 - Nested C Macros Syntax Errors
-**Learning:** Found another syntax error in the same codebase caused by mismatched closing parentheses during refactoring nested macros (`acl_show(i, response));`).
+**Learning:** Found another syntax error in the same codebase caused by mismatched closing parentheses during refactoring nested macros (`acl_show(i, response));`).  
 **Action:** When tracking down CI build failures in C codebases, closely inspect the line for stray tokens when parentheses are chained heavily at the end of statements.
 
 ## 2024-05-18 - Non-destructive Form Feedback
@@ -42,3 +42,7 @@
 ## 2025-01-28 - Synchronize dynamic states for auxiliary inputs
 **Learning:** When dynamically disabling a primary input field (like a password field when security is set to 'Open'), leaving auxiliary controls associated with that field (like a 'Show Password' checkbox) enabled creates an inconsistent and confusing UI state.
 **Action:** Always ensure any auxiliary controls tied to a primary input are disabled synchronously alongside the primary field to maintain a consistent UI state and avoid user confusion.
+
+## 2023-10-27 - Inline Validation for Embedded Systems
+**Learning:** In constrained embedded web interfaces where backend error handling might result in a confusing generic error page or silent truncation, client-side input validation is crucial. Relying on HTML5 attributes like `maxlength`, `pattern`, and `title` provides immediate feedback to the user and prevents malformed data from ever reaching the device, improving both UX and device stability.
+**Action:** Use standard HTML5 validation attributes (`maxlength`, `minlength`, `pattern`) whenever adding or modifying configuration inputs for embedded interfaces to ensure inputs conform to expected formats (e.g., IPv4 addresses, SSID lengths).
