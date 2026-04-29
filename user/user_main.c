@@ -62,9 +62,9 @@
         int flen = (sizeof(flash_str) + 4) & ~3;                           \
         char *f = (char *)os_malloc(flen);                                 \
         os_memcpy(f, flash_str, flen);                                     \
-        int ret = ets_vsprintf(str, f, ##__VA_ARGS__);                     \
+        int __os_sprintf_flash_ret = ets_vsprintf(str, f, ##__VA_ARGS__);  \
         os_free(f);                                                        \
-        ret;                                                               \
+        __os_sprintf_flash_ret;                                            \
     })
 
 uint32_t Vdd;
@@ -1468,6 +1468,10 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
             {
                 /* ⚡ Bolt: Cache wifi_softap_get_station_num() to avoid redundant API call */
                 uint8_t num_stations = wifi_softap_get_station_num();
+<<<<<<< HEAD
+=======
+                /* ⚡ Bolt: Capture return length to avoid redundant os_strlen inside to_console_len and fix missing console output */
+>>>>>>> pr/63
                 to_console_len(response, os_sprintf(response, "%d Station%s connected to SoftAP\r\n", num_stations,
                            num_stations == 1 ? "" : "s"));
             }
@@ -1552,13 +1556,11 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
         if (nTokens == 2 && strcmp(tokens[1], "acl") == 0)
         {
             char *txt[] = {"From STA:\r\n", "To STA:\r\n", "From AP:\r\n", "To AP:\r\n"};
-            /* ⚡ Bolt: Cache compile-time string literal lengths to avoid O(N) runtime evaluations */
-            const uint8_t txt_len[] = {sizeof("From STA:\r\n") - 1, sizeof("To STA:\r\n") - 1, sizeof("From AP:\r\n") - 1, sizeof("To AP:\r\n") - 1};
             for (i = 0; i < MAX_NO_ACLS; i++)
             {
                 if (!acl_is_empty(i))
                 {
-                    ringbuf_memcpy_into(console_tx_buffer, txt[i], txt_len[i]);
+                    ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
                     acl_show(i, response);
                 }
             }
