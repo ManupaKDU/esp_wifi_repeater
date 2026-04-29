@@ -54,3 +54,7 @@
 ## 2025-01-28 - Placeholder Attributes in Embedded Devices
 **Learning:** In embedded configuration pages where external help documentation is sparse or unavailable, adding `placeholder` attributes (e.g., `placeholder='Min 8 characters'`) to inputs provides valuable, inline guidance to users. Additionally, visually denoting unconditionally required fields with an asterisk (e.g., `*`) combined with `<span aria-hidden='true'>*</span>` informs sighted users about the field's requirement without cluttering screen reader announcements, which already handle the native `required` attribute.
 **Action:** Use `placeholder` attributes liberally in embedded HTML configurations to offer immediate user guidance. Hide visual required indicators (like asterisks) from screen readers using `aria-hidden='true'` since the native HTML5 `required` attribute already conveys this state natively.
+
+## 2024-06-25 - Add native dark mode support to config pages
+**Learning:** Adding `<meta name="color-scheme" content="light dark">` enables native browser dark mode support automatically for unstyled native HTML elements without needing CSS changes. This is highly beneficial for the unstyled embedded web interface of ESP8266 where memory constraints limit custom CSS.
+**Action:** Use the `color-scheme` meta tag early when building highly constrained native interfaces to ensure a base level of accessibility for users preferring dark mode.

@@ -2,6 +2,7 @@
 <html lang='en'>\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
+<meta name='color-scheme' content='light dark'>\
 <title>ESP WiFi NAT Router Config</title>\
 </head>\
 <body>\
@@ -109,6 +110,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <html lang='en'>\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
+<meta name='color-scheme' content='light dark'>\
 <title>ESP WiFi NAT Router Config</title>\
 </head>\
 <body>\
