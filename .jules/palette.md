@@ -46,3 +46,7 @@
 ## 2023-10-27 - Inline Validation for Embedded Systems
 **Learning:** In constrained embedded web interfaces where backend error handling might result in a confusing generic error page or silent truncation, client-side input validation is crucial. Relying on HTML5 attributes like `maxlength`, `pattern`, and `title` provides immediate feedback to the user and prevents malformed data from ever reaching the device, improving both UX and device stability.
 **Action:** Use standard HTML5 validation attributes (`maxlength`, `minlength`, `pattern`) whenever adding or modifying configuration inputs for embedded interfaces to ensure inputs conform to expected formats (e.g., IPv4 addresses, SSID lengths).
+
+## 2025-01-28 - HTML5 minlength validation insight
+**Learning:** HTML5 validation attributes like `minlength` will not be evaluated if the field is empty unless the `required` attribute is also present. This is particularly relevant when input fields (like passwords) are dynamically enabled or disabled based on other settings. Without `required`, an empty field with `minlength='8'` is considered valid and will allow submission, which can lead to silent failures or backend-generated defaults.
+**Action:** When enforcing minimum length constraints on input fields, especially those that can be disabled conditionally, always pair `minlength` with the `required` attribute to ensure proper client-side validation when the field is enabled.
