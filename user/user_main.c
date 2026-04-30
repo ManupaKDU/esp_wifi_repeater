@@ -1212,7 +1212,6 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
 #if ACLS
         to_console_len(response, os_sprintf_flash(response, "show acl|acl [from_sta|to_sta|from_ap|to_ap] [IP|TCP|UDP] <src_addr> [<src_port>] <dest_addr> [<dest_port>] [allow|deny|allow_monitor|deny_monitor]\r\nacl [from_sta|to_sta|from_ap|to_ap] clear\r\n"));
 #endif
-#endif
 #if DAILY_LIMIT
         to_console_len(response, os_sprintf_flash(response, "set [daily_limit|timezone] <val>\r\n"));
 #endif
