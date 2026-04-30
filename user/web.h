@@ -115,12 +115,15 @@ setTimeout(\"location.href = '/'\",10000);\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <body>\
 <h1>ESP WiFi Repeater Config</h1>\
+<div id='status_msg' role='status' style='display:none'></div>\
 <div id='config'>\
 <script>\
 if (window.location.search.substr(1) != '')\
 {\
-document.getElementById('config').display = 'none';\
-document.body.innerHTML ='<h1>ESP WiFi Repeater Config</h1>The new settings have been sent to the device...';\
+document.getElementById('config').style.display = 'none';\
+document.title = 'Status - ESP WiFi Repeater Config';\
+document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
 </script>\

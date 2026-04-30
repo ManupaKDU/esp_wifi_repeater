@@ -58,3 +58,6 @@
 ## 2024-06-25 - Add native dark mode support to config pages
 **Learning:** Adding `<meta name="color-scheme" content="light dark">` enables native browser dark mode support automatically for unstyled native HTML elements without needing CSS changes. This is highly beneficial for the unstyled embedded web interface of ESP8266 where memory constraints limit custom CSS.
 **Action:** Use the `color-scheme` meta tag early when building highly constrained native interfaces to ensure a base level of accessibility for users preferring dark mode.
+## 2025-01-28 - Destructive Layout Shifts on Form Submit
+**Learning:** In the repeater mode UI, form submission handled by overwriting `document.body.innerHTML` is a destructive UX pattern. It breaks accessibility tools, resets the page structure, and is inconsistent with the non-destructive approach used in NAT mode.
+**Action:** Avoid overwriting the entire document body for simple status messages. Instead, toggle the visibility of a dedicated, pre-rendered  div to display feedback without losing page context.
