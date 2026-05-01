@@ -126,7 +126,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </script>\
 <h2>STA Settings</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td>SSID:</td>\
 <td><input type='text' name='ssid' value='%s'/></td>\
@@ -145,7 +145,7 @@ setTimeout(\"location.href = '/'\",10000);\
 \
 <h2>AP Settings</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td>SSID:</td>\
 <td><input type='text' name='ap_ssid' value='%s'/></td>\
@@ -175,7 +175,7 @@ setTimeout(\"location.href = '/'\",10000);\
 \
 <h2>Lock Config</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td>Lock Device:</td>\
 <td><input type='checkbox' name='lock' value='l'></td>\
@@ -189,7 +189,7 @@ setTimeout(\"location.href = '/'\",10000);\
 \
 <h2>Device Management</h2>\
 <form action='' method='GET'>\
-<table>\
+<table role='presentation'>\
 <tr>\
 <td>Reset Device:</td>\
 <td><input type='submit' name='reset' value='Restart'/></td>\
