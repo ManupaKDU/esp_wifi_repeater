@@ -1199,7 +1199,8 @@ void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 to_console_len(response, os_sprintf_flash(response, "set [ap_mac|sta_mac|ssid_hidden|sta_hostname|max_clients] <val>\r\n"));
 #ifndef REPEATER_MODE
 to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask|gw] <val>\r\n"));
-#endif#if HAVE_ENC28J60
+#endif
+#if HAVE_ENC28J60
 #if DCHPSERVER_ENC28J60
         to_console_len(response, os_sprintf_flash(response, "set [eth_dhcpd] <val>\r\n"));
 #endif
@@ -1210,7 +1211,6 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
 #endif
 #if ACLS
         to_console_len(response, os_sprintf_flash(response, "show acl|acl [from_sta|to_sta|from_ap|to_ap] [IP|TCP|UDP] <src_addr> [<src_port>] <dest_addr> [<dest_port>] [allow|deny|allow_monitor|deny_monitor]\r\nacl [from_sta|to_sta|from_ap|to_ap] clear\r\n"));
-#endif
 #endif
 #if DAILY_LIMIT
         to_console_len(response, os_sprintf_flash(response, "set [daily_limit|timezone] <val>\r\n"));
@@ -1232,7 +1232,8 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
         to_console_len(response, os_sprintf_flash(response, "|am_scan_time|am_sleep_time"));
 #endif
         to_console_len(response, os_sprintf_flash(response, "] <val>\r\n"));
-#endif#if ALLOW_SCANNING
+#endif
+#if ALLOW_SCANNING
         to_console_len(response, os_sprintf_flash(response, "scan\r\n"));
 #endif
 #if PHY_MODE
@@ -3305,7 +3306,8 @@ char send_data[] = "Welcome to "
         "WiFi NAT Router "
 #endif
         ESP_REPEATER_VERSION "\r\nEnter 'help' to get help.\r\nCMD>";
-espconn_send(pespconn, (uint8_t *) send_data, sizeof(send_data) - 1);#if ACLS
+espconn_send(pespconn, (uint8_t *) send_data, sizeof(send_data) - 1);
+#if ACLS
     deny_cb_conn = pespconn;
 #endif
 }
