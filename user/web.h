@@ -112,17 +112,23 @@ setTimeout(\"location.href = '/'\",10000);\
 "
 #else
 #define CONFIG_PAGE "HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n\
-<html>\
-<head></head>\
+<html lang='en'>\
+<head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
+<meta name='color-scheme' content='light dark'>\
+<title>ESP WiFi Repeater Config</title>\
+</head>\
 <body>\
 <h1>ESP WiFi Repeater Config</h1>\
+<div id='status_msg' role='status' style='display:none'></div>\
 <div id='config'>\
 <script>\
 if (window.location.search.substr(1) != '')\
 {\
-document.getElementById('config').display = 'none';\
-document.body.innerHTML ='<h1>ESP WiFi Repeater Config</h1>The new settings have been sent to the device...';\
+document.getElementById('config').style.display = 'none';\
+document.title = 'Status - ESP WiFi Repeater Config';\
+document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
 </script>\
@@ -194,7 +200,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <table role='presentation'>\
 <tr>\
 <td>Reset Device:</td>\
-<td><input type='submit' name='reset' value='Restart'/></td>\
+<td><input type='submit' name='reset' value='Restart' onclick='return confirm(\"Are you sure you want to restart the device?\");'/></td>\
 </tr>\
 </table>\
 </form>\
