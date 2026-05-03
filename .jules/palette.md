@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2025-01-28 - Audit All Interface Modes for UX Parity
+**Learning:** In codebases that use C preprocessor directives (like `#ifndef REPEATER_MODE`) to serve different variations of a web interface, UX and accessibility enhancements (like labels, validation attributes, and dynamic states) often get applied to the primary mode but are missed in secondary variations. This leaves users of the secondary mode with a degraded, inaccessible experience.
+**Action:** When implementing UX improvements in configuration interfaces, always audit the entire file or related files for alternate modes (e.g., Repeater vs. NAT mode) and ensure UX enhancements are applied to all variations to maintain parity.

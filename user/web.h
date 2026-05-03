@@ -136,12 +136,12 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table role='presentation'>\
 <tr>\
-<td>SSID:</td>\
-<td><input type='text' name='ssid' value='%s'/></td>\
+<td><label for='sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><input id='sta_ssid' type='text' name='ssid' value='%s' required maxlength='32' placeholder='e.g. MyHomeWiFi' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
-<td>Password:</td>\
-<td><input type='password' name='password' value='%s'/></td>\
+<td><label for='sta_password'>Password:</label></td>\
+<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' onclick=\"document.getElementById('sta_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -155,17 +155,17 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table role='presentation'>\
 <tr>\
-<td>SSID:</td>\
-<td><input type='text' name='ap_ssid' value='%s'/></td>\
+<td><label for='ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><input id='ap_ssid' type='text' name='ap_ssid' value='%s' required maxlength='32' placeholder='e.g. ESP_Repeater' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
-<td>Password:</td>\
-<td><input type='text' name='ap_password' value='%s'/></td>\
+<td><label for='ap_password'>Password:</label></td>\
+<td><input id='ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='ap_show' type='checkbox' onclick=\"document.getElementById('ap_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
-<td>Security:</td>\
+<td><label for='ap_open'>Security:</label></td>\
 <td>\
- <select name='ap_open'>\
+ <select id='ap_open' name='ap_open' onchange=\"var isOpen = (this.value === 'open'); document.getElementById('ap_password').disabled = isOpen; document.getElementById('ap_show').disabled = isOpen;\">\
  <option value='open'%s>Open</option>\
  <option value='wpa2'%s>WPA2</option>\
 </select>\
@@ -176,23 +176,27 @@ setTimeout(\"location.href = '/'\",10000);\
 <td><input type='submit' value='Set' /></td>\
 </tr>\
 </table>\
-<small>\
+<small id='ap_pwd_help'>\
 <i>Password: </i>min. 8 chars<br />\
 </small>\
+<script>var isOpen = (document.getElementById('ap_open').value === 'open'); document.getElementById('ap_password').disabled = isOpen; document.getElementById('ap_show').disabled = isOpen;</script>\
 </form>\
 \
 <h2>Lock Config</h2>\
 <form action='' method='GET'>\
 <table role='presentation'>\
 <tr>\
-<td>Lock Device:</td>\
-<td><input type='checkbox' name='lock' value='l'></td>\
+<td><label for='lock_device'>Lock Device:</label></td>\
+<td><input id='lock_device' type='checkbox' name='lock' value='l' aria-describedby='lock_help' onchange=\"document.getElementById('lock_submit').disabled = !this.checked;\"></td>\
 </tr>\
 <tr>\
 <td></td>\
-<td><input type='submit' name='dolock' value='Lock'/></td>\
+<td><input id='lock_submit' type='submit' name='dolock' value='Lock' disabled/></td>\
 </tr>\
 </table>\
+<small id='lock_help'>\
+<i>Note:</i> Uses STA password to unlock<br />\
+</small>\
 </form>\
 \
 <h2>Device Management</h2>\
