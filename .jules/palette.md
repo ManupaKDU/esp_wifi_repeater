@@ -62,3 +62,6 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+## 2024-05-24 - Accessibility and Dynamic HTML in C Macros
+**Learning:** When adding frontend features (like "Show Password" toggles and `<select>` change handlers) within embedded C HTML strings, you must ensure element IDs are unique across `#ifdef` macro variants and standard JavaScript patterns (like `document.getElementById`) are properly single-quote-escaped inside the double-quoted C strings. Combining `onchange` and `<script>` initialization handles dynamic state correctly.
+**Action:** Consistently namespace IDs and pre-escape quotes when implementing dynamic frontend logic in macro-driven HTML forms to prevent compilation errors and ensure a11y functions cleanly.
