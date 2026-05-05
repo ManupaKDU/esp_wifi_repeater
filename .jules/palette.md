@@ -62,3 +62,6 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+## 2024-05-24 - HTML Structural/UX Disparity in C Macros
+**Learning:** Found that embedded HTML interfaces generated via C preprocessor `#ifdef` branches (e.g., NAT mode vs. Repeater mode) often suffer from structural drift where accessibility/UX improvements applied to one mode aren't inherently applied to the other.
+**Action:** When adding IDs or UX enhancements to HTML macros within specific `#ifdef` modes, proactively namespace element IDs (e.g., `repeater_lock_submit`) to avoid conflicts if the macros are ever merged or compiled together, and verify both macro branches to ensure feature parity.
