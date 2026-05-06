@@ -62,3 +62,6 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+## 2024-05-06 - Dynamic submit buttons for destructive actions
+**Learning:** In the embedded config portal, single-input configuration items (like 'Lock Device') can lead to accidental or empty state form submissions if the submit button is permanently enabled. Additionally, they often lack explicit linkage to instructions.
+**Action:** Always disable submit buttons on destructive form actions by default and pair with a required confirmation checkbox that dynamically enables it via `onchange`. Pair this with `aria-describedby` on the checkbox to link explicit helper text.
