@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2024-05-07 - Namespacing HTML Element IDs in C Macros
+**Learning:** When adding inline JavaScript that relies on unique HTML element IDs to C string macros that are conditionally compiled (e.g. `#ifdef REPEATER_MODE` vs `#else`), identical IDs can accidentally conflict across different build configurations or if both forms are rendered simultaneously in tests.
+**Action:** Always namespace HTML IDs corresponding to conditionally compiled macros (e.g. `repeater_ap_password` vs `sta_password`) to ensure uniqueness and reliable client-side behavior regardless of the build environment.
