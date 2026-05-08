@@ -62,3 +62,6 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+## 2026-05-08 - Dynamic state missing in Repeater Mode
+**Learning:** Secondary build modes (like Repeater mode) lacked UX parity with the primary mode, specifically missing dynamic disable logic and accessibility labels.
+**Action:** Always check secondary or alternate UI compilation blocks for parity when reviewing forms.
