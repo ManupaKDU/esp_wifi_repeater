@@ -62,3 +62,6 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+## 2026-05-09 - Dynamic Input Disabling
+**Learning:** When dynamically disabling a primary input field (e.g., a password field when security is set to 'Open'), it is essential to ensure any auxiliary controls tied to it (such as a 'Show Password' toggle checkbox) are also disabled synchronously to maintain a consistent UI state and avoid user confusion. This pattern is particularly critical in this application's components due to the reliance on raw HTML and inline JS.
+**Action:** Always sync the `disabled` state of auxiliary controls with their primary inputs in the `onchange` and initial load scripts.

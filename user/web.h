@@ -155,17 +155,17 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET'>\
 <table role='presentation'>\
 <tr>\
-<td>SSID:</td>\
-<td><input type='text' name='ap_ssid' value='%s'/></td>\
+<td><label for='repeater_ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><input id='repeater_ap_ssid' type='text' name='ap_ssid' value='%s' required maxlength='32' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
-<td>Password:</td>\
-<td><input type='text' name='ap_password' value='%s'/></td>\
+<td><label for='repeater_ap_password'>Password:</label></td>\
+<td><input id='repeater_ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' aria-describedby='repeater_ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='repeater_ap_show' type='checkbox' onclick=\"document.getElementById('repeater_ap_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
 </tr>\
 <tr>\
-<td>Security:</td>\
+<td><label for='repeater_ap_open'>Security:</label></td>\
 <td>\
- <select name='ap_open'>\
+ <select id='repeater_ap_open' name='ap_open' onchange=\"var isOpen = (this.value === 'open'); document.getElementById('repeater_ap_password').disabled = isOpen; document.getElementById('repeater_ap_show').disabled = isOpen;\">\
  <option value='open'%s>Open</option>\
  <option value='wpa2'%s>WPA2</option>\
 </select>\
@@ -176,9 +176,10 @@ setTimeout(\"location.href = '/'\",10000);\
 <td><input type='submit' value='Set' /></td>\
 </tr>\
 </table>\
-<small>\
+<small id='repeater_ap_pwd_help'>\
 <i>Password: </i>min. 8 chars<br />\
 </small>\
+<script>var isOpen = (document.getElementById('repeater_ap_open').value === 'open'); document.getElementById('repeater_ap_password').disabled = isOpen; document.getElementById('repeater_ap_show').disabled = isOpen;</script>\
 </form>\
 \
 <h2>Lock Config</h2>\
