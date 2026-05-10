@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2024-05-24 - Namespacing IDs in compilation blocks
+**Learning:** When adding standard UX improvements (like labels and `onchange` ID selectors) to C string macros, IDs must be carefully namespaced (e.g., `repeater_ap_password` vs `ap_password`) when the HTML is duplicated across multiple `#ifdef` and `#else` compilation blocks. If the same ID is used in both NAT mode and Repeater mode blocks, it creates ambiguity in the source code and potentially breaks automated tests that extract both blocks.
+**Action:** Always namespace HTML IDs with the compilation mode context (e.g., `repeater_`) when working within multi-variant C header files.
