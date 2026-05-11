@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2025-01-28 - Namespacing IDs in Conditional C Macros
+**Learning:** When embedding UX patterns like dynamically disabled password fields/toggles via inline JavaScript within `#else`/`#endif` C compilation variants (such as Repeater vs NAT mode), standardizing on generic IDs like `ap_password` can cause unintended logic collisions if the output isn't carefully constrained.
+**Action:** Always manually namespace HTML element IDs (e.g., `repeater_ap_password`, `repeater_ap_open`) and pair them accordingly within their specific compilation block.
