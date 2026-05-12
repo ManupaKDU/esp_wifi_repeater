@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2024-05-19 - Destructive Actions in Legacy Macros
+**Learning:** Even when UI components exist within complex legacy codebases (like `#ifdef` variants of inline HTML inside C macros), consistency in destructive actions is critical. The Repeater mode form originally lacked the disabled-by-default submit button and `aria-describedby` helper text that was present in the NAT mode. We must ensure parity for these critical patterns across all variants.
+**Action:** When auditing or implementing UX improvements (such as disabling a submit button for destructive confirmations like device locking) in files with multiple compilation variants, check all variants (e.g., both `#ifndef REPEATER_MODE` and `#else`) to ensure the accessibility and safety patterns are consistently applied everywhere.
