@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2024-06-25 - Extrapolate UI fixes to all compilation variants
+**Learning:** In C projects that utilize macros for different compilation modes (e.g., `#ifndef REPEATER_MODE`), identical or similar HTML blocks are often duplicated across `#else` statements. If you apply a significant UX improvement (like accessible labels, validation, and dynamic JS state) to one block (like NAT mode AP Settings), failing to check and apply those same improvements to the other block (Repeater mode AP Settings) leads to an inconsistent user experience across different builds.
+**Action:** When making UX improvements in files heavily reliant on preprocessor directives (like `user/web.h`), explicitly scan the file for `#else` or `#elif` blocks containing duplicated structures to ensure your accessibility fixes are applied uniformly across all compilation variants.
