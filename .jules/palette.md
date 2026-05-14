@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2025-01-28 - Cross-Variant UX Parity
+**Learning:** In C or C++ embedded projects that use compilation variants (e.g., `#ifndef REPEATER_MODE` / `#else`), forms that serve identical purposes across different modes (like a device lock configuration) often drift out of sync over time. While the primary mode might receive UX enhancements (like `disabled` submit buttons or proper `<label>` elements), secondary compilation modes can be easily overlooked, leaving them with poor usability or accessibility.
+**Action:** When inspecting or adding UX enhancements to embedded device forms, always use tools like `grep` to check if similar or duplicate HTML structures exist inside `#else` or `#elif` blocks for different firmware variants, and ensure parity by bringing the secondary modes up to the same UX and accessibility standards.
