@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2024-05-24 - Cross-Variant UX Parity
+**Learning:** In C-based embedded projects where UI views are duplicated across compilation variants (e.g. NAT Mode vs Repeater Mode in `#ifndef` blocks), identical input fields (like WiFi "AP Settings" forms) can easily drift, leading to missing accessibility labels, IDs, and dynamic disabled states in secondary compilation paths.
+**Action:** Always check the codebase (e.g., using `grep`) for secondary compilation variants of the same UI (like `#else` blocks) and ensure UX enhancements (like namespaced IDs and inline JS toggles) are applied to all variants to maintain consistent cross-mode UX parity.
