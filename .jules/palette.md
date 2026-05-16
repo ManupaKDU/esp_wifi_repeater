@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2025-01-28 - Cross-Variant UX Parity for Destructive Actions
+**Learning:** Destructive actions (like "Lock Device") requiring checkbox confirmation need synchronized button states (disabled by default, enabled on check) and explicit help text (`aria-describedby`). When applying these UX enhancements in C codebases with multiple compilation variants (e.g., `#ifndef REPEATER_MODE` / `#else`), the secondary variants (like Repeater mode) often lack the enhancements applied to the primary mode, leading to inconsistent UX and accessibility across firmware versions.
+**Action:** When improving embedded HTML forms, always check for secondary compilation variants (e.g., using `grep`) and apply identical structural and accessibility improvements (like dynamic button disabling and helper text) to ensure cross-variant parity.
