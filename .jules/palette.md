@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2024-05-18 - Namespacing Accessible Forms Across Compilation Variants
+**Learning:** When embedding HTML forms (like `<label for="id">`) within multiple C preprocessor compilation variants (e.g., `#ifndef REPEATER_MODE` and `#else`), using identical element IDs causes uniqueness conflicts if both variants share identical logic or are later merged. This breaks accessibility mappings and inline JavaScript DOM selections.
+**Action:** Always explicitly namespace `id` attributes with the variant name (e.g., `repeater_lock_device`, `repeater_lock_submit`) to guarantee global DOM uniqueness and preserve correct UX bindings across different firmware builds.
