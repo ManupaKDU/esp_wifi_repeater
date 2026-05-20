@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2024-05-20 - Cross-Variant UX Parity and Namespacing IDs in C Macros
+**Learning:** When HTML is embedded within C macros, identical layout elements (e.g., config forms) often exist across multiple `#ifdef` and `#else` compilation variants (e.g., NAT mode vs. Repeater mode). These secondary variants can severely lack accessibility tags (labels, ARIA) and UX features (dynamic enabling/disabling, placeholders) present in the primary variant. Furthermore, IDs in forms must be strictly namespaced (e.g., `repeater_sta_ssid`) across these variants to avoid duplicates and ensure inline JS execution targets the correct elements when mocking or testing logic locally.
+**Action:** Always search (`grep`) for `#else` and `#ifdef` compilation variants when improving embedded HTML interfaces, and explicitly verify that UX/accessibility improvements are synced across all variants. Namespace element IDs specifically by compilation variant to guarantee robust testing and valid accessibility mappings.
