@@ -62,3 +62,7 @@
 ## 2026-05-02 - ARIA Live Regions vs DOM Replacement in Embedded UIs
 **Learning:** Destructively replacing `document.body.innerHTML` for submission feedback on embedded config pages breaks screen reader context and creates jarring visual shifts.
 **Action:** Use a pre-rendered `<div role='status'>` and toggle its visibility while hiding the form (`display: none`) and updating the `<title>` to cleanly announce state changes while preserving semantic structure.
+
+## 2025-01-28 - Maintaining Cross-Variant Parity
+**Learning:** When multiple `#ifdef` compilation variants exist (like NAT mode vs Repeater mode in `user/web.h`), UX improvements applied to one variant are often easily forgotten in the other. This creates a fragmented and inconsistent experience depending on how the firmware is built.
+**Action:** Whenever introducing UX or accessibility enhancements to an embedded HTML form within a C preprocessor block, explicitly search the file for corresponding `#else` blocks and apply the identical enhancements to maintain cross-variant parity. Use namespaced IDs (e.g., `repeater_lock_submit` instead of `lock_submit`) to avoid DOM collisions or confusing screen reader mappings if the blocks are ever merged or refactored.
