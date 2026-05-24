@@ -65,3 +65,6 @@
 ## 2024-06-11 - Cross-Variant Accessibility Mappings in Embedded C HTML
 **Learning:** When implementing accessibility features like `for` and `id` linking in HTML that is conditionally compiled via C preprocessor macros (e.g., `#ifndef` / `#else`), reusing generalized IDs across variants can cause logical collisions or confusion during maintenance, as well as breaking accessibility mappings if multiple variants were ever somehow combined.
 **Action:** Explicitly namespace HTML element IDs (e.g., using `repeater_lock_device` instead of just `lock_device`) based on the specific compilation variant they belong to. This guarantees uniqueness and robust accessibility mappings regardless of the macro path taken.
+## 2025-01-29 - Cross-variant UX synchronization
+**Learning:** Found that the "Repeater Mode" HTML (`#else` block) inside `user/web.h` lacked all the accessibility labels (`<label for>`), HTML5 form validation (`required`, `minlength`, `maxlength`), and usability features (Show Password toggles, dynamic disabled states) that were already present in the primary "NAT Mode" HTML.
+**Action:** When updating or reviewing configuration UI forms in codebase components conditionally compiled via C preprocessor macros, always audit the secondary modes to ensure UX parity is maintained so users of alternate firmware builds don't get degraded experiences.
