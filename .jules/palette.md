@@ -65,3 +65,6 @@
 ## 2024-06-11 - Cross-Variant Accessibility Mappings in Embedded C HTML
 **Learning:** When implementing accessibility features like `for` and `id` linking in HTML that is conditionally compiled via C preprocessor macros (e.g., `#ifndef` / `#else`), reusing generalized IDs across variants can cause logical collisions or confusion during maintenance, as well as breaking accessibility mappings if multiple variants were ever somehow combined.
 **Action:** Explicitly namespace HTML element IDs (e.g., using `repeater_lock_device` instead of just `lock_device`) based on the specific compilation variant they belong to. This guarantees uniqueness and robust accessibility mappings regardless of the macro path taken.
+## 2026-06-02 - Cross-Variant UX Parity in Embedded C Apps
+**Learning:** When dealing with C macros that define identical HTML structures for different compilation modes (e.g. `#ifndef REPEATER_MODE` vs `#else`), accessibility improvements (like labels, ID namespaces, and dynamically disabled dependent inputs) are easily overlooked in secondary variants, breaking cross-mode parity.
+**Action:** Always use targeted extraction tools (like custom Python block slicers) to identify and update corresponding secondary compilation blocks to maintain complete UX parity across the entire application ecosystem.
