@@ -71,3 +71,7 @@
 ## 2025-01-28 - Cross-Variant UX Parity in Conditional UI Blocks
 **Learning:** When modifying embedded HTML forms that exist in multiple C compilation variants (e.g., NAT mode vs. Repeater mode `#else` blocks), failing to mirror UX enhancements (like dynamic disable states, namespaced IDs, or helper text) leads to inconsistent user experiences depending on the active build. Additionally, when implementing conditionally disabled primary inputs across variants, their associated auxiliary controls (like a 'Show' checkbox) must also be disabled synchronously to prevent UI confusion.
 **Action:** Always inspect the full C source file for alternative `#ifndef` / `#else` branches containing duplicate or similar UI elements to ensure UX and accessibility improvements are applied with full parity across all build variations.
+
+## 2024-05-24 - [Accessibility] Add ARIA labels to "Show Password" checkboxes
+**Learning:** Found an accessibility issue pattern in the app's components: The "Show" checkboxes for password inputs lacked ARIA controls and labels. This makes it difficult for screen reader users to understand what the checkbox does or what input it controls.
+**Action:** Always add `aria-controls`, `aria-label`, and `title` attributes to auxiliary controls like "Show Password" toggles to explicitly link them to their target input and describe their function.
