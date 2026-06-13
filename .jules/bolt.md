@@ -29,3 +29,6 @@
 ## 2026-03-14 - Cache Redundant SDK API Calls
 **Learning:** SDK functions like `wifi_softap_get_station_num()` that retrieve hardware or network state have non-zero execution cost and can return changing values, which causes a slight race condition when evaluated multiple times in the same format string block.
 **Action:** Cache the results of redundant hardware or API calls in local variables rather than invoking them multiple times within a single formatting statement or block to avoid unnecessary overhead.
+## 2026-03-14 - Wrap Switch Case Declarations in Blocks
+**Learning:** Codebase C Syntax pitfall: In C, a variable declaration cannot immediately follow a `case` label (e.g., `case EVENT_X: int len = ...;`). This results in a strict syntax error because a label must precede a statement, and a declaration is not considered a statement.
+**Action:** Always wrap the `case` block in curly braces `{ ... }` when introducing new variable declarations directly inside switch statements.
