@@ -29,3 +29,10 @@
 ## 2026-03-14 - Cache Redundant SDK API Calls
 **Learning:** SDK functions like `wifi_softap_get_station_num()` that retrieve hardware or network state have non-zero execution cost and can return changing values, which causes a slight race condition when evaluated multiple times in the same format string block.
 **Action:** Cache the results of redundant hardware or API calls in local variables rather than invoking them multiple times within a single formatting statement or block to avoid unnecessary overhead.
+## 2026-03-14 - Avoid Optimizing Cold Paths
+**Learning:** Avoid micro-optimizations (e.g., caching string lengths or replacing formatting) on 'cold' paths, such as immediately before a `system_restart()`, as this violates the optimization guidelines by adding complexity without measurable runtime benefits.
+**Action:** Do not apply any performance optimizations to code blocks that execute during firmware updates, reboots, or startup sequences unless there is a proven bottleneck.
+
+## 2026-03-14 - Inline Formatting Helpers in Loops
+**Learning:** Codebase performance pattern: When building formatted strings in loops (like topology JSONs), inline formatting helpers that internally use `os_sprintf` (such as `mac_2_buff`) directly into the parent `os_sprintf` call.
+**Action:** Replace intermediate buffer formatting with direct format specifiers (e.g., replacing `mac_2_buff` with `%02x:%02x:%02x:%02x:%02x:%02x`) to eliminate redundant `os_sprintf` function calls and intermediate buffer allocations inside the loop.
