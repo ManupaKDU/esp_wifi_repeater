@@ -29,3 +29,6 @@
 ## 2026-03-14 - Cache Redundant SDK API Calls
 **Learning:** SDK functions like `wifi_softap_get_station_num()` that retrieve hardware or network state have non-zero execution cost and can return changing values, which causes a slight race condition when evaluated multiple times in the same format string block.
 **Action:** Cache the results of redundant hardware or API calls in local variables rather than invoking them multiple times within a single formatting statement or block to avoid unnecessary overhead.
+## 2024-05-19 - Cache redundant os_strlen in MQTT telemetry callbacks
+**Learning:** Codebase performance pattern: In frequent telemetry callbacks (like publishing uptime, memory, or packet stats via MQTT), passing a buffer formatted via `os_sprintf` to a string-based publish function (e.g., `mqtt_publish_str`) triggers a redundant `os_strlen(str)` O(N) evaluation inside `MQTT_Publish`.
+**Action:** Created `mqtt_publish_str_len` to directly accept a length argument. Update helper functions like `mqtt_publish_int` to capture the return value of `os_sprintf` (which returns the length) and pass it directly to `mqtt_publish_str_len`, eliminating the redundant `os_strlen` overhead.
