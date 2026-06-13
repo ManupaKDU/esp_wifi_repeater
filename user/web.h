@@ -35,7 +35,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='sta_am'>Automesh:</label></td>\
-<td><input id='sta_am' type='checkbox' name='am' value='mesh' %s></td>\
+<td><input id='sta_am' type='checkbox' name='am' value='mesh' aria-describedby='am_help' %s></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -43,6 +43,9 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 \
 </table>\
+<small id='am_help'>\
+<i>Automesh:</i> Auto-connects to nearest mesh node<br />\
+</small>\
 </form>\
 \
 <h2>AP Settings</h2>\

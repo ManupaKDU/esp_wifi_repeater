@@ -75,3 +75,7 @@
 ## 2024-05-24 - [Accessibility] Add ARIA labels to "Show Password" checkboxes
 **Learning:** Found an accessibility issue pattern in the app's components: The "Show" checkboxes for password inputs lacked ARIA controls and labels. This makes it difficult for screen reader users to understand what the checkbox does or what input it controls.
 **Action:** Always add `aria-controls`, `aria-label`, and `title` attributes to auxiliary controls like "Show Password" toggles to explicitly link them to their target input and describe their function.
+
+## 2025-01-28 - Helper Text for Domain-Specific Features
+**Learning:** For domain-specific or complex features (like "Automesh" in an embedded WiFi router context), simply providing a checkbox is insufficient and hurts accessibility/usability since users may not know what the feature entails. In embedded interfaces where external help documentation isn't easily accessible, this problem is compounded.
+**Action:** Always provide inline helper text (using `<small>`) and explicitly link it to the control using `aria-describedby` when exposing complex, domain-specific functionality.
