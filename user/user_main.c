@@ -3723,8 +3723,10 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                         len += 1;
                     }
                     do_colon = true;
-                    mac_2_buff(sta_mac, station->bssid);
-                    len += os_sprintf(&buffer[len], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
+                    /* ⚡ Bolt: Inline mac_2_buff to avoid an extra string buffer and an entire os_sprintf call per station */
+                    len += os_sprintf(&buffer[len], "{\"mac\":\"%02x:%02x:%02x:%02x:%02x:%02x\",\"ip\":\"" IPSTR "\"}",
+                                      station->bssid[0], station->bssid[1], station->bssid[2], station->bssid[3], station->bssid[4], station->bssid[5],
+                                      IP2STR(&station->ip));
                     station = STAILQ_NEXT(station, next);
                 }
                 wifi_softap_free_station_info();
