@@ -171,15 +171,20 @@ void ICACHE_FLASH_ATTR mac_2_buff(char *buf, uint8_t mac[6])
 MQTT_Client mqttClient;
 bool mqtt_enabled, mqtt_connected;
 
-void ICACHE_FLASH_ATTR mqtt_publish_str(uint16_t mask, uint8_t *sub_topic, uint8_t *str)
+void ICACHE_FLASH_ATTR mqtt_publish_str_len(uint16_t mask, uint8_t *sub_topic, uint8_t *str, uint16_t len)
 {
     uint8_t buf[256];
-    if (!mqtt_enabled || (config.mqtt_topic_mask & mask) == 0)
-        return;
 
     os_sprintf(buf, "%s/%s", config.mqtt_prefix, sub_topic);
     //os_printf("Publish: %s %s\r\n", buf, str);
-    MQTT_Publish(&mqttClient, buf, str, os_strlen(str), config.mqtt_qos, 0);
+    MQTT_Publish(&mqttClient, buf, str, len, config.mqtt_qos, 0);
+}
+
+void ICACHE_FLASH_ATTR mqtt_publish_str(uint16_t mask, uint8_t *sub_topic, uint8_t *str)
+{
+    if (!mqtt_enabled || (config.mqtt_topic_mask & mask) == 0)
+        return;
+    mqtt_publish_str_len(mask, sub_topic, str, os_strlen(str));
 }
 
 void ICACHE_FLASH_ATTR mqtt_publish_int(uint16_t mask, uint8_t *sub_topic, uint8_t *format, uint32_t val)
@@ -188,8 +193,8 @@ void ICACHE_FLASH_ATTR mqtt_publish_int(uint16_t mask, uint8_t *sub_topic, uint8
     if (!mqtt_enabled || (config.mqtt_topic_mask & mask) == 0)
         return;
 
-    os_sprintf(buf, format, val);
-    mqtt_publish_str(mask, sub_topic, buf);
+    int len = os_sprintf(buf, format, val);
+    mqtt_publish_str_len(mask, sub_topic, buf, len);
 }
 
 static void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)

@@ -29,3 +29,7 @@
 ## 2026-03-14 - Cache Redundant SDK API Calls
 **Learning:** SDK functions like `wifi_softap_get_station_num()` that retrieve hardware or network state have non-zero execution cost and can return changing values, which causes a slight race condition when evaluated multiple times in the same format string block.
 **Action:** Cache the results of redundant hardware or API calls in local variables rather than invoking them multiple times within a single formatting statement or block to avoid unnecessary overhead.
+
+## $(date +%Y-%m-%d) - Avoiding hardcoded string lengths for micro-optimizations
+**Learning:** Do not attempt to micro-optimize string literal lengths by hardcoding integer values (e.g., `17`) or using manual calculations like `sizeof("...") - 1` in place of `os_strlen`. This creates fragile code and severe maintainability hazards, especially since compilers often optimize literal lengths automatically. Furthermore, avoid micro-optimizations on absolute cold paths (e.g., just before a `system_restart()`) as they violate the core performance directives by introducing complexity without measurable runtime benefits.
+**Action:** When seeking string calculation optimizations, focus on caching dynamically calculated lengths that are already returned by upstream formatting functions (like `os_sprintf`) on hot paths, rather than trying to optimize literal lengths or cold paths.
