@@ -1487,9 +1487,7 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             struct station_info *station = wifi_softap_get_station_info();
             while (station)
             {
-                uint8_t sta_mac[20];
-                mac_2_buff(sta_mac, station->bssid);
-                to_console_len(response, os_sprintf(response, "Station: %s - " IPSTR "\r\n", sta_mac, IP2STR(&station->ip)));
+                to_console_len(response, os_sprintf(response, "Station: " MACSTR " - " IPSTR "\r\n", MAC2STR(station->bssid), IP2STR(&station->ip)));
                 station = STAILQ_NEXT(station, next);
             }
             wifi_softap_free_station_info();
@@ -3723,8 +3721,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                         len += 1;
                     }
                     do_colon = true;
-                    mac_2_buff(sta_mac, station->bssid);
-                    len += os_sprintf(&buffer[len], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
+                    len += os_sprintf(&buffer[len], "{\"mac\":\"" MACSTR "\",\"ip\":\"" IPSTR "\"}", MAC2STR(station->bssid), IP2STR(&station->ip));
                     station = STAILQ_NEXT(station, next);
                 }
                 wifi_softap_free_station_info();
