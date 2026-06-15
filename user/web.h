@@ -69,8 +69,8 @@ setTimeout(\"location.href = '/'\",10000);\
 </td>\
 </tr>\
 <tr>\
-<td><label for='ap_network'>Subnet:</label></td>\
-<td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d' pattern='^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$' title='Valid IPv4 address' inputmode='decimal' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><label for='ap_network'>Subnet <span aria-hidden='true'>*</span>:</label></td>\
+<td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d' required pattern='^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$' title='Valid IPv4 address' placeholder='e.g. 192.168.4.1' inputmode='decimal' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td></td>\
