@@ -79,3 +79,6 @@
 ## 2025-01-28 - Helper Text for Domain-Specific Features
 **Learning:** For domain-specific or complex features (like "Automesh" in an embedded WiFi router context), simply providing a checkbox is insufficient and hurts accessibility/usability since users may not know what the feature entails. In embedded interfaces where external help documentation isn't easily accessible, this problem is compounded.
 **Action:** Always provide inline helper text (using `<small>`) and explicitly link it to the control using `aria-describedby` when exposing complex, domain-specific functionality.
+## 2024-05-24 - Wrap visual required indicators in aria-hidden
+**Learning:** When adding a visual required indicator (such as an asterisk `*`) to a form field `<label>`, wrapping it in `<span aria-hidden='true'>*</span>` prevents screen readers from redundantly announcing 'star', since the input's `required` attribute already conveys this state natively.
+**Action:** Always wrap visual decorators like asterisks in `aria-hidden='true'` when styling required fields.
