@@ -29,3 +29,6 @@
 ## 2026-03-14 - Cache Redundant SDK API Calls
 **Learning:** SDK functions like `wifi_softap_get_station_num()` that retrieve hardware or network state have non-zero execution cost and can return changing values, which causes a slight race condition when evaluated multiple times in the same format string block.
 **Action:** Cache the results of redundant hardware or API calls in local variables rather than invoking them multiple times within a single formatting statement or block to avoid unnecessary overhead.
+## 2026-06-17 - Avoid Custom String Converters for Standard Types
+**Learning:** Codebase performance pattern: Writing custom formatting wrappers like `mac_2_buff(buf, mac)` adds unnecessary function-call overhead and wastes stack memory because you must allocate intermediate string buffers (like `uint8_t mac_buf[20];`) just to hold the converted string before immediately printing it.
+**Action:** Use the SDK's built-in `MACSTR` format string macro and `MAC2STR()` argument macro directly within `os_sprintf` or `os_printf` calls to format MAC addresses inline, reducing stack usage and eliminating redundant wrapper function overhead.
