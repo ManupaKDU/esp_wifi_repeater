@@ -29,3 +29,6 @@
 ## 2026-03-14 - Cache Redundant SDK API Calls
 **Learning:** SDK functions like `wifi_softap_get_station_num()` that retrieve hardware or network state have non-zero execution cost and can return changing values, which causes a slight race condition when evaluated multiple times in the same format string block.
 **Action:** Cache the results of redundant hardware or API calls in local variables rather than invoking them multiple times within a single formatting statement or block to avoid unnecessary overhead.
+## 2026-03-14 - Optimize MAC Formatting Overhead
+**Learning:** Codebase C/ESP8266 pattern: Use the built-in `MACSTR` and `MAC2STR()` macros directly within `os_sprintf` calls instead of allocating intermediate `uint8_t` stack buffers and using custom conversion functions (like `mac_2_buff`). This reduces stack memory usage and eliminates unnecessary function-call overhead during string formatting.
+**Action:** When building formatted strings in loops, inline formatting helpers that internally use `os_sprintf` (such as `mac_2_buff`) directly into the parent `os_sprintf` call.
