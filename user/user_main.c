@@ -3691,21 +3691,15 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 
             if (buffer != NULL)
             {
-                uint8_t ap_mac[20], sta_mac[20], bssid_mac[20];
                 ip_addr_t my_ap_ip = config.network_addr;
                 my_ap_ip.addr |= 0x01000000;
 
-                mac_2_buff(ap_mac, config.AP_MAC_address);
-
                 uint8_t mac_buf[6];
                 wifi_get_macaddr(STATION_IF, mac_buf);
-                mac_2_buff(sta_mac, mac_buf);
-
-                mac_2_buff(bssid_mac, uplink_bssid);
 
                 /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
-                int len = os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"%s\",\"sta_mac\":\"%s\",\"uplink_bssid\":\"%s\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
-                           config.sta_hostname, ap_mac, sta_mac, bssid_mac,
+                int len = os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"" MACSTR "\",\"sta_mac\":\"" MACSTR "\",\"uplink_bssid\":\"" MACSTR "\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
+                           config.sta_hostname, MAC2STR(config.AP_MAC_address), MAC2STR(mac_buf), MAC2STR(uplink_bssid),
                            IP2STR(&my_ap_ip), IP2STR(&my_ip),
                            wifi_station_get_rssi(),
                            config.automesh_mode == AUTOMESH_OPERATIONAL ? config.AP_MAC_address[2] : 0,
@@ -3723,8 +3717,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                         len += 1;
                     }
                     do_colon = true;
-                    mac_2_buff(sta_mac, station->bssid);
-                    len += os_sprintf(&buffer[len], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
+                    len += os_sprintf(&buffer[len], "{\"mac\":\"" MACSTR "\",\"ip\":\"" IPSTR "\"}", MAC2STR(station->bssid), IP2STR(&station->ip));
                     station = STAILQ_NEXT(station, next);
                 }
                 wifi_softap_free_station_info();
