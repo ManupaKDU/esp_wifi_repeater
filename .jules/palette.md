@@ -79,3 +79,6 @@
 ## 2025-01-28 - Helper Text for Domain-Specific Features
 **Learning:** For domain-specific or complex features (like "Automesh" in an embedded WiFi router context), simply providing a checkbox is insufficient and hurts accessibility/usability since users may not know what the feature entails. In embedded interfaces where external help documentation isn't easily accessible, this problem is compounded.
 **Action:** Always provide inline helper text (using `<small>`) and explicitly link it to the control using `aria-describedby` when exposing complex, domain-specific functionality.
+## 2026-06-19 - Substring Matching for Escaped C Strings
+**Learning:** When using Python to inject UX improvements (like `aria-hidden` elements) into HTML that is embedded as multiline C macros, including trailing line-continuation characters (`\\`) in the search string often causes `str.replace()` to fail silently due to escaping mismatch.
+**Action:** Always target the exact, raw inner HTML substring for replacements, explicitly excluding trailing backslashes, to ensure Python scripts correctly match and modify the embedded C macro content.
