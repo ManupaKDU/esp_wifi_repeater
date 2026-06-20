@@ -91,3 +91,7 @@
 ## 2025-01-28 - HTML5 Pattern Validation Requires 'required' Attribute
 **Learning:** HTML5 validation attributes like `pattern` will not trigger validation logic on an input field if the field is empty, unless the `required` attribute is also present. This causes empty fields to successfully submit and bypass regex validation constraints, which can be problematic for critical network configuration inputs like IPs or Subnets.
 **Action:** When enforcing formatting constraints on input fields via `pattern`, always pair it with the `required` attribute to ensure the validation logic correctly blocks both malformed and empty submissions.
+
+## 2024-05-18 - HTML5 Pattern Validation and Required Attribute
+**Learning:** When using the HTML5 `pattern` attribute for inline validation (like validating an IPv4 address), if the field is left empty, the pattern regex will not be evaluated and the form will submit successfully.
+**Action:** Always ensure `pattern` attributes are combined with the `required` attribute if the input must conform to the regex, thus preventing empty invalid submissions.
