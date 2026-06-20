@@ -66,3 +66,7 @@
 ## 2024-05-18 - Inline Formatting Helpers
 **Learning:** Codebase performance pattern: When building formatted strings in loops, inline formatting helpers that internally use `os_sprintf` (such as `mac_2_buff`) directly into the parent `os_sprintf` call.
 **Action:** By doing this, it prevents allocating intermediate string buffers and eliminates redundant function overhead.
+
+## 2026-06-17 - Avoid Custom String Converters for Standard Types
+**Learning:** Codebase performance pattern: Writing custom formatting wrappers like `mac_2_buff(buf, mac)` adds unnecessary function-call overhead and wastes stack memory because you must allocate intermediate string buffers (like `uint8_t mac_buf[20];`) just to hold the converted string before immediately printing it.
+**Action:** Use the SDK's built-in `MACSTR` format string macro and `MAC2STR()` argument macro directly within `os_sprintf` or `os_printf` calls to format MAC addresses inline, reducing stack usage and eliminating redundant wrapper function overhead.

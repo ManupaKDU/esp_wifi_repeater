@@ -1328,9 +1328,9 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             to_console_len(response, len);
 #endif
             char *rand = "";
+            uint8_t mac[6];
             if (strcmp(config.STA_MAC_address, "random") == 0)
             {
-                uint8_t mac[6];
                 wifi_get_macaddr(STATION_IF, mac);
                 rand = " (random)";
                 to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(mac), rand));
@@ -1339,6 +1339,10 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             {
                 to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(config.STA_MAC_address), rand));
             }
+
+                os_memcpy(mac, config.STA_MAC_address, 6);
+            }
+            to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(mac), rand));
             to_console_len(response, os_sprintf(response, "AP MAC:  " MACSTR "\r\n", MAC2STR(config.AP_MAC_address)));
 #if HAVE_ENC28J60
             if (config.eth_enable)
