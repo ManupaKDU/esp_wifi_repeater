@@ -70,3 +70,7 @@
 ## 2026-06-17 - Avoid Custom String Converters for Standard Types
 **Learning:** Codebase performance pattern: Writing custom formatting wrappers like `mac_2_buff(buf, mac)` adds unnecessary function-call overhead and wastes stack memory because you must allocate intermediate string buffers (like `uint8_t mac_buf[20];`) just to hold the converted string before immediately printing it.
 **Action:** Use the SDK's built-in `MACSTR` format string macro and `MAC2STR()` argument macro directly within `os_sprintf` or `os_printf` calls to format MAC addresses inline, reducing stack usage and eliminating redundant wrapper function overhead.
+
+## 2026-03-14 - Optimize MAC Formatting Overhead
+**Learning:** Codebase C/ESP8266 pattern: Use the built-in `MACSTR` and `MAC2STR()` macros directly within `os_sprintf` calls instead of allocating intermediate `uint8_t` stack buffers and using custom conversion functions (like `mac_2_buff`). This reduces stack memory usage and eliminates unnecessary function-call overhead during string formatting.
+**Action:** When building formatted strings in loops, inline formatting helpers that internally use `os_sprintf` (such as `mac_2_buff`) directly into the parent `os_sprintf` call.
