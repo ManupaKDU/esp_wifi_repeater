@@ -79,3 +79,7 @@
 ## 2025-01-28 - Helper Text for Domain-Specific Features
 **Learning:** For domain-specific or complex features (like "Automesh" in an embedded WiFi router context), simply providing a checkbox is insufficient and hurts accessibility/usability since users may not know what the feature entails. In embedded interfaces where external help documentation isn't easily accessible, this problem is compounded.
 **Action:** Always provide inline helper text (using `<small>`) and explicitly link it to the control using `aria-describedby` when exposing complex, domain-specific functionality.
+
+## 2025-01-28 - HTML5 pattern validation insight
+**Learning:** HTML5 `pattern` validation attributes do not evaluate if the input field is empty. To enforce formatting constraints and prevent empty submissions from bypassing regex validations, they must be paired with the `required` attribute.
+**Action:** Always pair the `pattern` attribute with the `required` attribute to ensure formatting constraints are strictly enforced, even for empty fields.
