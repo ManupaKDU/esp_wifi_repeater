@@ -45,3 +45,11 @@
 ## 2024-05-24 - Avoid Redundant string length calculation for MQTT Publish
 **Learning:** Codebase performance pattern: When formatting variables (like integers) into a buffer using `os_sprintf` specifically to publish them via MQTT, passing the resulting buffer to `mqtt_publish_str` implicitly invokes a redundant `os_strlen(buf)` calculation.
 **Action:** Created `mqtt_publish_str_len` to explicitly accept a string length. Refactored `mqtt_publish_int` to capture the return value of `os_sprintf(buf, ...)` and pass it directly to `mqtt_publish_str_len`, avoiding an O(N) string traversal just to find the length of the string we just wrote.
+
+## 2026-03-14 - Avoid Optimizing Cold Paths
+**Learning:** Avoid micro-optimizations (e.g., caching string lengths or replacing formatting) on 'cold' paths, such as immediately before a `system_restart()`, as this violates the optimization guidelines by adding complexity without measurable runtime benefits.
+**Action:** Do not apply any performance optimizations to code blocks that execute during firmware updates, reboots, or startup sequences unless there is a proven bottleneck.
+
+## 2026-03-14 - Inline Formatting Helpers in Loops
+**Learning:** Codebase performance pattern: When building formatted strings in loops (like topology JSONs), inline formatting helpers that internally use `os_sprintf` (such as `mac_2_buff`) directly into the parent `os_sprintf` call.
+**Action:** Replace intermediate buffer formatting with direct format specifiers (e.g., replacing `mac_2_buff` with `%02x:%02x:%02x:%02x:%02x:%02x`) to eliminate redundant `os_sprintf` function calls and intermediate buffer allocations inside the loop.
