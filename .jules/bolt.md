@@ -57,3 +57,8 @@
 ## 2024-05-19 - Cache redundant os_strlen in MQTT telemetry callbacks
 **Learning:** Codebase performance pattern: In frequent telemetry callbacks (like publishing uptime, memory, or packet stats via MQTT), passing a buffer formatted via `os_sprintf` to a string-based publish function (e.g., `mqtt_publish_str`) triggers a redundant `os_strlen(str)` O(N) evaluation inside `MQTT_Publish`.
 **Action:** Created `mqtt_publish_str_len` to directly accept a length argument. Update helper functions like `mqtt_publish_int` to capture the return value of `os_sprintf` (which returns the length) and pass it directly to `mqtt_publish_str_len`, eliminating the redundant `os_strlen` overhead.
+
+
+## $(date +%Y-%m-%d) - Avoiding hardcoded string lengths for micro-optimizations
+**Learning:** Do not attempt to micro-optimize string literal lengths by hardcoding integer values (e.g., `17`) or using manual calculations like `sizeof("...") - 1` in place of `os_strlen`. This creates fragile code and severe maintainability hazards, especially since compilers often optimize literal lengths automatically. Furthermore, avoid micro-optimizations on absolute cold paths (e.g., just before a `system_restart()`) as they violate the core performance directives by introducing complexity without measurable runtime benefits.
+**Action:** When seeking string calculation optimizations, focus on caching dynamically calculated lengths that are already returned by upstream formatting functions (like `os_sprintf`) on hot paths, rather than trying to optimize literal lengths or cold paths.

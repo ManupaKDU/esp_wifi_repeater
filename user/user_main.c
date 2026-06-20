@@ -169,8 +169,6 @@ bool mqtt_enabled, mqtt_connected;
 void ICACHE_FLASH_ATTR mqtt_publish_str_len(uint16_t mask, uint8_t *sub_topic, uint8_t *str, uint16_t len)
 {
     uint8_t buf[256];
-    if (!mqtt_enabled || (config.mqtt_topic_mask & mask) == 0)
-        return;
 
     os_sprintf(buf, "%s/%s", config.mqtt_prefix, sub_topic);
     //os_printf("Publish: %s %s\r\n", buf, str);
