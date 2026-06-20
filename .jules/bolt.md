@@ -40,3 +40,8 @@
 ## 2024-06-13 - Avoid redundant os_strlen in MQTT publish
 **Learning:** Codebase performance pattern: In `user_main.c`, strings passed to `mqtt_publish_str` are often pre-formatted using `os_sprintf` right before the call. Since `os_sprintf` returns the string length, calculating `os_strlen(str)` again inside `mqtt_publish_str` is redundant O(N) work.
 **Action:** Use the new `mqtt_publish_str_len` variant which directly accepts the pre-calculated string length to save cycles.
+
+
+## 2024-05-24 - Avoid Redundant string length calculation for MQTT Publish
+**Learning:** Codebase performance pattern: When formatting variables (like integers) into a buffer using `os_sprintf` specifically to publish them via MQTT, passing the resulting buffer to `mqtt_publish_str` implicitly invokes a redundant `os_strlen(buf)` calculation.
+**Action:** Created `mqtt_publish_str_len` to explicitly accept a string length. Refactored `mqtt_publish_int` to capture the return value of `os_sprintf(buf, ...)` and pass it directly to `mqtt_publish_str_len`, avoiding an O(N) string traversal just to find the length of the string we just wrote.
