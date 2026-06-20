@@ -107,3 +107,7 @@
 ## 2026-06-18 - HTML5 pattern validation bypass
 **Learning:** HTML5 `pattern` validation attributes do not evaluate if the input field is empty. To enforce formatting constraints and prevent empty submissions from bypassing regex validations, you must always pair the `pattern` attribute with the `required` attribute. This is particularly crucial for complex embedded configuration fields like Subnet or IP addresses where an empty string is an invalid configuration but passes regex validation if `required` is omitted.
 **Action:** When enforcing constraints using the `pattern` attribute, always pair it with the `required` attribute to ensure empty inputs do not bypass validation.
+
+## 2026-06-19 - Substring Matching for Escaped C Strings
+**Learning:** When using Python to inject UX improvements (like `aria-hidden` elements) into HTML that is embedded as multiline C macros, including trailing line-continuation characters (`\\`) in the search string often causes `str.replace()` to fail silently due to escaping mismatch.
+**Action:** Always target the exact, raw inner HTML substring for replacements, explicitly excluding trailing backslashes, to ensure Python scripts correctly match and modify the embedded C macro content.
