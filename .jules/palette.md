@@ -103,3 +103,7 @@
 ## 2024-05-24 - Wrap visual required indicators in aria-hidden
 **Learning:** When adding a visual required indicator (such as an asterisk `*`) to a form field `<label>`, wrapping it in `<span aria-hidden='true'>*</span>` prevents screen readers from redundantly announcing 'star', since the input's `required` attribute already conveys this state natively.
 **Action:** Always wrap visual decorators like asterisks in `aria-hidden='true'` when styling required fields.
+
+## 2026-06-18 - HTML5 pattern validation bypass
+**Learning:** HTML5 `pattern` validation attributes do not evaluate if the input field is empty. To enforce formatting constraints and prevent empty submissions from bypassing regex validations, you must always pair the `pattern` attribute with the `required` attribute. This is particularly crucial for complex embedded configuration fields like Subnet or IP addresses where an empty string is an invalid configuration but passes regex validation if `required` is omitted.
+**Action:** When enforcing constraints using the `pattern` attribute, always pair it with the `required` attribute to ensure empty inputs do not bypass validation.
