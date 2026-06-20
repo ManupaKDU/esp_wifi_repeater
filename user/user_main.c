@@ -143,12 +143,6 @@ void ICACHE_FLASH_ATTR to_console_len(char *str, uint16_t len)
     ringbuf_memcpy_into(console_tx_buffer, str, len);
 }
 
-void ICACHE_FLASH_ATTR mac_2_buff(char *buf, uint8_t mac[6])
-{
-    os_sprintf(buf, "%02x:%02x:%02x:%02x:%02x:%02x",
-               mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-}
-
 #if MQTT_CLIENT
 
 #define MQTT_TOPIC_RESPONSE 0x0001
@@ -1327,28 +1321,23 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             }
             to_console_len(response, len);
 #endif
-
-            uint8_t mac_buf[20];
             char *rand = "";
             if (strcmp(config.STA_MAC_address, "random") == 0)
             {
                 uint8_t mac[6];
                 wifi_get_macaddr(STATION_IF, mac);
-                mac_2_buff(mac_buf, mac);
                 rand = " (random)";
+                to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(mac), rand));
             }
             else
             {
-                mac_2_buff(mac_buf, config.STA_MAC_address);
+                to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(config.STA_MAC_address), rand));
             }
-            to_console_len(response, os_sprintf(response, "STA MAC: %s%s\r\n", mac_buf, rand));
-            mac_2_buff(mac_buf, config.AP_MAC_address);
-            to_console_len(response, os_sprintf(response, "AP MAC:  %s\r\n", mac_buf));
+            to_console_len(response, os_sprintf(response, "AP MAC:  " MACSTR "\r\n", MAC2STR(config.AP_MAC_address)));
 #if HAVE_ENC28J60
             if (config.eth_enable)
             {
-                mac_2_buff(mac_buf, config.ETH_MAC_address);
-                to_console_len(response, os_sprintf(response, "ETH MAC: %s\r\n", mac_buf));
+                to_console_len(response, os_sprintf(response, "ETH MAC: " MACSTR "\r\n", MAC2STR(config.ETH_MAC_address)));
             }
 #endif
             to_console_len(response, os_sprintf(response, "STA hostname: %s\r\n", config.sta_hostname));
@@ -1487,9 +1476,7 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             struct station_info *station = wifi_softap_get_station_info();
             while (station)
             {
-                uint8_t sta_mac[20];
-                mac_2_buff(sta_mac, station->bssid);
-                to_console_len(response, os_sprintf(response, "Station: %s - " IPSTR "\r\n", sta_mac, IP2STR(&station->ip)));
+                to_console_len(response, os_sprintf(response, "Station: " MACSTR " - " IPSTR "\r\n", MAC2STR(station->bssid), IP2STR(&station->ip)));
                 station = STAILQ_NEXT(station, next);
             }
             wifi_softap_free_station_info();
@@ -3691,21 +3678,14 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 
             if (buffer != NULL)
             {
-                uint8_t ap_mac[20], sta_mac[20], bssid_mac[20];
                 ip_addr_t my_ap_ip = config.network_addr;
                 my_ap_ip.addr |= 0x01000000;
-
-                mac_2_buff(ap_mac, config.AP_MAC_address);
-
                 uint8_t mac_buf[6];
                 wifi_get_macaddr(STATION_IF, mac_buf);
-                mac_2_buff(sta_mac, mac_buf);
-
-                mac_2_buff(bssid_mac, uplink_bssid);
 
                 /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
-                int len = os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"%s\",\"sta_mac\":\"%s\",\"uplink_bssid\":\"%s\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
-                           config.sta_hostname, ap_mac, sta_mac, bssid_mac,
+                int len = os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"" MACSTR "\",\"sta_mac\":\"" MACSTR "\",\"uplink_bssid\":\"" MACSTR "\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
+                           config.sta_hostname, MAC2STR(config.AP_MAC_address), MAC2STR(mac_buf), MAC2STR(uplink_bssid),
                            IP2STR(&my_ap_ip), IP2STR(&my_ip),
                            wifi_station_get_rssi(),
                            config.automesh_mode == AUTOMESH_OPERATIONAL ? config.AP_MAC_address[2] : 0,
@@ -3723,8 +3703,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                         len += 1;
                     }
                     do_colon = true;
-                    mac_2_buff(sta_mac, station->bssid);
-                    len += os_sprintf(&buffer[len], "{\"mac\":\"%s\",\"ip\":\"" IPSTR "\"}", sta_mac, IP2STR(&station->ip));
+                    len += os_sprintf(&buffer[len], "{\"mac\":\"" MACSTR "\",\"ip\":\"" IPSTR "\"}", MAC2STR(station->bssid), IP2STR(&station->ip));
                     station = STAILQ_NEXT(station, next);
                 }
                 wifi_softap_free_station_info();
@@ -3828,8 +3807,7 @@ void wifi_handle_event_cb(System_Event_t *evt)
     switch (evt->event)
     {
     case EVENT_STAMODE_CONNECTED:
-        mac_2_buff(mac_str, evt->event_info.connected.bssid);
-        os_printf("connect to ssid %s, bssid %s, channel %d\r\n", evt->event_info.connected.ssid, mac_str, evt->event_info.connected.channel);
+        os_printf("connect to ssid %s, bssid " MACSTR ", channel %d\r\n", evt->event_info.connected.ssid, MAC2STR(evt->event_info.connected.bssid), evt->event_info.connected.channel);
         my_channel = evt->event_info.connected.channel;
         os_memcpy(uplink_bssid, evt->event_info.connected.bssid, sizeof(uplink_bssid));
 
