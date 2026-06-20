@@ -62,3 +62,7 @@
 ## $(date +%Y-%m-%d) - Avoiding hardcoded string lengths for micro-optimizations
 **Learning:** Do not attempt to micro-optimize string literal lengths by hardcoding integer values (e.g., `17`) or using manual calculations like `sizeof("...") - 1` in place of `os_strlen`. This creates fragile code and severe maintainability hazards, especially since compilers often optimize literal lengths automatically. Furthermore, avoid micro-optimizations on absolute cold paths (e.g., just before a `system_restart()`) as they violate the core performance directives by introducing complexity without measurable runtime benefits.
 **Action:** When seeking string calculation optimizations, focus on caching dynamically calculated lengths that are already returned by upstream formatting functions (like `os_sprintf`) on hot paths, rather than trying to optimize literal lengths or cold paths.
+
+## 2024-05-18 - Inline Formatting Helpers
+**Learning:** Codebase performance pattern: When building formatted strings in loops, inline formatting helpers that internally use `os_sprintf` (such as `mac_2_buff`) directly into the parent `os_sprintf` call.
+**Action:** By doing this, it prevents allocating intermediate string buffers and eliminates redundant function overhead.
