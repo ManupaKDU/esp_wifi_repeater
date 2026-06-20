@@ -99,3 +99,7 @@
 ## 2026-06-16 - HTML5 Pattern Validation Requires Required Attribute
 **Learning:** HTML5 validation attributes like `pattern` will not be evaluated if the field is empty unless the `required` attribute is also present. This is particularly relevant when input fields (like subnets or IP addresses) have pattern matching regexes but are missing the `required` attribute. Without `required`, an empty field is considered valid and will allow submission, which can bypass regex validation.
 **Action:** When enforcing formatting constraints on input fields using the `pattern` attribute, always pair `pattern` with the `required` attribute to ensure proper client-side validation evaluates the regex instead of allowing empty submissions.
+
+## 2024-05-24 - Wrap visual required indicators in aria-hidden
+**Learning:** When adding a visual required indicator (such as an asterisk `*`) to a form field `<label>`, wrapping it in `<span aria-hidden='true'>*</span>` prevents screen readers from redundantly announcing 'star', since the input's `required` attribute already conveys this state natively.
+**Action:** Always wrap visual decorators like asterisks in `aria-hidden='true'` when styling required fields.
