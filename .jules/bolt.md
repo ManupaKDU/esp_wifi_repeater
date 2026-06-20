@@ -36,3 +36,7 @@
 ## 2026-03-14 - Wrap Switch Case Declarations in Blocks
 **Learning:** Codebase C Syntax pitfall: In C, a variable declaration cannot immediately follow a `case` label (e.g., `case EVENT_X: int len = ...;`). This results in a strict syntax error because a label must precede a statement, and a declaration is not considered a statement.
 **Action:** Always wrap the `case` block in curly braces `{ ... }` when introducing new variable declarations directly inside switch statements.
+
+## 2024-06-13 - Avoid redundant os_strlen in MQTT publish
+**Learning:** Codebase performance pattern: In `user_main.c`, strings passed to `mqtt_publish_str` are often pre-formatted using `os_sprintf` right before the call. Since `os_sprintf` returns the string length, calculating `os_strlen(str)` again inside `mqtt_publish_str` is redundant O(N) work.
+**Action:** Use the new `mqtt_publish_str_len` variant which directly accepts the pre-calculated string length to save cycles.
