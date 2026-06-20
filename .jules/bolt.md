@@ -53,3 +53,7 @@
 ## 2026-03-14 - Inline Formatting Helpers in Loops
 **Learning:** Codebase performance pattern: When building formatted strings in loops (like topology JSONs), inline formatting helpers that internally use `os_sprintf` (such as `mac_2_buff`) directly into the parent `os_sprintf` call.
 **Action:** Replace intermediate buffer formatting with direct format specifiers (e.g., replacing `mac_2_buff` with `%02x:%02x:%02x:%02x:%02x:%02x`) to eliminate redundant `os_sprintf` function calls and intermediate buffer allocations inside the loop.
+
+## 2024-05-19 - Cache redundant os_strlen in MQTT telemetry callbacks
+**Learning:** Codebase performance pattern: In frequent telemetry callbacks (like publishing uptime, memory, or packet stats via MQTT), passing a buffer formatted via `os_sprintf` to a string-based publish function (e.g., `mqtt_publish_str`) triggers a redundant `os_strlen(str)` O(N) evaluation inside `MQTT_Publish`.
+**Action:** Created `mqtt_publish_str_len` to directly accept a length argument. Update helper functions like `mqtt_publish_int` to capture the return value of `os_sprintf` (which returns the length) and pass it directly to `mqtt_publish_str_len`, eliminating the redundant `os_strlen` overhead.
