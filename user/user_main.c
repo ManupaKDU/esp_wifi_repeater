@@ -3696,8 +3696,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                 wifi_get_macaddr(STATION_IF, mac_buf);
 
                 /* ⚡ Bolt: Cache redundant os_strlen calculation by capturing os_sprintf return value */
-
-                /* ⚡ Bolt: Use MACSTR directly instead of buffer allocation & conversion to reduce overhead */
                 int len = os_sprintf(buffer, "{\"nodeinfo\":{\"id\":\"%s\",\"ap_mac\":\"" MACSTR "\",\"sta_mac\":\"" MACSTR "\",\"uplink_bssid\":\"" MACSTR "\",\"ap_ip\":\"" IPSTR "\",\"sta_ip\":\"" IPSTR "\",\"rssi\":\"%d\",\"mesh_level\":\"%u\",\"no_stas\":\"%d\"},\"stas\":[",
                            config.sta_hostname, MAC2STR(config.AP_MAC_address), MAC2STR(mac_buf), MAC2STR(uplink_bssid),
                            IP2STR(&my_ap_ip), IP2STR(&my_ip),
@@ -3717,8 +3715,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                         len += 1;
                     }
                     do_colon = true;
-
-                    /* ⚡ Bolt: Use MACSTR directly instead of buffer allocation & conversion to reduce overhead */
                     len += os_sprintf(&buffer[len], "{\"mac\":\"" MACSTR "\",\"ip\":\"" IPSTR "\"}", MAC2STR(station->bssid), IP2STR(&station->ip));
                     station = STAILQ_NEXT(station, next);
                 }
