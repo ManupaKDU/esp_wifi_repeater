@@ -165,6 +165,7 @@ void ICACHE_FLASH_ATTR to_console_len(char *str, uint16_t len)
 MQTT_Client mqttClient;
 bool mqtt_enabled, mqtt_connected;
 
+// ⚡ Bolt: Cache redundant os_strlen() call by reusing known length
 void ICACHE_FLASH_ATTR mqtt_publish_str_len(uint16_t mask, uint8_t *sub_topic, uint8_t *str, uint16_t len)
 {
     uint8_t buf[256];
@@ -178,8 +179,6 @@ void ICACHE_FLASH_ATTR mqtt_publish_str_len(uint16_t mask, uint8_t *sub_topic, u
 
 void ICACHE_FLASH_ATTR mqtt_publish_str(uint16_t mask, uint8_t *sub_topic, uint8_t *str)
 {
-    if (!mqtt_enabled || (config.mqtt_topic_mask & mask) == 0)
-        return;
     mqtt_publish_str_len(mask, sub_topic, str, os_strlen(str));
 }
 
@@ -206,8 +205,8 @@ static void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
     /* ⚡ Bolt: Resolve literal string length at compile-time instead of runtime O(N) evaluation */
     MQTT_Publish(client, buf, "online", (sizeof("online") - 1), config.mqtt_qos, 1);
 
-    os_sprintf(buf, IPSTR, IP2STR(&my_ip));
-    mqtt_publish_str(MQTT_TOPIC_IP, "IP", buf);
+    int len = os_sprintf(buf, IPSTR, IP2STR(&my_ip));
+    mqtt_publish_str_len(MQTT_TOPIC_IP, "IP", buf, len);
 
     if (os_strcmp(config.mqtt_command_topic, "none") != 0)
     {
@@ -811,7 +810,7 @@ void console_send_response(struct espconn *pespconn, uint8_t do_cmd)
     console_output[len] = 0;
     if (os_strcmp(config.mqtt_command_topic, "none") != 0)
     {
-        mqtt_publish_str(MQTT_TOPIC_RESPONSE, "response", console_output);
+        mqtt_publish_str_len(MQTT_TOPIC_RESPONSE, "response", console_output, len);
     }
 #endif
     if (do_cmd)
@@ -844,11 +843,12 @@ void ICACHE_FLASH_ATTR scan_done(void *arg, STATUS status)
         ringbuf_memcpy_into(console_tx_buffer, "\r", 1);
         while (bss_link != NULL)
         {
-            to_console_len(response, os_sprintf(response, "%d,\"%s\",%d,\"" MACSTR "\",%d\r\n",
+            int len = os_sprintf(response, "%d,\"%s\",%d,\"" MACSTR "\",%d\r\n",
                        bss_link->authmode, bss_link->ssid, bss_link->rssi,
-                       MAC2STR(bss_link->bssid), bss_link->channel));
+                       MAC2STR(bss_link->bssid), bss_link->channel);
+            to_console_len(response, len);
 #if MQTT_CLIENT
-            mqtt_publish_str(MQTT_TOPIC_SCANRESULT, "ScanResult", response);
+            mqtt_publish_str_len(MQTT_TOPIC_SCANRESULT, "ScanResult", response, len);
 #endif
             bss_link = bss_link->next.stqe_next;
         }
@@ -905,7 +905,7 @@ uint8_t acl_deny_cb(uint8_t proto, uint32_t saddr, uint16_t s_port, uint32_t dad
                IP2STR((ip_addr_t *)&saddr), s_port, IP2STR((ip_addr_t *)&daddr), d_port);
 
 #if MQTT_CLIENT
-    mqtt_publish_str(MQTT_TOPIC_ACLDENY, "ACLDeny", response);
+    mqtt_publish_str_len(MQTT_TOPIC_ACLDENY, "ACLDeny", response, len);
 #endif
     if (acl_debug)
     {
@@ -3715,9 +3715,9 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                     station = STAILQ_NEXT(station, next);
                 }
                 wifi_softap_free_station_info();
-                os_sprintf(&buffer[len], "]}");
+                len += os_sprintf(&buffer[len], "]}");
 
-                mqtt_publish_str(MQTT_TOPIC_TOPOLOGY, "Topology", buffer);
+                mqtt_publish_str_len(MQTT_TOPIC_TOPOLOGY, "Topology", buffer, len);
                 os_free(buffer);
             }
         }
@@ -3974,10 +3974,11 @@ void wifi_handle_event_cb(System_Event_t *evt)
         break;
 
     case EVENT_SOFTAPMODE_STACONNECTED:
-        os_sprintf(mac_str, MACSTR, MAC2STR(evt->event_info.sta_connected.mac));
+    {
+        int join_len = os_sprintf(mac_str, MACSTR, MAC2STR(evt->event_info.sta_connected.mac));
         os_printf("station: %s join, AID = %d\r\n", mac_str, evt->event_info.sta_connected.aid);
 #if MQTT_CLIENT
-        mqtt_publish_str(MQTT_TOPIC_JOIN, "join", mac_str);
+        mqtt_publish_str_len(MQTT_TOPIC_JOIN, "join", mac_str, join_len);
 #endif
 #ifndef REPEATER_MODE
         ip_addr_t ap_ip = config.network_addr;
@@ -3985,14 +3986,17 @@ void wifi_handle_event_cb(System_Event_t *evt)
         patch_netif(ap_ip, my_input_ap, &orig_input_ap, my_output_ap, &orig_output_ap, config.nat_enable);
 #endif
         break;
+    }
 
     case EVENT_SOFTAPMODE_STADISCONNECTED:
-        os_sprintf(mac_str, MACSTR, MAC2STR(evt->event_info.sta_disconnected.mac));
+    {
+        int leave_len = os_sprintf(mac_str, MACSTR, MAC2STR(evt->event_info.sta_disconnected.mac));
         os_printf("station: %s leave, AID = %d\r\n", mac_str, evt->event_info.sta_disconnected.aid);
 #if MQTT_CLIENT
-        mqtt_publish_str(MQTT_TOPIC_LEAVE, "leave", mac_str);
+        mqtt_publish_str_len(MQTT_TOPIC_LEAVE, "leave", mac_str, leave_len);
 #endif
         break;
+    }
 
     default:
         break;

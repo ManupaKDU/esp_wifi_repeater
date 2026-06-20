@@ -32,3 +32,7 @@
 ## 2026-03-14 - Optimize MAC address string formatting
 **Learning:** Codebase C/ESP8266 pattern: Use the built-in `MACSTR` and `MAC2STR()` macros directly within `os_sprintf` calls instead of allocating intermediate `uint8_t` stack buffers and using custom conversion functions (like `mac_2_buff`). This reduces stack memory usage and eliminates unnecessary function-call overhead during string formatting.
 **Action:** When printing or formatting MAC addresses, always prefer `MACSTR` with `MAC2STR(mac)` inside `os_sprintf` over writing custom wrapper functions or allocating temporary local arrays.
+
+## 2026-03-14 - Wrap Switch Case Declarations in Blocks
+**Learning:** Codebase C Syntax pitfall: In C, a variable declaration cannot immediately follow a `case` label (e.g., `case EVENT_X: int len = ...;`). This results in a strict syntax error because a label must precede a statement, and a declaration is not considered a statement.
+**Action:** Always wrap the `case` block in curly braces `{ ... }` when introducing new variable declarations directly inside switch statements.
