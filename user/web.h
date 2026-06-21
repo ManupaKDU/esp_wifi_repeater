@@ -70,13 +70,16 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='ap_network'>Subnet <span aria-hidden='true'>*</span>:</label></td>\
-<td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d' required pattern='^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$' title='Valid IPv4 address' inputmode='decimal' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
+<td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d' required pattern='^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$' title='Valid IPv4 address' aria-describedby='ap_network_help' inputmode='decimal' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
 <td></td>\
 <td><input type='submit' value='Set' /></td>\
 </tr>\
 </table>\
+<small id='ap_network_help'>\
+<i>Format: </i>X.X.X.X (e.g. 192.168.4.1)<br />\
+</small>\
 <small id='ap_pwd_help'>\
 <i>Password: </i>8-63 chars<br />\
 </small>\
