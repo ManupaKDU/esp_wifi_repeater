@@ -1333,13 +1333,9 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             {
                 wifi_get_macaddr(STATION_IF, mac);
                 rand = " (random)";
-                to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(mac), rand));
             }
             else
             {
-                to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(config.STA_MAC_address), rand));
-            }
-
                 os_memcpy(mac, config.STA_MAC_address, 6);
             }
             to_console_len(response, os_sprintf(response, "STA MAC: " MACSTR "%s\r\n", MAC2STR(mac), rand));
@@ -1646,7 +1642,7 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             goto command_handled_2;
         }
 #endif
-    }
+
 #if ACLS
     if (strcmp(tokens[0], "acl") == 0)
     {

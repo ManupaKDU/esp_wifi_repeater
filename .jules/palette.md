@@ -111,3 +111,7 @@
 ## 2026-06-19 - Substring Matching for Escaped C Strings
 **Learning:** When using Python to inject UX improvements (like `aria-hidden` elements) into HTML that is embedded as multiline C macros, including trailing line-continuation characters (`\\`) in the search string often causes `str.replace()` to fail silently due to escaping mismatch.
 **Action:** Always target the exact, raw inner HTML substring for replacements, explicitly excluding trailing backslashes, to ensure Python scripts correctly match and modify the embedded C macro content.
+
+## 2026-06-21 - [Accessibility] Inline Helper Text for Pre-filled Regex Inputs
+**Learning:** Complex form fields with regex `pattern` validation (like IP addresses or Subnets) are often pre-filled by the backend via macros (e.g. `%d.%d.%d.%d`). Because the `value` attribute is not empty, the `placeholder` attribute is never displayed to the user. Furthermore, browser-native validation tooltips for `pattern` mismatches are generic and do not explain the expected format. This can leave users guessing the correct input format, hurting accessibility and usability.
+**Action:** When a complex input field relies on `pattern` validation and might be pre-filled with values, always provide explicit inline helper text (using `<small>`) below the input and associate it directly using the `aria-describedby` attribute, rather than relying solely on `placeholder` or `title` attributes.
