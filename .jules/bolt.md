@@ -79,3 +79,7 @@
 ## 2026-03-14 - Optimize MAC address string formatting
 **Learning:** Codebase performance pattern: using `mac_2_buff` to format MAC addresses into intermediate stack-allocated string buffers (`uint8_t buffer[20]`) before passing them to `os_sprintf` via `%s` adds unnecessary memory pressure and redundant formatting overhead.
 **Action:** Use the built-in `MACSTR` format string macro combined with the `MAC2STR(mac_array)` argument macro to inline MAC address formatting directly into the target `os_sprintf` call. This reduces stack allocation (saving ~20 bytes per MAC address) and eliminates the need for intermediate helper function calls.
+
+## 2026-06-18 - Replace Software Division with Bitwise Shift on Hot Paths
+**Learning:** Codebase performance pattern: ESP8266 lacks a hardware division unit, making software division (e.g., `get_long_systime() / 1000000ULL`) take significantly more CPU cycles than bitwise operations. When calculating timestamps for TTL logic inside high-frequency networking paths (like per-packet bridge forwarding), this adds measurable overhead.
+**Action:** Replace division by 1,000,000 with a right bitwise shift by 20 (`>> 20`, dividing by 1,048,576) to approximate seconds. This reduces a multi-cycle division to a single-cycle shift instruction, dramatically speeding up the packet processing hot path while retaining functionally identical TTL expiration behavior.
