@@ -95,7 +95,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td></td>\
-<td><input id='lock_submit' type='submit' name='dolock' value='Lock' disabled/></td>\
+<td><input id='lock_submit' type='submit' name='dolock' value='Lock' disabled onclick='return confirm(\"Are you sure you want to lock the config? You will need the STA password to unlock it.\");'/></td>\
 </tr>\
 </table>\
 <small id='lock_help'>\
@@ -197,7 +197,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td></td>\
-<td><input id='repeater_lock_submit' type='submit' name='dolock' value='Lock' disabled/></td>\
+<td><input id='repeater_lock_submit' type='submit' name='dolock' value='Lock' disabled onclick='return confirm(\"Are you sure you want to lock the config? You will need the STA password to unlock it.\");'/></td>\
 </tr>\
 </table>\
 <small id='repeater_lock_help'>\
