@@ -119,3 +119,6 @@
 ## 2024-06-25 - Confirmation for Destructive Actions in Embedded UIs
 **Learning:** Locking the device configuration is a restrictive action that can leave users stranded if they don't know the unlock password. In an embedded context where external recovery options are limited, always provide a confirmation dialog explaining the prerequisites (e.g., 'You will need the STA password to unlock') before executing restrictive state changes.
 **Action:** Always add a confirmation dialog (e.g., `onclick='return confirm(...)'`) for destructive or restrictive state changes like locking the device or resetting to factory defaults.
+## 2026-06-26 - [Bug] C String Parser Quirk with Quotes
+**Learning:** In the `xtensa-lx106-elf-gcc` compiler, if a string literal containing JS code uses `onclick=\"return confirm('...');\"`, it can trigger a parsing bug when the string is extremely long, leading to syntax errors far away from the site of modification.
+**Action:** When injecting inline JS into long embedded C macros, invert the quotes (e.g., `onclick='return confirm(\"...\");'`) as it is correctly parsed by the toolchain.
