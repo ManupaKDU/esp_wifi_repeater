@@ -36,8 +36,13 @@
     select:focus {
       outline: none;
       border-color: #3f51b5;
+      box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
     }
     /* Style for the actual button inside the web component */
+    button[slot="activate"]:focus-visible {
+      outline: 3px solid #3f51b5;
+      outline-offset: 2px;
+    }
     button[slot="activate"] {
       background: #3f51b5;
       color: white;
