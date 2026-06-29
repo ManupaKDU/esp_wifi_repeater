@@ -1132,6 +1132,7 @@ static char INVALID_LOCKED[] = "Invalid command. Config locked\r\n";
 static char INVALID_NUMARGS[] = "Invalid number of arguments\r\n";
 static char INVALID_ARG[] = "Invalid argument\r\n";
 
+void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn);
 void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 {
 #define MAX_CMD_TOKENS 9
@@ -3225,17 +3226,17 @@ bool ICACHE_FLASH_ATTR check_connection_access(struct espconn *pesp_conn, uint8_
 }
 
 #if REMOTE_CONFIG
-static void ICACHE_FLASH_ATTR tcp_client_sent_cb(void *arg);
-static void ICACHE_FLASH_ATTR tcp_client_recv_cb(void *arg, char *data, unsigned short length);
-static void ICACHE_FLASH_ATTR tcp_client_discon_cb(void *arg);
-static void ICACHE_FLASH_ATTR tcp_client_connected_cb(void *arg);
+static void tcp_client_sent_cb(void *arg);
+static void tcp_client_recv_cb(void *arg, char *data, unsigned short length);
+static void tcp_client_discon_cb(void *arg);
+static void tcp_client_connected_cb(void *arg);
 #endif
 #if WEB_CONFIG
-static void ICACHE_FLASH_ATTR handle_set_cmd(void *arg, char *cmd, char *val);
-static void ICACHE_FLASH_ATTR web_config_client_recv_cb(void *arg, char *data, unsigned short length);
-static void ICACHE_FLASH_ATTR web_config_client_discon_cb(void *arg);
-static void ICACHE_FLASH_ATTR web_config_client_sent_cb(void *arg);
-static void ICACHE_FLASH_ATTR web_config_client_connected_cb(void *arg);
+static void handle_set_cmd(void *arg, char *cmd, char *val);
+static void web_config_client_recv_cb(void *arg, char *data, unsigned short length);
+static void web_config_client_discon_cb(void *arg);
+static void web_config_client_sent_cb(void *arg);
+static void web_config_client_connected_cb(void *arg);
 #endif
 
 #if REMOTE_CONFIG
