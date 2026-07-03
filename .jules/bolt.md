@@ -79,7 +79,3 @@
 ## 2026-03-14 - Optimize MAC address string formatting
 **Learning:** Codebase performance pattern: using `mac_2_buff` to format MAC addresses into intermediate stack-allocated string buffers (`uint8_t buffer[20]`) before passing them to `os_sprintf` via `%s` adds unnecessary memory pressure and redundant formatting overhead.
 **Action:** Use the built-in `MACSTR` format string macro combined with the `MAC2STR(mac_array)` argument macro to inline MAC address formatting directly into the target `os_sprintf` call. This reduces stack allocation (saving ~20 bytes per MAC address) and eliminates the need for intermediate helper function calls.
-
-## 2026-07-03 - Optimize Single-Character Append in Loops
-**Learning:** Using `os_sprintf` to append a single literal character (e.g., `os_sprintf(&buffer[len], ",");`) invokes unnecessary overhead from variadic argument handling and format string parsing, especially inside loops.
-**Action:** Replace it with direct array assignment and manual null-termination (e.g., `buffer[len] = ','; buffer[len + 1] = '\0';`) for a safe and functionally equivalent micro-optimization.

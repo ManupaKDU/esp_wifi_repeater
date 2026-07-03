@@ -3225,7 +3225,7 @@ bool ICACHE_FLASH_ATTR check_connection_access(struct espconn *pesp_conn, uint8_
 }
 
 #if REMOTE_CONFIG
-static void ICACHE_FLASH_ATTR tcp_client_sent_cb(void *arg)
+void ICACHE_FLASH_ATTR tcp_client_sent_cb(void *arg)
 {
     uint16_t len;
     static uint8_t tbuf[1400];
@@ -3239,7 +3239,7 @@ static void ICACHE_FLASH_ATTR tcp_client_sent_cb(void *arg)
     }
 }
 
-static void ICACHE_FLASH_ATTR tcp_client_recv_cb(void *arg,
+void ICACHE_FLASH_ATTR tcp_client_recv_cb(void *arg,
                                                  char *data,
                                                  unsigned short length)
 {
@@ -3261,7 +3261,7 @@ static void ICACHE_FLASH_ATTR tcp_client_recv_cb(void *arg,
     *(data + length) = 0;
 }
 
-static void ICACHE_FLASH_ATTR tcp_client_discon_cb(void *arg)
+void ICACHE_FLASH_ATTR tcp_client_discon_cb(void *arg)
 {
     //os_printf("tcp_client_discon_cb(): client disconnected\n");
 #if ACLS
@@ -3272,7 +3272,7 @@ static void ICACHE_FLASH_ATTR tcp_client_discon_cb(void *arg)
 }
 
 /* Called when a client connects to the console server */
-static void ICACHE_FLASH_ATTR tcp_client_connected_cb(void *arg)
+void ICACHE_FLASH_ATTR tcp_client_connected_cb(void *arg)
 {
     struct espconn *pespconn = (struct espconn *)arg;
 
@@ -3309,7 +3309,7 @@ espconn_send(pespconn, (uint8_t *) send_data, sizeof(send_data) - 1);
 #endif /* REMOTE_CONFIG */
 
 #if WEB_CONFIG
-static void ICACHE_FLASH_ATTR handle_set_cmd(void *arg, char *cmd, char *val)
+void ICACHE_FLASH_ATTR handle_set_cmd(void *arg, char *cmd, char *val)
 {
     struct espconn *pespconn = (struct espconn *)arg;
     int max_current_cmd_size = MAX_CON_CMD_SIZE - (os_strlen(cmd) + 1);
@@ -3331,7 +3331,7 @@ char *strstr(char *string, char *needle);
 char *strtok(char *str, const char *delimiters);
 char *strtok_r(char *s, const char *delim, char **last);
 
-static void ICACHE_FLASH_ATTR web_config_client_recv_cb(void *arg,
+void ICACHE_FLASH_ATTR web_config_client_recv_cb(void *arg,
                                                         char *data,
                                                         unsigned short length)
 {
@@ -3440,13 +3440,13 @@ static void ICACHE_FLASH_ATTR web_config_client_recv_cb(void *arg,
     }
 }
 
-static void ICACHE_FLASH_ATTR web_config_client_discon_cb(void *arg)
+void ICACHE_FLASH_ATTR web_config_client_discon_cb(void *arg)
 {
     //os_printf("web_config_client_discon_cb(): client disconnected\n");
     struct espconn *pespconn = (struct espconn *)arg;
 }
 
-static void ICACHE_FLASH_ATTR web_config_client_sent_cb(void *arg)
+void ICACHE_FLASH_ATTR web_config_client_sent_cb(void *arg)
 {
     //os_printf("web_config_client_sent_cb(): data sent to client\n");
     struct espconn *pespconn = (struct espconn *)arg;
@@ -3455,7 +3455,7 @@ static void ICACHE_FLASH_ATTR web_config_client_sent_cb(void *arg)
 }
 
 /* Called when a client connects to the web config */
-static void ICACHE_FLASH_ATTR web_config_client_connected_cb(void *arg)
+void ICACHE_FLASH_ATTR web_config_client_connected_cb(void *arg)
 {
 
     struct espconn *pespconn = (struct espconn *)arg;
@@ -3707,9 +3707,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                 while (station)
                 {
                     if (do_colon) {
-                        /* ⚡ Bolt: Replace os_sprintf overhead for single char append with direct assignment */
-                        buffer[len] = ',';
-                        buffer[len + 1] = '\0';
+                        os_sprintf(&buffer[len], ",");
                         len += 1;
                     }
                     do_colon = true;
@@ -3736,7 +3734,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 }
 
 //Priority 0 Task
-static void ICACHE_FLASH_ATTR user_procTask(os_event_t *events)
+void ICACHE_FLASH_ATTR user_procTask(os_event_t *events)
 {
     //os_printf("Sig: %d\r\n", events->sig);
 
