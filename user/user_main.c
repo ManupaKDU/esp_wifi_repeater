@@ -3707,7 +3707,9 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                 while (station)
                 {
                     if (do_colon) {
-                        os_sprintf(&buffer[len], ",");
+                        /* ⚡ Bolt: Replace os_sprintf overhead for single char append with direct assignment */
+                        buffer[len] = ',';
+                        buffer[len + 1] = '\0';
                         len += 1;
                     }
                     do_colon = true;
