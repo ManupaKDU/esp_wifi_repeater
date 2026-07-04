@@ -13,11 +13,16 @@
 <div id='status_msg' role='status' style='display:none'></div>\
 <div id='config'>\
 <script>\
-if (window.location.search.substr(1) != '')\
+var q = window.location.search;\
+if (q.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi NAT Router Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var msg = 'The new settings have been sent to the device...';\
+if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
+else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
+else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
+document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -129,11 +134,16 @@ setTimeout(\"location.href = '/'\",10000);\
 <div id='status_msg' role='status' style='display:none'></div>\
 <div id='config'>\
 <script>\
-if (window.location.search.substr(1) != '')\
+var q = window.location.search;\
+if (q.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi Repeater Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var msg = 'The new settings have been sent to the device...';\
+if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
+else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
+else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
+document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
