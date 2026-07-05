@@ -3205,6 +3205,7 @@ command_handled_2:
     system_os_post(0, SIG_CONSOLE_TX, (ETSParam)pespconn);
     return;
 }
+}
 
 bool ICACHE_FLASH_ATTR check_connection_access(struct espconn *pesp_conn, uint8_t access_flags)
 {
