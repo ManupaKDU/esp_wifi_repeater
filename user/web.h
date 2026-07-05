@@ -17,7 +17,8 @@ if (window.location.search.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi NAT Router Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var isRestart = window.location.search.indexOf('reset=') !== -1;\
+if (isRestart) { document.getElementById('status_msg').innerHTML = 'The device is restarting...'; } else { document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...'; }\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -133,7 +134,8 @@ if (window.location.search.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi Repeater Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var isRestart = window.location.search.indexOf('reset=') !== -1;\
+if (isRestart) { document.getElementById('status_msg').innerHTML = 'The device is restarting...'; } else { document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...'; }\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
