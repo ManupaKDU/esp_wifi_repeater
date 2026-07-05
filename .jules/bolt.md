@@ -79,3 +79,7 @@
 ## 2026-03-14 - Optimize MAC address string formatting
 **Learning:** Codebase performance pattern: using `mac_2_buff` to format MAC addresses into intermediate stack-allocated string buffers (`uint8_t buffer[20]`) before passing them to `os_sprintf` via `%s` adds unnecessary memory pressure and redundant formatting overhead.
 **Action:** Use the built-in `MACSTR` format string macro combined with the `MAC2STR(mac_array)` argument macro to inline MAC address formatting directly into the target `os_sprintf` call. This reduces stack allocation (saving ~20 bytes per MAC address) and eliminates the need for intermediate helper function calls.
+
+## 2026-07-05 - Block Skip Telemetry Processing
+**Learning:** In periodic telemetry callbacks, checking `mqtt_enabled` and `interval` is not enough. If the user disabled specific MQTT topics via `mqtt_topic_mask == 0`, the code executes dozens of formatting calculations and function calls (like `mqtt_publish_int`), only for each inner function to exit due to mask checks.
+**Action:** Add an early block check for `config.mqtt_topic_mask != 0` around the telemetry processing. This O(1) check skips all subsequent O(N) formatting and redundant mask checks, saving significant CPU cycles when telemetry is disabled, while safely preserving timer callback state updates outside the block.
