@@ -79,7 +79,7 @@ uint32_t Vdd;
 #define user_procTaskPrio 0
 #define user_procTaskQueueLen 2
 os_event_t user_procTaskQueue[user_procTaskQueueLen];
-static void user_procTask(os_event_t *events);
+void user_procTask(os_event_t *events);
 
 static os_timer_t ptimer;
 
