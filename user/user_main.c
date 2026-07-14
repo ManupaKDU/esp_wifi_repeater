@@ -3660,12 +3660,15 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
     t_diff = (uint32_t)((t_new - t_old) / 1000000);
     if (mqtt_enabled && config.mqtt_interval != 0 && (t_diff > config.mqtt_interval))
     {
-        mqtt_publish_int(MQTT_TOPIC_UPTIME, "Uptime", "%d", (uint32_t)(t_new / 1000000));
-        mqtt_publish_int(MQTT_TOPIC_VDD, "Vdd", "%d", Vdd);
-        mqtt_publish_int(MQTT_TOPIC_BYTES, "Bin", "%d", (uint32_t)(Bytes_in / 1024));
-        mqtt_publish_int(MQTT_TOPIC_BYTES, "Bout", "%d", (uint32_t)(Bytes_out / 1024));
-        mqtt_publish_int(MQTT_TOPIC_PACKETS, "Ppsin", "%d", (Packets_in - Packets_in_last) / t_diff);
-        mqtt_publish_int(MQTT_TOPIC_PACKETS, "Ppsout", "%d", (Packets_out - Packets_out_last) / t_diff);
+        /* ⚡ Bolt: Skip expensive telemetry operations when all topics are disabled */
+        if (config.mqtt_topic_mask != 0)
+        {
+            mqtt_publish_int(MQTT_TOPIC_UPTIME, "Uptime", "%d", (uint32_t)(t_new / 1000000));
+            mqtt_publish_int(MQTT_TOPIC_VDD, "Vdd", "%d", Vdd);
+            mqtt_publish_int(MQTT_TOPIC_BYTES, "Bin", "%d", (uint32_t)(Bytes_in / 1024));
+            mqtt_publish_int(MQTT_TOPIC_BYTES, "Bout", "%d", (uint32_t)(Bytes_out / 1024));
+            mqtt_publish_int(MQTT_TOPIC_PACKETS, "Ppsin", "%d", (Packets_in - Packets_in_last) / t_diff);
+            mqtt_publish_int(MQTT_TOPIC_PACKETS, "Ppsout", "%d", (Packets_out - Packets_out_last) / t_diff);
 
         // ⚡ Bolt: Cache redundant API call for station count to avoid multiple hardware state queries
         uint8_t current_station_num = config.ap_on ? wifi_softap_get_station_num() : 0;
@@ -3720,6 +3723,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                 mqtt_publish_str_len(MQTT_TOPIC_TOPOLOGY, "Topology", buffer, len);
                 os_free(buffer);
             }
+        }
         }
 
         t_old = t_new;
