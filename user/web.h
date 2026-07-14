@@ -17,7 +17,11 @@ if (window.location.search.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi NAT Router Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var search = window.location.search;\
+var msg = 'The new settings have been sent to the device...';\
+if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
+document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -133,7 +137,11 @@ if (window.location.search.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi Repeater Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var search = window.location.search;\
+var msg = 'The new settings have been sent to the device...';\
+if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
+document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
