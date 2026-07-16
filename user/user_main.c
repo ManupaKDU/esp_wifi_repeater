@@ -3732,6 +3732,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
     Bytes_out_last = Bytes_out;
     Packets_in_last = Packets_in;
     Packets_out_last = Packets_out;
+    }
 #endif
 
     os_timer_arm(&ptimer, toggle ? 900 : 100, 0);
