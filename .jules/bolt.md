@@ -79,3 +79,7 @@
 ## 2026-03-14 - Optimize MAC address string formatting
 **Learning:** Codebase performance pattern: using `mac_2_buff` to format MAC addresses into intermediate stack-allocated string buffers (`uint8_t buffer[20]`) before passing them to `os_sprintf` via `%s` adds unnecessary memory pressure and redundant formatting overhead.
 **Action:** Use the built-in `MACSTR` format string macro combined with the `MAC2STR(mac_array)` argument macro to inline MAC address formatting directly into the target `os_sprintf` call. This reduces stack allocation (saving ~20 bytes per MAC address) and eliminates the need for intermediate helper function calls.
+
+## 2026-03-14 - Skip Expensive Work Early
+**Learning:** Codebase C/ESP8266 Performance Pattern: When optimizing periodic timer callbacks (like telemetry reporting), do not use early returns (`return;`) to skip redundant work, as this can silently bypass necessary state updates (like time tracking `t_old = t_new`) at the end of the callback function. Instead, securely wrap the expensive operations in a conditional block (e.g., `if (config.mqtt_topic_mask != 0) { ... }`).
+**Action:** When optimizing callback functions, wrap the expensive operations in conditionals rather than using early returns to ensure crucial state cleanup operations at the end of the function remain intact.
