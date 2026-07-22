@@ -115,3 +115,7 @@
 ## 2026-06-21 - [Accessibility] Inline Helper Text for Pre-filled Regex Inputs
 **Learning:** Complex form fields with regex `pattern` validation (like IP addresses or Subnets) are often pre-filled by the backend via macros (e.g. `%d.%d.%d.%d`). Because the `value` attribute is not empty, the `placeholder` attribute is never displayed to the user. Furthermore, browser-native validation tooltips for `pattern` mismatches are generic and do not explain the expected format. This can leave users guessing the correct input format, hurting accessibility and usability.
 **Action:** When a complex input field relies on `pattern` validation and might be pre-filled with values, always provide explicit inline helper text (using `<small>`) below the input and associate it directly using the `aria-describedby` attribute, rather than relying solely on `placeholder` or `title` attributes.
+
+## 2026-07-22 - Context-aware submission feedback
+**Learning:** In embedded HTML interfaces without full page reloads, using a generic 'Settings sent' success message for all form actions (like resets, locks, or connecting) degrades UX. Parsing query parameters (`window.location.search`) on the client side allows for dynamic, context-aware feedback messages that clearly confirm the user's specific action.
+**Action:** Always provide action-specific confirmation messages by extracting intent from the submission query string.

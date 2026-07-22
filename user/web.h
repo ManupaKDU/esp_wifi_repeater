@@ -17,7 +17,13 @@ if (window.location.search.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi NAT Router Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var params = new URLSearchParams(window.location.search);\
+var msg = 'The new settings have been sent to the device...';\
+if (params.has('reset')) { msg = 'The device is restarting...'; }\
+else if (params.has('dolock')) { msg = 'The device is locking...'; }\
+else if (params.has('ssid') && !params.has('ap_ssid')) { msg = 'Connecting to STA network...'; }\
+else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
+document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -133,7 +139,13 @@ if (window.location.search.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi Repeater Config';\
-document.getElementById('status_msg').innerHTML = 'The new settings have been sent to the device...';\
+var params = new URLSearchParams(window.location.search);\
+var msg = 'The new settings have been sent to the device...';\
+if (params.has('reset')) { msg = 'The device is restarting...'; }\
+else if (params.has('dolock')) { msg = 'The device is locking...'; }\
+else if (params.has('ssid') && !params.has('ap_ssid')) { msg = 'Connecting to STA network...'; }\
+else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
+document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
