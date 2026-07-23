@@ -3724,7 +3724,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                 os_free(buffer);
             }
         }
-        }
 
         t_old = t_new;
         Bytes_in_last = Bytes_in;
