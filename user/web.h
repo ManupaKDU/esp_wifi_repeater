@@ -27,6 +27,8 @@ else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
 if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
 else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
 else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
+if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
@@ -153,6 +155,8 @@ else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
 if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
 else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
 else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
+if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\

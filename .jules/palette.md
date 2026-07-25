@@ -149,3 +149,6 @@
 ## 2025-02-12 - Context-Aware Submission Feedback
 **Learning:** In embedded HTML interfaces without full page reloads, using a generic "The new settings have been sent..." message for all forms (like "Restart" or "Change AP SSID") leaves users confused about the next steps.
 **Action:** Parse the query parameters (`window.location.search`) in the submission feedback handler to provide context-aware messages, such as "The device is restarting" or "You may need to reconnect", improving clarity and user confidence.
+## 2024-05-22 - Context-aware feedback in embedded interfaces
+**Learning:** In embedded HTML interfaces that lack full page reloads, using a generic submission success message for all actions (e.g., 'Settings sent') causes user confusion for distinct actions like device restarts or locking.
+**Action:** Parse client-side query parameters (e.g., `window.location.search`) to dynamically display context-aware feedback (e.g., 'The device is restarting...') for a more intuitive user experience.
