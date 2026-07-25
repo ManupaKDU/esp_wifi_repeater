@@ -3738,6 +3738,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
         Packets_in_last = Packets_in;
         Packets_out_last = Packets_out;
     }
+    }
 #endif
 
     os_timer_arm(&ptimer, toggle ? 900 : 100, 0);
@@ -4630,5 +4631,4 @@ void ICACHE_FLASH_ATTR user_init()
 
     //Start task
     system_os_task(user_procTask, user_procTaskPrio, user_procTaskQueue, user_procTaskQueueLen);
-}
 }
