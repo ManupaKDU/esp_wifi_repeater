@@ -3663,10 +3663,9 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
     if (mqtt_enabled && config.mqtt_interval != 0 && (t_diff > config.mqtt_interval))
     {
         /* ⚡ Bolt: Skip expensive telemetry operations when all topics are disabled */
+        uint8_t current_station_num = config.ap_on ? wifi_softap_get_station_num() : 0;
         if (config.mqtt_topic_mask != 0)
         {
-            uint8_t current_station_num = config.ap_on ? wifi_softap_get_station_num() : 0;
-
             mqtt_publish_int(MQTT_TOPIC_UPTIME, "Uptime", "%d", (uint32_t)(t_new / 1000000));
             mqtt_publish_int(MQTT_TOPIC_VDD, "Vdd", "%d", Vdd);
             mqtt_publish_int(MQTT_TOPIC_BYTES, "Bin", "%d", (uint32_t)(Bytes_in / 1024));
@@ -3682,7 +3681,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 #ifdef USER_GPIO_OUT
             mqtt_publish_int(MQTT_TOPIC_GPIOOUT, "GpioOut", "%d", (uint32_t)config.gpio_out_status);
 #endif
-        }
 
             if (config.mqtt_topic_mask & MQTT_TOPIC_TOPOLOGY)
             {
