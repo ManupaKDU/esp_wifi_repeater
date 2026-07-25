@@ -119,3 +119,7 @@
 ## 2026-07-22 - Context-aware submission feedback
 **Learning:** In embedded HTML interfaces without full page reloads, using a generic 'Settings sent' success message for all form actions (like resets, locks, or connecting) degrades UX. Parsing query parameters (`window.location.search`) on the client side allows for dynamic, context-aware feedback messages that clearly confirm the user's specific action.
 **Action:** Always provide action-specific confirmation messages by extracting intent from the submission query string.
+
+## 2024-07-25 - Robust Focus Indicators for Custom Outlines
+**Learning:** Removing native outlines (`outline: none`) on custom-styled elements (like the `<select>` dropdown) and replacing them with only a subtle `border-color` change is insufficient for keyboard accessibility. Custom buttons also need explicit `:focus-visible` styles to ensure keyboard users can clearly track their position.
+**Action:** Always provide strong `:focus-visible` indicators (such as `box-shadow` or a bold `outline` with `outline-offset`) when overriding native outlines to maintain robust keyboard accessibility.
