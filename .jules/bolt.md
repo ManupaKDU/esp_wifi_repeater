@@ -111,3 +111,7 @@
 ## 2024-06-24 - Avoid 64-bit Software Division on Hot Paths
 **Learning:** C/ESP8266 Performance Pattern: The ESP8266 lacks a hardware division unit, making 64-bit software division (e.g., / 1000000ULL) computationally expensive.
 **Action:** On hot paths where slight precision loss is acceptable (like internal TTL timeouts in packet processing), replace division by 1,000,000 with a right bitwise shift by 20 (>> 20, dividing by 1,048,576) to optimize performance, and add a comment explaining the ~4.8% acceptable drift.
+
+## 2026-07-05 - Block Skip Telemetry Processing
+**Learning:** In periodic telemetry callbacks, checking `mqtt_enabled` and `interval` is not enough. If the user disabled specific MQTT topics via `mqtt_topic_mask == 0`, the code executes dozens of formatting calculations and function calls (like `mqtt_publish_int`), only for each inner function to exit due to mask checks.
+**Action:** Add an early block check for `config.mqtt_topic_mask != 0` around the telemetry processing. This O(1) check skips all subsequent O(N) formatting and redundant mask checks, saving significant CPU cycles when telemetry is disabled, while safely preserving timer callback state updates outside the block.
