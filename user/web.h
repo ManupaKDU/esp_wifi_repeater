@@ -43,6 +43,7 @@ if (qs != '')\
 if (qs.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (qs.indexOf('dolock=') !== -1) msg = 'Lock request has been sent...';\
 document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : 'The new settings have been sent to the device...';\
+document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : (window.location.search.indexOf('dolock=') !== -1 ? 'Lock request has been sent to the device...' : 'The new settings have been sent to the device...');\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -184,6 +185,7 @@ if (qs != '')\
 if (qs.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (qs.indexOf('dolock=') !== -1) msg = 'Lock request has been sent...';\
 document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : 'The new settings have been sent to the device...';\
+document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : (window.location.search.indexOf('dolock=') !== -1 ? 'Lock request has been sent to the device...' : 'The new settings have been sent to the device...');\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
