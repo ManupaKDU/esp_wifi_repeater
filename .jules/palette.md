@@ -178,3 +178,6 @@
 ## 2026-07-19 - [Context-Aware Feedback]
 **Learning:** In embedded HTML interfaces without full page reloads, using a generic submission success message ("Settings sent") causes user confusion for distinct actions like device restarts.
 **Action:** Parse client-side query parameters (`window.location.search`) to dynamically display context-aware feedback (e.g., 'The device is restarting...') for better clarity.
+## 2026-10-27 - Dynamic Context-Aware Submission Feedback
+**Learning:** In embedded HTML interfaces that lack full page reloads, using a generic submission success message for all actions (e.g., 'Settings sent') causes user confusion for distinct actions like device restarts or locking.
+**Action:** Parse client-side query parameters (e.g., `window.location.search`) to dynamically display context-aware feedback (e.g., 'The device is restarting...') instead of a generic message.
