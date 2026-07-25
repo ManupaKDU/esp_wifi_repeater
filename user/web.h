@@ -36,6 +36,9 @@ if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
 else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
 else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
+var search = window.location.search;\
+if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -170,6 +173,9 @@ if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
 else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
 else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
+var search = window.location.search;\
+if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
