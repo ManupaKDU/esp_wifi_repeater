@@ -1642,6 +1642,7 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             goto command_handled_2;
         }
 #endif
+    }
 
 #if ACLS
     if (strcmp(tokens[0], "acl") == 0)
@@ -3737,7 +3738,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
         Bytes_out_last = Bytes_out;
         Packets_in_last = Packets_in;
         Packets_out_last = Packets_out;
-    }
     }
 #endif
 
