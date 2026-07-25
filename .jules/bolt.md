@@ -99,3 +99,7 @@
 ## 2024-05-24 - Conditionally skip redundant work in periodic timer callbacks
 **Learning:** Codebase C/ESP8266 Performance Pattern: When optimizing periodic timer callbacks (like telemetry reporting), do not use early returns (`return;`) to skip redundant work, as this can silently bypass necessary state updates (like time tracking `t_old = t_new`) at the end of the callback function.
 **Action:** Instead, securely wrap the expensive operations in a conditional block (e.g., `if (config.mqtt_topic_mask != 0) { ... }`) to avoid executing redundant function calls while ensuring state updates run.
+
+## 2024-05-18 - Securely optimize periodic callbacks
+**Learning:** Codebase C/ESP8266 Performance Pattern: When optimizing periodic timer callbacks (like telemetry reporting), do not use early returns (`return;`) to skip redundant work, as this can silently bypass necessary state updates (like time tracking `t_old = t_new`) at the end of the callback function.
+**Action:** Securely wrap the expensive operations in a conditional block (e.g., `if (config.mqtt_topic_mask != 0) { ... }`) to avoid early returns and ensure state updates are reached.
