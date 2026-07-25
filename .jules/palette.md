@@ -181,3 +181,6 @@
 ## 2026-10-27 - Dynamic Context-Aware Submission Feedback
 **Learning:** In embedded HTML interfaces that lack full page reloads, using a generic submission success message for all actions (e.g., 'Settings sent') causes user confusion for distinct actions like device restarts or locking.
 **Action:** Parse client-side query parameters (e.g., `window.location.search`) to dynamically display context-aware feedback (e.g., 'The device is restarting...') instead of a generic message.
+## 2026-07-23 - Add clear focus indicators for keyboard navigation
+**Learning:** Removing native outlines (`outline: none`) on interactive elements like `<select>` without providing a strong visual alternative harms keyboard accessibility. Subtle border color changes are often insufficient.
+**Action:** Always provide robust `:focus` or `:focus-visible` indicators (such as `box-shadow` or `outline`) when overriding native outlines to ensure keyboard users can clearly track their position on the page.
