@@ -31,6 +31,11 @@ if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restar
 else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
 var msg = 'The new settings have been sent to the device...'; if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...'; else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...'; document.getElementById('status_msg').innerHTML = msg;\
+var q = window.location.search;\
+if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
+else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
+else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -160,6 +165,11 @@ if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restar
 else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
 var msg = 'The new settings have been sent to the device...'; if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...'; else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...'; document.getElementById('status_msg').innerHTML = msg;\
+var q = window.location.search;\
+if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
+else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
+else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -262,7 +272,10 @@ if (window.location.search.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi NAT Router Config';\
-document.getElementById('status_msg').innerHTML = 'Unlock request has been sent to the device...';\
+var q = window.location.search;\
+var msg = 'Unlock request has been sent to the device...';\
+if (q.indexOf('unlock_password=') !== -1) msg = 'Verifying unlock password...';\
+document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",1000);\
 }\
