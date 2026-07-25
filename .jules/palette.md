@@ -119,3 +119,7 @@
 ## 2024-06-22 - Focus indicators for custom-styled elements
 **Learning:** Removing native outlines (`outline: none`) on custom-styled form controls (like `<select>`) or buttons without providing a robust alternative (like `box-shadow` or `outline`) harms keyboard accessibility, as color changes alone may lack sufficient contrast.
 **Action:** Always provide strong `:focus` or `:focus-visible` indicators (e.g., using `box-shadow: 0 0 0 3px rgba(...)`) when overriding native outlines.
+
+## 2026-06-25 - [Accessibility] Inline Helper Text for Automesh
+**Learning:** For domain-specific features like 'Automesh', adding a checkbox without inline help makes it inaccessible. Using inline help with `aria-describedby` helps users understand what the checkbox does.
+**Action:** Provide inline helper text (using `<small>`) and explicitly link it to the control using `aria-describedby` when exposing complex functionality like Automesh.
