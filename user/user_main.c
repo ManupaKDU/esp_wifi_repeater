@@ -3709,6 +3709,8 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
                     if (do_colon) {
                         /* ⚡ Bolt: Direct character assignment avoids variadic format parsing overhead */
                         buffer[len] = ',';
+                        /* ⚡ Bolt: Replace os_sprintf for single character to avoid variadic overhead in loop */
+                        buffer[len + 1] = '\0';
                         len += 1;
                     }
                     do_colon = true;
