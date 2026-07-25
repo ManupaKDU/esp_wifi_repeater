@@ -123,3 +123,7 @@
 ## 2026-06-25 - [Accessibility] Inline Helper Text for Automesh
 **Learning:** For domain-specific features like 'Automesh', adding a checkbox without inline help makes it inaccessible. Using inline help with `aria-describedby` helps users understand what the checkbox does.
 **Action:** Provide inline helper text (using `<small>`) and explicitly link it to the control using `aria-describedby` when exposing complex functionality like Automesh.
+
+## 2026-06-25 - Robust Keyboard Focus Indicators
+**Learning:** Removing native outlines (`outline: none`) on custom-styled elements (like `<select>` tags or custom Web Component buttons) without providing a robust alternative harms keyboard accessibility. Sighted keyboard users lose the ability to see which element currently has focus.
+**Action:** Always provide strong `:focus` or `:focus-visible` indicators (such as `box-shadow` or an explicit `outline` with `outline-offset`) when overriding native outlines to ensure users can navigate the interface via keyboard effectively.
