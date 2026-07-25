@@ -3661,7 +3661,6 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 #if MQTT_CLIENT
     t_diff = (uint32_t)((t_new - t_old) / 1000000);
     if (mqtt_enabled && config.mqtt_interval != 0 && (t_diff > config.mqtt_interval))
-    {
         /* ⚡ Bolt: Skip expensive telemetry operations when all topics are disabled */
         if (config.mqtt_topic_mask != 0)
         {
