@@ -128,3 +128,6 @@
 ## 2026-06-26 - [Bug] C String Parser Quirk with Quotes
 **Learning:** In the `xtensa-lx106-elf-gcc` compiler, if a string literal containing JS code uses `onclick=\"return confirm('...');\"`, it can trigger a parsing bug when the string is extremely long, leading to syntax errors far away from the site of modification.
 **Action:** When injecting inline JS into long embedded C macros, invert the quotes (e.g., `onclick='return confirm(\"...\");'`) as it is correctly parsed by the toolchain.
+## 2026-06-25 - Provide accessible focus indicators when removing native outlines
+**Learning:** Removing native outlines (`outline: none`) on custom-styled elements without providing a robust alternative (like `box-shadow` or a styled `outline`) harms keyboard accessibility. The `index.html` installer page hid the native outline on the select element without a sufficient replacement, making it difficult for keyboard users to see focus state.
+**Action:** Always provide strong `:focus` or `:focus-visible` indicators (such as `box-shadow` or styled `outline` with offsets) when overriding native outlines to ensure keyboard navigation remains accessible.
