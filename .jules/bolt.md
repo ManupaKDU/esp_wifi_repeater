@@ -127,3 +127,7 @@
 ## 2026-03-14 - Skip Redundant MQTT Work When Topics Are Disabled
 **Learning:** Codebase C/ESP8266 Performance Pattern: When optimizing periodic timer callbacks (like telemetry reporting), do not use early returns (`return;`) to skip redundant work, as this can silently bypass necessary state updates (like time tracking `t_old = t_new`) at the end of the callback function.
 **Action:** Instead of early returns, securely wrap the expensive operations (function calls, math, hardware queries) in a conditional block (e.g., `if (config.mqtt_topic_mask != 0) { ... }`).
+
+## 2026-07-24 - Prevent Expensive Argument Evaluations
+**Learning:** Function arguments in C are evaluated before the function is called. When calling telemetry functions (like `mqtt_publish_int`) that internally check if a topic is enabled, any expensive operations passed as arguments (like software divisions e.g., `Bytes_in / 1024`) will always be executed, even if the topic is disabled.
+**Action:** When a block of code conditionally executes based on a bitmask (e.g., `config.mqtt_topic_mask != 0`), wrap the function calls at the caller level to prevent evaluating expensive arguments when the entire feature is disabled, while ensuring necessary state updates at the end of the callback are not skipped.
