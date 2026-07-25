@@ -184,3 +184,6 @@
 ## 2026-07-23 - Add clear focus indicators for keyboard navigation
 **Learning:** Removing native outlines (`outline: none`) on interactive elements like `<select>` without providing a strong visual alternative harms keyboard accessibility. Subtle border color changes are often insufficient.
 **Action:** Always provide robust `:focus` or `:focus-visible` indicators (such as `box-shadow` or `outline`) when overriding native outlines to ensure keyboard users can clearly track their position on the page.
+## 2026-07-24 - Focus indicators for keyboard accessibility
+**Learning:** Removing native outlines (`outline: none`) on custom-styled elements without providing a robust alternative (like `box-shadow` or `outline`) harms keyboard accessibility, as keyboard users will lose their place when navigating the interface. This is especially true for custom web components like `esp-web-install-button`.
+**Action:** Always provide strong `:focus` or `:focus-visible` indicators when overriding native outlines. Use `box-shadow` as a reliable alternative that respects element borders and radiuses.
