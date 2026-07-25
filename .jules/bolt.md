@@ -79,3 +79,7 @@
 ## 2026-03-14 - Optimize MAC address string formatting
 **Learning:** Codebase performance pattern: using `mac_2_buff` to format MAC addresses into intermediate stack-allocated string buffers (`uint8_t buffer[20]`) before passing them to `os_sprintf` via `%s` adds unnecessary memory pressure and redundant formatting overhead.
 **Action:** Use the built-in `MACSTR` format string macro combined with the `MAC2STR(mac_array)` argument macro to inline MAC address formatting directly into the target `os_sprintf` call. This reduces stack allocation (saving ~20 bytes per MAC address) and eliminates the need for intermediate helper function calls.
+
+## 2026-07-25 - Avoid Unnecessary Argument Evaluation in C
+**Learning:** Function arguments in C evaluate before the function call. When calling functions that might internally exit early (like mqtt_publish_int checking topic masks), expensive arguments (like software divisions Bytes_in / 1024 on ESP8266, which lacks hardware division) will still evaluate.
+**Action:** Wrap such calls in a caller-level conditional block to skip unnecessary computation, instead of relying on the function's internal early return. However, ensure that necessary state updates following the block are not mistakenly bypassed.
