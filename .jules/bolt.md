@@ -95,3 +95,7 @@
 ## 2026-07-04 - Optimize Single Character Appends in C
 **Learning:** Using `os_sprintf` to append a single literal character (e.g., `os_sprintf(&buffer[len], ",");`) invokes unnecessary overhead from variadic argument handling and format string parsing, especially inside loops.
 **Action:** Replace it with direct array assignment and manual null-termination (e.g., `buffer[len] = ','; buffer[len + 1] = '\0';`) for a safe and functionally equivalent micro-optimization.
+
+## 2024-05-24 - Conditionally skip redundant work in periodic timer callbacks
+**Learning:** Codebase C/ESP8266 Performance Pattern: When optimizing periodic timer callbacks (like telemetry reporting), do not use early returns (`return;`) to skip redundant work, as this can silently bypass necessary state updates (like time tracking `t_old = t_new`) at the end of the callback function.
+**Action:** Instead, securely wrap the expensive operations in a conditional block (e.g., `if (config.mqtt_topic_mask != 0) { ... }`) to avoid executing redundant function calls while ensuring state updates run.
