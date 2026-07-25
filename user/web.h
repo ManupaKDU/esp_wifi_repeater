@@ -24,30 +24,7 @@ if (params.has('reset')) { msg = 'The device is restarting...'; }\
 else if (params.has('dolock')) { msg = 'The device is locking...'; }\
 else if (params.has('ssid') && !params.has('ap_ssid')) { msg = 'Connecting to STA network...'; }\
 else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
-if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
-else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
-else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
-if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
-var msg = 'The new settings have been sent to the device...'; if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...'; else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...'; document.getElementById('status_msg').innerHTML = msg;\
-if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
-else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
-else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
-var search = window.location.search;\
-if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
-var qs = window.location.search.substr(1);\
-if (qs != '')\
-if (qs.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (qs.indexOf('dolock=') !== -1) msg = 'Lock request has been sent...';\
-document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : 'The new settings have been sent to the device...';\
-document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : (window.location.search.indexOf('dolock=') !== -1 ? 'Lock request has been sent to the device...' : 'The new settings have been sent to the device...');\
-else if (window.location.search.indexOf('dolock=') !== -1) msg = 'The device is locking...';\
-var q = window.location.search.substr(1);\
-if (q != '')\
-else if (q.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -170,30 +147,7 @@ if (params.has('reset')) { msg = 'The device is restarting...'; }\
 else if (params.has('dolock')) { msg = 'The device is locking...'; }\
 else if (params.has('ssid') && !params.has('ap_ssid')) { msg = 'Connecting to STA network...'; }\
 else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
-if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
-else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
-else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
-if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
-var msg = 'The new settings have been sent to the device...'; if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...'; else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...'; document.getElementById('status_msg').innerHTML = msg;\
-if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
-else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
-else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
-var search = window.location.search;\
-if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
-var qs = window.location.search.substr(1);\
-if (qs != '')\
-if (qs.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
-else if (qs.indexOf('dolock=') !== -1) msg = 'Lock request has been sent...';\
-document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : 'The new settings have been sent to the device...';\
-document.getElementById('status_msg').innerHTML = window.location.search.indexOf('reset=') !== -1 ? 'The device is restarting...' : (window.location.search.indexOf('dolock=') !== -1 ? 'Lock request has been sent to the device...' : 'The new settings have been sent to the device...');\
-else if (window.location.search.indexOf('dolock=') !== -1) msg = 'The device is locking...';\
-var q = window.location.search.substr(1);\
-if (q != '')\
-else if (q.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\

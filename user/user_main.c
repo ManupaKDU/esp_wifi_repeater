@@ -3208,6 +3208,7 @@ command_handled_2:
     return;
 }
 
+}
 bool ICACHE_FLASH_ATTR check_connection_access(struct espconn *pesp_conn, uint8_t access_flags)
 {
     remot_info *premot = NULL;
