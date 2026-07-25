@@ -92,4 +92,6 @@
 
 ## 2026-03-14 - Avoid os_sprintf for single character appends
 **Learning:** C/ESP8266 Performance Pattern: Using `os_sprintf` to append a single literal character (e.g., `os_sprintf(&buffer[len], ",");`) invokes unnecessary overhead from variadic argument handling and format string parsing, especially inside loops.
+## 2026-07-04 - Optimize Single Character Appends in C
+**Learning:** Using `os_sprintf` to append a single literal character (e.g., `os_sprintf(&buffer[len], ",");`) invokes unnecessary overhead from variadic argument handling and format string parsing, especially inside loops.
 **Action:** Replace it with direct array assignment and manual null-termination (e.g., `buffer[len] = ','; buffer[len + 1] = '\0';`) for a safe and functionally equivalent micro-optimization.
