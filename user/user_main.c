@@ -3722,6 +3722,8 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
             }
         }
 
+        }
+
         t_old = t_new;
         Bytes_in_last = Bytes_in;
         Bytes_out_last = Bytes_out;
