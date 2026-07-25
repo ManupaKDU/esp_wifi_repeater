@@ -79,7 +79,7 @@ uint32_t Vdd;
 #define user_procTaskPrio 0
 #define user_procTaskQueueLen 2
 os_event_t user_procTaskQueue[user_procTaskQueueLen];
-static void user_procTask(os_event_t *events);
+static void ICACHE_FLASH_ATTR user_procTask(os_event_t *events);
 
 static os_timer_t ptimer;
 
@@ -1132,6 +1132,7 @@ static char INVALID_LOCKED[] = "Invalid command. Config locked\r\n";
 static char INVALID_NUMARGS[] = "Invalid number of arguments\r\n";
 static char INVALID_ARG[] = "Invalid argument\r\n";
 
+void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn);
 void ICACHE_FLASH_ATTR console_handle_command(struct espconn *pespconn)
 {
 #define MAX_CMD_TOKENS 9

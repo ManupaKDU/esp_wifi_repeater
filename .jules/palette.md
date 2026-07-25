@@ -127,3 +127,7 @@
 ## 2026-06-25 - Robust Keyboard Focus Indicators
 **Learning:** Removing native outlines (`outline: none`) on custom-styled elements (like `<select>` tags or custom Web Component buttons) without providing a robust alternative harms keyboard accessibility. Sighted keyboard users lose the ability to see which element currently has focus.
 **Action:** Always provide strong `:focus` or `:focus-visible` indicators (such as `box-shadow` or an explicit `outline` with `outline-offset`) when overriding native outlines to ensure users can navigate the interface via keyboard effectively.
+
+## 2026-06-29 - Robust focus indicators
+**Learning:** Removing native outlines (`outline: none`) on custom-styled elements without providing a robust alternative (like `box-shadow` or `outline`) harms keyboard accessibility.
+**Action:** Always provide strong `:focus` or `:focus-visible` indicators when overriding native outlines.
