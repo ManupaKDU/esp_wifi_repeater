@@ -146,3 +146,6 @@
 ## 2026-06-22 - [Accessibility] Robust Focus Indicators for Custom Styles
 **Learning:** Removing native outlines (`outline: none`) on custom-styled elements (like the `<select>` in `index.html`) without providing a robust alternative (like `box-shadow` or `outline`) harms keyboard accessibility. Just changing the border color is often insufficient.
 **Action:** When overriding native outlines (`outline: none`), always provide a strong alternative focus indicator on `:focus` or `:focus-visible` to ensure the currently focused element is clearly identifiable.
+## 2025-02-12 - Context-Aware Submission Feedback
+**Learning:** In embedded HTML interfaces without full page reloads, using a generic "The new settings have been sent..." message for all forms (like "Restart" or "Change AP SSID") leaves users confused about the next steps.
+**Action:** Parse the query parameters (`window.location.search`) in the submission feedback handler to provide context-aware messages, such as "The device is restarting" or "You may need to reconnect", improving clarity and user confidence.

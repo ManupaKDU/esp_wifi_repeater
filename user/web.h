@@ -13,7 +13,8 @@
 <div id='status_msg' role='status' style='display:none'></div>\
 <div id='config'>\
 <script>\
-if (window.location.search.substr(1) != '')\
+var q = window.location.search;\
+if (q.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi NAT Router Config';\
@@ -23,6 +24,9 @@ if (params.has('reset')) { msg = 'The device is restarting...'; }\
 else if (params.has('dolock')) { msg = 'The device is locking...'; }\
 else if (params.has('ssid') && !params.has('ap_ssid')) { msg = 'Connecting to STA network...'; }\
 else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
+if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
+else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
+else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
 document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
@@ -135,7 +139,8 @@ setTimeout(\"location.href = '/'\",10000);\
 <div id='status_msg' role='status' style='display:none'></div>\
 <div id='config'>\
 <script>\
-if (window.location.search.substr(1) != '')\
+var q = window.location.search;\
+if (q.substr(1) != '')\
 {\
 document.getElementById('config').style.display = 'none';\
 document.title = 'Status - ESP WiFi Repeater Config';\
@@ -145,6 +150,9 @@ if (params.has('reset')) { msg = 'The device is restarting...'; }\
 else if (params.has('dolock')) { msg = 'The device is locking...'; }\
 else if (params.has('ssid') && !params.has('ap_ssid')) { msg = 'Connecting to STA network...'; }\
 else if (params.has('ap_ssid')) { msg = 'Applying AP settings...'; }\
+if (q.indexOf('reset=') !== -1) msg = 'The device is restarting. Please wait...';\
+else if (q.indexOf('dolock=') !== -1) msg = 'Locking the device...';\
+else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated. You may need to reconnect to the new WiFi network.';\
 document.getElementById('status_msg').innerHTML = msg;\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
