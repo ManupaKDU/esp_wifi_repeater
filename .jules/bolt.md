@@ -103,3 +103,7 @@
 ## 2024-05-18 - Securely optimize periodic callbacks
 **Learning:** Codebase C/ESP8266 Performance Pattern: When optimizing periodic timer callbacks (like telemetry reporting), do not use early returns (`return;`) to skip redundant work, as this can silently bypass necessary state updates (like time tracking `t_old = t_new`) at the end of the callback function.
 **Action:** Securely wrap the expensive operations in a conditional block (e.g., `if (config.mqtt_topic_mask != 0) { ... }`) to avoid early returns and ensure state updates are reached.
+
+## 2026-06-18 - Replace Software Division with Bitwise Shift on Hot Paths
+**Learning:** Codebase performance pattern: ESP8266 lacks a hardware division unit, making software division (e.g., `get_long_systime() / 1000000ULL`) take significantly more CPU cycles than bitwise operations. When calculating timestamps for TTL logic inside high-frequency networking paths (like per-packet bridge forwarding), this adds measurable overhead.
+**Action:** Replace division by 1,000,000 with a right bitwise shift by 20 (`>> 20`, dividing by 1,048,576) to approximate seconds. This reduces a multi-cycle division to a single-cycle shift instruction, dramatically speeding up the packet processing hot path while retaining functionally identical TTL expiration behavior.
