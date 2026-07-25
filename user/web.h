@@ -31,7 +31,6 @@ if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restar
 else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
 var msg = 'The new settings have been sent to the device...'; if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...'; else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...'; document.getElementById('status_msg').innerHTML = msg;\
-var q = window.location.search;\
 if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
 else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
@@ -39,6 +38,10 @@ else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
 var search = window.location.search;\
 if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
+var qs = window.location.search.substr(1);\
+if (qs != '')\
+if (qs.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (qs.indexOf('dolock=') !== -1) msg = 'Lock request has been sent...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\
@@ -168,7 +171,6 @@ if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restar
 else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...';\
 document.getElementById('status_msg').innerHTML = msg;\
 var msg = 'The new settings have been sent to the device...'; if (window.location.search.indexOf('reset=') !== -1) msg = 'The device is restarting...'; else if (window.location.search.indexOf('dolock=') !== -1) msg = 'Lock request has been sent to the device...'; document.getElementById('status_msg').innerHTML = msg;\
-var q = window.location.search;\
 if (q.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (q.indexOf('dolock=') !== -1) msg = 'Device lock configuration updated...';\
 else if (q.indexOf('ap_ssid=') !== -1) msg = 'AP settings updated...';\
@@ -176,6 +178,10 @@ else if (q.indexOf('ssid=') !== -1) msg = 'STA settings updated...';\
 var search = window.location.search;\
 if (search.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
 else if (search.indexOf('dolock=') !== -1) msg = 'The device is being locked...';\
+var qs = window.location.search.substr(1);\
+if (qs != '')\
+if (qs.indexOf('reset=') !== -1) msg = 'The device is restarting...';\
+else if (qs.indexOf('dolock=') !== -1) msg = 'Lock request has been sent...';\
 document.getElementById('status_msg').style.display = 'block';\
 setTimeout(\"location.href = '/'\",10000);\
 }\

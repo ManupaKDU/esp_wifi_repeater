@@ -166,3 +166,6 @@
 ## 2026-07-13 - Context-Aware Submission Feedback in Embedded Single-Page HTML
 **Learning:** In constrained embedded HTML interfaces that rely on generic form submission reloads (e.g., redirecting to the same page with query parameters), using a single static "Settings sent" success message for all forms (like Restarting, Locking, or Saving Settings) causes significant user confusion and lack of confidence in destructive actions.
 **Action:** When working with single-page embedded config forms, parse client-side query parameters (e.g., `window.location.search`) to display dynamic, context-aware feedback corresponding to the specific form action the user just took (e.g., "The device is restarting...").
+## 2026-06-25 - Context-Aware Feedback in Embedded UIs
+**Learning:** In embedded HTML interfaces without full page reloads, using a generic submission success message for all actions (like "Settings sent") causes user confusion when performing distinct, non-configuration actions such as restarting the device or locking it.
+**Action:** Always parse client-side query parameters (e.g., `window.location.search`) to dynamically display context-aware feedback (e.g., "The device is restarting...") to give users clear and accurate confirmation of their specific action.
