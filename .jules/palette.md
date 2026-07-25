@@ -131,3 +131,6 @@
 ## 2026-06-25 - Provide accessible focus indicators when removing native outlines
 **Learning:** Removing native outlines (`outline: none`) on custom-styled elements without providing a robust alternative (like `box-shadow` or a styled `outline`) harms keyboard accessibility. The `index.html` installer page hid the native outline on the select element without a sufficient replacement, making it difficult for keyboard users to see focus state.
 **Action:** Always provide strong `:focus` or `:focus-visible` indicators (such as `box-shadow` or styled `outline` with offsets) when overriding native outlines to ensure keyboard navigation remains accessible.
+## 2026-06-25 - Robust focus indicators
+**Learning:** Removing native outlines (`outline: none`) on custom-styled elements without providing a robust alternative (like `box-shadow` or `outline`) harms keyboard accessibility.
+**Action:** Always provide strong `:focus` or `:focus-visible` indicators when overriding native outlines.
