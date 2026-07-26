@@ -119,6 +119,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 </table>\
 </form>\
+<script>document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(){var b=f.querySelector('input[type=submit]');if(b){b.disabled=true;b.value='Processing...';}})});</script>\
 </div>\
 </body>\
 </html>\
@@ -228,6 +229,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 </table>\
 </form>\
+<script>document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(){var b=f.querySelector('input[type=submit]');if(b){b.disabled=true;b.value='Processing...';}})});</script>\
 </div>\
 </body>\
 </html>\
@@ -275,6 +277,7 @@ setTimeout(\"location.href = '/'\",1000);\
 <i>Default:</i> STA password to unlock<br />\
 </small>\
 </form>\
+<script>document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(){var b=f.querySelector('input[type=submit]');if(b){b.disabled=true;b.value='Processing...';}})});</script>\
 </div>\
 </body>\
 </html>\
