@@ -30,7 +30,7 @@ setTimeout(\"location.href = '/'\",10000);\
 }\
 </script>\
 <h2>STA Settings</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -56,7 +56,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>AP Settings</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -94,7 +94,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Lock Config</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='lock_device'>Lock Device:</label></td>\
@@ -111,7 +111,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Device Management</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td>Reset Device:</td>\
@@ -153,7 +153,7 @@ setTimeout(\"location.href = '/'\",10000);\
 }\
 </script>\
 <h2>STA Settings</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='repeater_sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -172,7 +172,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>AP Settings</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='repeater_ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -203,7 +203,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Lock Config</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='repeater_lock_device'>Lock Device:</label></td>\
@@ -220,7 +220,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Device Management</h2>\
-<form action='' method='GET'>\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td>Reset Device:</td>\
@@ -259,7 +259,7 @@ setTimeout(\"location.href = '/'\",1000);\
 }\
 </script>\
 <h2>Config Locked</h2>\
-<form autocomplete='off' action='' method='GET'>\
+<form autocomplete='off' action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); b.value='Processing...'; setTimeout(()=>b.disabled=true, 10);\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='unlock_password'>Password <span aria-hidden='true'>*</span>:</label></td>\
