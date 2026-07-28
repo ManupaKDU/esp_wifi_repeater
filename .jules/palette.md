@@ -134,3 +134,9 @@
 ## 2026-07-05 - Dynamic Feedback on Single-Page Interfaces
 **Learning:** In embedded HTML interfaces without full page reloads, using a single generic success message (e.g., 'Settings sent') for all actions creates confusion, especially for distinct operations like device restarts.
 **Action:** Parse client-side query parameters (e.g., `window.location.search`) to conditionally display context-aware feedback (e.g., 'The device is restarting...') without requiring backend architectural changes.
+## 2026-07-28 - Dynamic Button States on GET Forms
+**Learning:** HTML Web Standard: When disabling a submit button inside an `onsubmit` event handler for a GET form to provide synchronous submission feedback (e.g., preventing duplicate clicks), disabling it synchronously (e.g., `b.disabled = true;`) excludes its name and value from the URL query parameters.
+**Action:** To retain the button's data while disabling it, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
+## 2026-07-28 - Deferring Button Value Change in Form Submission
+**Learning:** When altering a submit button's value (e.g., to "Processing...") to provide synchronous visual feedback inside an `onsubmit` handler for a GET form, doing so synchronously alters the value that gets serialized and sent in the query parameters. If the backend relies on exact string matching for the button value, this breaks core functionality.
+**Action:** Always wrap both the `disabled = true` state and the `value = 'Processing...'` reassignment within a `setTimeout` to allow the browser to serialize the form's original state first.
