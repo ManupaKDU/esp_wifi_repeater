@@ -134,3 +134,7 @@
 ## 2026-07-05 - Dynamic Feedback on Single-Page Interfaces
 **Learning:** In embedded HTML interfaces without full page reloads, using a single generic success message (e.g., 'Settings sent') for all actions creates confusion, especially for distinct operations like device restarts.
 **Action:** Parse client-side query parameters (e.g., `window.location.search`) to conditionally display context-aware feedback (e.g., 'The device is restarting...') without requiring backend architectural changes.
+
+## 2026-07-29 - [Immediate Feedback for Blocking Form Submissions]
+**Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions (like device restarts or network reconnections), and the backend (like ESP8266) evaluates actions by checking for the presence of the parameter key while ignoring its value, disabling the submit button and updating its text (e.g., to 'Processing...') provides explicit progress communication. To prevent the disabled button's data from being omitted from the URL query parameters during a GET submission, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
+**Action:** Apply the timeout-wrapped disable pattern to synchronous form submissions to maintain data integrity while preventing duplicate submissions and ensuring screen reader context is preserved.
