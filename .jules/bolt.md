@@ -135,3 +135,7 @@
 ## 2026-07-25 - Avoid Unnecessary Argument Evaluation in C
 **Learning:** Function arguments in C evaluate before the function call. When calling functions that might internally exit early (like mqtt_publish_int checking topic masks), expensive arguments (like software divisions Bytes_in / 1024 on ESP8266, which lacks hardware division) will still evaluate.
 **Action:** Wrap such calls in a caller-level conditional block to skip unnecessary computation, instead of relying on the function's internal early return. However, ensure that necessary state updates following the block are not mistakenly bypassed.
+
+## 2026-07-29 - Replace Software Division by Powers of 2 with Bitwise Shifts
+**Learning:** C/ESP8266 Performance Pattern: Unlike approximating `/ 1000000` with `>> 20` (which introduces inaccuracy and should be avoided), explicitly replacing divisions by exact powers of 2 (e.g., `/ 1024`) with bitwise right shifts (e.g., `>> 10`) on unsigned integers maintains perfect correctness while saving software division CPU cycles on chips lacking hardware division.
+**Action:** On hot paths (like packet processing and telemetry updates) and elsewhere, safely replace divisions by 1024 with right bitwise shifts by 10 (`>> 10`) to speed up execution time with zero loss in precision.
