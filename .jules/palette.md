@@ -134,3 +134,7 @@
 ## 2026-07-05 - Dynamic Feedback on Single-Page Interfaces
 **Learning:** In embedded HTML interfaces without full page reloads, using a single generic success message (e.g., 'Settings sent') for all actions creates confusion, especially for distinct operations like device restarts.
 **Action:** Parse client-side query parameters (e.g., `window.location.search`) to conditionally display context-aware feedback (e.g., 'The device is restarting...') without requiring backend architectural changes.
+
+## 2026-07-06 - Immediate Submission Feedback for Sync Operations
+**Learning:** In embedded HTML interfaces where form submissions trigger synchronous, long-running blocking actions on the backend (like device restarts or network reconnections), the delay before the page unloads or redirects leaves the user with an unresponsive UI. Sighted users may click the submit button multiple times, while screen reader users receive no immediate status update.
+**Action:** Always provide immediate UI feedback on form submission by disabling the submit button and updating its text (e.g., to "Processing...") to explicitly communicate that the request is underway and prevent duplicate submissions.
