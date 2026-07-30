@@ -576,7 +576,8 @@ err_t ICACHE_FLASH_ATTR my_input_ap(struct pbuf *p, struct netif *inp)
 #endif
 
 #if DAILY_LIMIT
-    if (config.daily_limit != 0 && Bytes_per_day / 1024 >= config.daily_limit)
+    /* ⚡ Bolt: Replace expensive 64-bit software division with bitwise shift */
+    if (config.daily_limit != 0 && (Bytes_per_day >> 10) >= config.daily_limit)
     {
         pbuf_free(p);
         return ERR_OK;
@@ -655,7 +656,8 @@ err_t ICACHE_FLASH_ATTR my_output_ap(struct netif *outp, struct pbuf *p)
 #endif
 
 #if DAILY_LIMIT
-    if (config.daily_limit != 0 && Bytes_per_day / 1024 >= config.daily_limit)
+    /* ⚡ Bolt: Replace expensive 64-bit software division with bitwise shift */
+    if (config.daily_limit != 0 && (Bytes_per_day >> 10) >= config.daily_limit)
     {
         pbuf_free(p);
         return ERR_OK;
@@ -1426,13 +1428,15 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             to_console_len(response, os_sprintf(response, "Local time: %s\r", current_stamp ? sntp_get_real_time(current_stamp) : "no NTP sync\n"));
 #endif
             to_console_len(response, os_sprintf(response, "%d KiB in (%d packets)\r\n%d KiB out (%d packets)\r\n",
-                       (uint32_t)(Bytes_in / 1024), Packets_in,
-                       (uint32_t)(Bytes_out / 1024), Packets_out));
+                       /* ⚡ Bolt: Replace expensive software division with bitwise shift */
+                       (uint32_t)(Bytes_in >> 10), Packets_in,
+                       (uint32_t)(Bytes_out >> 10), Packets_out));
 #if DAILY_LIMIT
             if (config.daily_limit != 0)
             {
                 to_console_len(response, os_sprintf(response, "%d KiB of %d per day used\r\n",
-                           (uint32_t)(Bytes_per_day / 1024), config.daily_limit));
+                           /* ⚡ Bolt: Replace expensive software division with bitwise shift */
+                           (uint32_t)(Bytes_per_day >> 10), config.daily_limit));
             }
 #endif
             to_console_len(response, os_sprintf(response, "Power supply: %d.%03d V\r\n", Vdd / 1000, Vdd % 1000));
@@ -3603,7 +3607,8 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
     if (toggle)
     {
 
-        Vcurr = (system_get_vdd33() * 1000) / 1024;
+        /* ⚡ Bolt: Replace expensive software division with bitwise shift */
+        Vcurr = (system_get_vdd33() * 1000) >> 10;
         Vdd = (Vdd * 3 + Vcurr) / 4;
 #if ALLOW_SLEEP
         if (config.Vmin != 0 && Vdd < config.Vmin)

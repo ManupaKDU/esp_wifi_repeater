@@ -139,3 +139,7 @@
 ## 2026-07-27 - Prevent Expensive Argument Evaluations
 **Learning:** Function arguments in C are evaluated before the function is called. When calling telemetry functions (like `mqtt_publish_int`) that internally check if a topic is enabled, any expensive operations passed as arguments (like software divisions e.g., `Bytes_in / 1024`) will always be executed, even if the topic is disabled.
 **Action:** When a block of code conditionally executes based on a bitmask (e.g., `config.mqtt_topic_mask != 0`), wrap the function calls at the caller level to prevent evaluating expensive arguments when the individual topic is disabled in the mask, and use bitwise shift (e.g., `>> 10`) instead of division by 1024 to save cycles.
+
+## 2026-07-29 - Replace Software Division by Powers of 2 with Bitwise Shifts
+**Learning:** C/ESP8266 Performance Pattern: Unlike approximating `/ 1000000` with `>> 20` (which introduces inaccuracy and should be avoided), explicitly replacing divisions by exact powers of 2 (e.g., `/ 1024`) with bitwise right shifts (e.g., `>> 10`) on unsigned integers maintains perfect correctness while saving software division CPU cycles on chips lacking hardware division.
+**Action:** On hot paths (like packet processing and telemetry updates) and elsewhere, safely replace divisions by 1024 with right bitwise shifts by 10 (`>> 10`) to speed up execution time with zero loss in precision.
