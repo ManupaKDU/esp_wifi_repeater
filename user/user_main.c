@@ -3666,14 +3666,15 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
         uint8_t current_station_num = config.ap_on ? wifi_softap_get_station_num() : 0;
         if (config.mqtt_topic_mask != 0)
         {
-            /* ⚡ Bolt: Wrap calls in caller-level conditionals to skip evaluating expensive arguments (like 64-bit software divisions) when the topic is disabled */
+            /* ⚡ Bolt: Prevent Expensive Argument Evaluations by skipping division/subtraction
+               when individual topics are disabled in the mask */
             if (config.mqtt_topic_mask & MQTT_TOPIC_UPTIME)
                 mqtt_publish_int(MQTT_TOPIC_UPTIME, "Uptime", "%d", (uint32_t)(t_new / 1000000));
             if (config.mqtt_topic_mask & MQTT_TOPIC_VDD)
                 mqtt_publish_int(MQTT_TOPIC_VDD, "Vdd", "%d", Vdd);
             if (config.mqtt_topic_mask & MQTT_TOPIC_BYTES) {
-                mqtt_publish_int(MQTT_TOPIC_BYTES, "Bin", "%d", (uint32_t)(Bytes_in / 1024));
-                mqtt_publish_int(MQTT_TOPIC_BYTES, "Bout", "%d", (uint32_t)(Bytes_out / 1024));
+                mqtt_publish_int(MQTT_TOPIC_BYTES, "Bin", "%d", (uint32_t)(Bytes_in >> 10));
+                mqtt_publish_int(MQTT_TOPIC_BYTES, "Bout", "%d", (uint32_t)(Bytes_out >> 10));
             }
             if (config.mqtt_topic_mask & MQTT_TOPIC_PACKETS) {
                 mqtt_publish_int(MQTT_TOPIC_PACKETS, "Ppsin", "%d", (Packets_in - Packets_in_last) / t_diff);
@@ -3687,7 +3688,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
             }
 #if DAILY_LIMIT
             if (config.mqtt_topic_mask & MQTT_TOPIC_BPD)
-                mqtt_publish_int(MQTT_TOPIC_BPD, "Bpd", "%d", (uint32_t)(Bytes_per_day / 1024));
+                mqtt_publish_int(MQTT_TOPIC_BPD, "Bpd", "%d", (uint32_t)(Bytes_per_day >> 10));
 #endif
 #ifdef USER_GPIO_OUT
             if (config.mqtt_topic_mask & MQTT_TOPIC_GPIOOUT)

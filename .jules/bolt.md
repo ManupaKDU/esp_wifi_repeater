@@ -135,3 +135,7 @@
 ## 2026-07-25 - Avoid Unnecessary Argument Evaluation in C
 **Learning:** Function arguments in C evaluate before the function call. When calling functions that might internally exit early (like mqtt_publish_int checking topic masks), expensive arguments (like software divisions Bytes_in / 1024 on ESP8266, which lacks hardware division) will still evaluate.
 **Action:** Wrap such calls in a caller-level conditional block to skip unnecessary computation, instead of relying on the function's internal early return. However, ensure that necessary state updates following the block are not mistakenly bypassed.
+
+## 2026-07-27 - Prevent Expensive Argument Evaluations
+**Learning:** Function arguments in C are evaluated before the function is called. When calling telemetry functions (like `mqtt_publish_int`) that internally check if a topic is enabled, any expensive operations passed as arguments (like software divisions e.g., `Bytes_in / 1024`) will always be executed, even if the topic is disabled.
+**Action:** When a block of code conditionally executes based on a bitmask (e.g., `config.mqtt_topic_mask != 0`), wrap the function calls at the caller level to prevent evaluating expensive arguments when the individual topic is disabled in the mask, and use bitwise shift (e.g., `>> 10`) instead of division by 1024 to save cycles.
