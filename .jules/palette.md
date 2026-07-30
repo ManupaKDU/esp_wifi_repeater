@@ -134,7 +134,6 @@
 ## 2026-07-05 - Dynamic Feedback on Single-Page Interfaces
 **Learning:** In embedded HTML interfaces without full page reloads, using a single generic success message (e.g., 'Settings sent') for all actions creates confusion, especially for distinct operations like device restarts.
 **Action:** Parse client-side query parameters (e.g., `window.location.search`) to conditionally display context-aware feedback (e.g., 'The device is restarting...') without requiring backend architectural changes.
-
 ## 2026-07-06 - Immediate Submission Feedback for Sync Operations
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous, long-running blocking actions on the backend (like device restarts or network reconnections), the delay before the page unloads or redirects leaves the user with an unresponsive UI. Sighted users may click the submit button multiple times, while screen reader users receive no immediate status update.
 **Action:** Always provide immediate UI feedback on form submission by disabling the submit button and updating its text (e.g., to "Processing...") to explicitly communicate that the request is underway and prevent duplicate submissions.
@@ -142,3 +141,11 @@
 ## 2026-07-27 - Immediate UI Feedback for Synchronous Actions
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions (like device restarts or network reconnections), users can become confused and submit the form multiple times because the browser appears unresponsive while waiting for the request to complete.
 **Action:** Always provide immediate UI feedback by disabling the submit button and updating its text (e.g., to 'Processing...') using a short `setTimeout` in the `onsubmit` event handler to explicitly communicate progress and prevent duplicate submissions.
+
+## 2026-07-28 - Dynamic Button States on GET Forms
+**Learning:** HTML Web Standard: When disabling a submit button inside an `onsubmit` event handler for a GET form to provide synchronous submission feedback (e.g., preventing duplicate clicks), disabling it synchronously (e.g., `b.disabled = true;`) excludes its name and value from the URL query parameters.
+**Action:** To retain the button's data while disabling it, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
+
+## 2026-07-28 - Deferring Button Value Change in Form Submission
+**Learning:** When altering a submit button's value (e.g., to "Processing...") to provide synchronous visual feedback inside an `onsubmit` handler for a GET form, doing so synchronously alters the value that gets serialized and sent in the query parameters. If the backend relies on exact string matching for the button value, this breaks core functionality.
+**Action:** Always wrap both the `disabled = true` state and the `value = 'Processing...'` reassignment within a `setTimeout` to allow the browser to serialize the form's original state first.
