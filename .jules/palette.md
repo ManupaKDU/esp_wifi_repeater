@@ -149,3 +149,7 @@
 ## 2026-07-28 - Deferring Button Value Change in Form Submission
 **Learning:** When altering a submit button's value (e.g., to "Processing...") to provide synchronous visual feedback inside an `onsubmit` handler for a GET form, doing so synchronously alters the value that gets serialized and sent in the query parameters. If the backend relies on exact string matching for the button value, this breaks core functionality.
 **Action:** Always wrap both the `disabled = true` state and the `value = 'Processing...'` reassignment within a `setTimeout` to allow the browser to serialize the form's original state first.
+
+## 2026-07-29 - [Immediate Feedback for Blocking Form Submissions]
+**Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions (like device restarts or network reconnections), and the backend (like ESP8266) evaluates actions by checking for the presence of the parameter key while ignoring its value, disabling the submit button and updating its text (e.g., to 'Processing...') provides explicit progress communication. To prevent the disabled button's data from being omitted from the URL query parameters during a GET submission, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
+**Action:** Apply the timeout-wrapped disable pattern to synchronous form submissions to maintain data integrity while preventing duplicate submissions and ensuring screen reader context is preserved.
