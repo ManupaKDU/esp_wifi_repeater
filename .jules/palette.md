@@ -153,3 +153,7 @@
 ## 2026-07-29 - [Immediate Feedback for Blocking Form Submissions]
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions (like device restarts or network reconnections), and the backend (like ESP8266) evaluates actions by checking for the presence of the parameter key while ignoring its value, disabling the submit button and updating its text (e.g., to 'Processing...') provides explicit progress communication. To prevent the disabled button's data from being omitted from the URL query parameters during a GET submission, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
 **Action:** Apply the timeout-wrapped disable pattern to synchronous form submissions to maintain data integrity while preventing duplicate submissions and ensuring screen reader context is preserved.
+
+## 2025-02-12 - Prevent duplicate submissions on GET forms
+**Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions via GET requests (like device restarts or network reconnections), providing immediate UI feedback by disabling the submit button and updating its text (e.g., to 'Processing...') explicitly communicates progress. However, disabling it synchronously (e.g., `b.disabled = true;`) inside the `onsubmit` event handler excludes its name and value from the URL query parameters.
+**Action:** To retain the button's data while disabling it, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).

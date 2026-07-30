@@ -121,6 +121,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 <script>document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(){var b=f.querySelector('input[type=submit]');if(b){b.disabled=true;b.value='Processing...';}})});</script>\
 </div>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;},10);}});}</script>\
 </body>\
 </html>\
 "
@@ -231,6 +232,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 <script>document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(){var b=f.querySelector('input[type=submit]');if(b){b.disabled=true;b.value='Processing...';}})});</script>\
 </div>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;},10);}});}</script>\
 </body>\
 </html>\
 "
@@ -279,6 +281,7 @@ setTimeout(\"location.href = '/'\",1000);\
 </form>\
 <script>document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(){var b=f.querySelector('input[type=submit]');if(b){b.disabled=true;b.value='Processing...';}})});</script>\
 </div>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;},10);}});}</script>\
 </body>\
 </html>\
 "
