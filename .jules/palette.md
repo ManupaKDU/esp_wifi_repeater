@@ -138,3 +138,7 @@
 ## 2026-07-06 - Immediate Submission Feedback for Sync Operations
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous, long-running blocking actions on the backend (like device restarts or network reconnections), the delay before the page unloads or redirects leaves the user with an unresponsive UI. Sighted users may click the submit button multiple times, while screen reader users receive no immediate status update.
 **Action:** Always provide immediate UI feedback on form submission by disabling the submit button and updating its text (e.g., to "Processing...") to explicitly communicate that the request is underway and prevent duplicate submissions.
+
+## 2026-07-27 - Immediate UI Feedback for Synchronous Actions
+**Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions (like device restarts or network reconnections), users can become confused and submit the form multiple times because the browser appears unresponsive while waiting for the request to complete.
+**Action:** Always provide immediate UI feedback by disabling the submit button and updating its text (e.g., to 'Processing...') using a short `setTimeout` in the `onsubmit` event handler to explicitly communicate progress and prevent duplicate submissions.
