@@ -120,6 +120,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </table>\
 </form>\
 </div>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;},10);}});}</script>\
 </body>\
 </html>\
 "
@@ -229,6 +230,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </table>\
 </form>\
 </div>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;},10);}});}</script>\
 </body>\
 </html>\
 "
@@ -276,6 +278,7 @@ setTimeout(\"location.href = '/'\",1000);\
 </small>\
 </form>\
 </div>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;},10);}});}</script>\
 </body>\
 </html>\
 "
