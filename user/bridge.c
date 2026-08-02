@@ -28,6 +28,7 @@ extern uint64_t Bytes_per_day;
 
 static struct netif        *s_sta_nif;
 static struct netif        *s_ap_nif;
+static bool                 s_is_default_ssid;
 static netif_input_fn       s_orig_input_sta;
 static netif_input_fn       s_orig_input_ap;
 static netif_output_fn      s_orig_output_sta;
@@ -539,7 +540,8 @@ static err_t ICACHE_FLASH_ATTR bridge_output_ap(struct netif *netif, struct pbuf
 
 static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp)
 {
-    if (os_strcmp(config.ssid, WIFI_SSID) == 0) return s_orig_input_ap(p, inp);
+    /* ⚡ Bolt: Cache default SSID check to avoid expensive os_strcmp per-packet on the AP hot path */
+    if (s_is_default_ssid) return s_orig_input_ap(p, inp);
 
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 1);
@@ -734,6 +736,7 @@ void ICACHE_FLASH_ATTR bridge_init(struct netif *sta_nif, struct netif *ap_nif)
     os_memset(s_fdb, 0, sizeof(s_fdb)); os_memset(s_xid_map, 0, sizeof(s_xid_map));
     struct softap_config ap_cfg; wifi_softap_get_config(&ap_cfg); ap_cfg.channel = my_channel; wifi_softap_set_config(&ap_cfg);
     wifi_set_sleep_type(NONE_SLEEP_T);
+    s_is_default_ssid = (os_strcmp(config.ssid, WIFI_SSID) == 0);
     os_printf("bridge: init done\n");
 }
 
