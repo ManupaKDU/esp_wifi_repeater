@@ -34,6 +34,7 @@ static netif_output_fn      s_orig_output_sta;
 static netif_output_fn      s_orig_output_ap;
 static netif_linkoutput_fn  s_orig_lo_sta;
 static netif_linkoutput_fn  s_orig_lo_ap;
+static bool                 s_is_config_mode = false;
 
 /* -------------------------------------------------------------------------
  * Compact packed header types
@@ -539,7 +540,8 @@ static err_t ICACHE_FLASH_ATTR bridge_output_ap(struct netif *netif, struct pbuf
 
 static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp)
 {
-    if (os_strcmp(config.ssid, WIFI_SSID) == 0) return s_orig_input_ap(p, inp);
+    /* ⚡ Bolt: Cache expensive string comparison result to avoid per-packet os_strcmp overhead */
+    if (s_is_config_mode) return s_orig_input_ap(p, inp);
 
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 1);
@@ -724,6 +726,8 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
 */
 void ICACHE_FLASH_ATTR bridge_init(struct netif *sta_nif, struct netif *ap_nif)
 {
+    /* ⚡ Bolt: Pre-calculate and cache config mode to optimize hot paths */
+    s_is_config_mode = (os_strcmp(config.ssid, WIFI_SSID) == 0);
     s_sta_nif = sta_nif; s_ap_nif = ap_nif;
     s_orig_input_sta = sta_nif->input; sta_nif->input = bridge_input_sta;
     s_orig_input_ap = ap_nif->input; ap_nif->input = bridge_input_ap;
