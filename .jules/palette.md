@@ -157,3 +157,6 @@
 ## 2025-02-12 - Prevent duplicate submissions on GET forms
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions via GET requests (like device restarts or network reconnections), providing immediate UI feedback by disabling the submit button and updating its text (e.g., to 'Processing...') explicitly communicates progress. However, disabling it synchronously (e.g., `b.disabled = true;`) inside the `onsubmit` event handler excludes its name and value from the URL query parameters.
 **Action:** To retain the button's data while disabling it, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
+## 2026-08-03 - CSS Syntax Errors and Focus States
+**Learning:** Syntax errors like unclosed brackets in inline `<style>` blocks silently break subsequent CSS rules. In `index.html`, an unclosed bracket broke the `select:focus` rule, and duplicated `button[slot="activate"]:focus-visible` rules led to `box-shadow` being overridden, removing the focus indicator. This harms keyboard accessibility.
+**Action:** Always verify CSS syntax and ensure focus rules (`:focus` and `:focus-visible`) are correctly applied and not overridden by duplicate selectors to maintain robust keyboard accessibility.
