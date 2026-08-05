@@ -157,3 +157,7 @@
 ## 2025-02-12 - Prevent duplicate submissions on GET forms
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions via GET requests (like device restarts or network reconnections), providing immediate UI feedback by disabling the submit button and updating its text (e.g., to 'Processing...') explicitly communicates progress. However, disabling it synchronously (e.g., `b.disabled = true;`) inside the `onsubmit` event handler excludes its name and value from the URL query parameters.
 **Action:** To retain the button's data while disabling it, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
+
+## 2026-07-29 - Missing Visual Required Indicators on Native Required Fields
+**Learning:** When enforcing an HTML5 `required` attribute on input fields (like the AP password), it is critical to ensure the corresponding label includes a visual required indicator (e.g., `<span aria-hidden='true'>*</span>`) to explicitly communicate the requirement to sighted users, otherwise the required state is hidden until the user attempts to submit.
+**Action:** Always verify that input fields with a `required` attribute have a corresponding visual indicator in their label, wrapped in `aria-hidden='true'` to prevent redundant screen reader announcements.
