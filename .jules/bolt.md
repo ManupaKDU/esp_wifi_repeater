@@ -143,3 +143,6 @@
 ## 2026-07-29 - Replace Software Division by Powers of 2 with Bitwise Shifts
 **Learning:** C/ESP8266 Performance Pattern: Unlike approximating `/ 1000000` with `>> 20` (which introduces inaccuracy and should be avoided), explicitly replacing divisions by exact powers of 2 (e.g., `/ 1024`) with bitwise right shifts (e.g., `>> 10`) on unsigned integers maintains perfect correctness while saving software division CPU cycles on chips lacking hardware division.
 **Action:** On hot paths (like packet processing and telemetry updates) and elsewhere, safely replace divisions by 1024 with right bitwise shifts by 10 (`>> 10`) to speed up execution time with zero loss in precision.
+## 2026-08-06 - Cache SSID String Comparison in Hot Paths
+**Learning:** C/ESP8266 Performance Pattern: Avoid evaluating expensive string comparisons (e.g., `os_strcmp(config.ssid, WIFI_SSID)`) directly inside per-packet network hot paths (like `bridge_input_ap`).
+**Action:** Cache the result into a static boolean during initialization (`bridge_init`) to minimize per-packet processing overhead.
