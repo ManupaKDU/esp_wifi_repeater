@@ -147,3 +147,7 @@
 ## 2026-08-02 - Cache Expensive String Comparisons on Network Hot Paths
 **Learning:** Codebase C/ESP8266 Performance Pattern: Checking configuration state (like `config.ssid == WIFI_SSID`) using string comparison functions (`os_strcmp`) directly inside per-packet network callbacks (like `bridge_input_ap`) forces expensive byte-by-byte memory iterations and function call overhead for every single frame.
 **Action:** When a configuration string is known to only change across reboots (or explicitly triggered re-initializations), cache the result of the string comparison into a static boolean during initialization (`bridge_init`) to reduce per-packet overhead to a single boolean check.
+
+## 2026-08-04 - Cache Expensive String Comparisons on Hot Paths
+**Learning:** C/ESP8266 Performance Pattern: Avoid evaluating expensive string comparisons (e.g., `os_strcmp`) directly inside per-packet network hot paths (like `bridge_input_ap`).
+**Action:** Cache the result into a static boolean during initialization to minimize per-packet processing overhead.

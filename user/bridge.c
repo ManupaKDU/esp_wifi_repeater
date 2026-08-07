@@ -35,6 +35,7 @@ static netif_output_fn      s_orig_output_sta;
 static netif_output_fn      s_orig_output_ap;
 static netif_linkoutput_fn  s_orig_lo_sta;
 static netif_linkoutput_fn  s_orig_lo_ap;
+static bool                 s_is_config_mode = false;
 
 /* -------------------------------------------------------------------------
  * Compact packed header types
@@ -726,6 +727,8 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
 */
 void ICACHE_FLASH_ATTR bridge_init(struct netif *sta_nif, struct netif *ap_nif)
 {
+    /* ⚡ Bolt: Pre-calculate and cache config mode to optimize hot paths */
+    s_is_config_mode = (os_strcmp(config.ssid, WIFI_SSID) == 0);
     s_sta_nif = sta_nif; s_ap_nif = ap_nif;
     s_orig_input_sta = sta_nif->input; sta_nif->input = bridge_input_sta;
     s_orig_input_ap = ap_nif->input; ap_nif->input = bridge_input_ap;
