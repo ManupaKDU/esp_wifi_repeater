@@ -160,3 +160,7 @@
 ## 2026-08-01 - [Missing Required Indicator]
 **Learning:** Inconsistent visual required indicators (`<span aria-hidden='true'>*</span>`) across forms with `required` inputs can confuse users, especially in embedded UIs.
 **Action:** Always ensure visual required indicators match the input's HTML5 `required` attribute.
+
+## 2026-08-01 - Visual Required Indicators Consistency
+**Learning:** Inconsistent visual required indicators across forms can confuse users. When enforcing an HTML5 `required` attribute on an input field, ensure its corresponding label includes a visual required indicator (e.g., `<span aria-hidden='true'>*</span>`) to explicitly communicate the requirement.
+**Action:** Always verify that input fields with the `required` attribute have matching visual indicators in their labels to maintain a predictable UX.
