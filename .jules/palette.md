@@ -157,6 +157,7 @@
 ## 2025-02-12 - Prevent duplicate submissions on GET forms
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions via GET requests (like device restarts or network reconnections), providing immediate UI feedback by disabling the submit button and updating its text (e.g., to 'Processing...') explicitly communicates progress. However, disabling it synchronously (e.g., `b.disabled = true;`) inside the `onsubmit` event handler excludes its name and value from the URL query parameters.
 **Action:** To retain the button's data while disabling it, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
+<<<<<<< HEAD
 ## 2026-08-01 - [Missing Required Indicator]
 **Learning:** Inconsistent visual required indicators (`<span aria-hidden='true'>*</span>`) across forms with `required` inputs can confuse users, especially in embedded UIs.
 **Action:** Always ensure visual required indicators match the input's HTML5 `required` attribute.
@@ -176,3 +177,7 @@
 ## 2026-07-29 - Missing Visual Required Indicators on Native Required Fields
 **Learning:** When enforcing an HTML5 `required` attribute on input fields (like the AP password), it is critical to ensure the corresponding label includes a visual required indicator (e.g., `<span aria-hidden='true'>*</span>`) to explicitly communicate the requirement to sighted users, otherwise the required state is hidden until the user attempts to submit.
 **Action:** Always verify that input fields with a `required` attribute have a corresponding visual indicator in their label, wrapped in `aria-hidden='true'` to prevent redundant screen reader announcements.
+
+## 2026-08-07 - Dynamic Visual Required Indicators for Form Validation
+**Learning:** UX/Accessibility Pattern: When enforcing conditional validation on a form field (e.g., dynamically disabling/enabling a password input via JavaScript based on a security dropdown's state), ensure any visual required indicators (like an asterisk) are also dynamically toggled to reflect the field's active state. Leaving a required asterisk visible on a disabled field confuses users about whether they still need to fill it out.
+**Action:** When toggling a field's disabled state dynamically, attach an ID to its visual required indicator (e.g., `<span id='ap_password_req'>*</span>`) and explicitly toggle its visibility (e.g., `display: none` or `display: inline`) along with the field's disabled state.
