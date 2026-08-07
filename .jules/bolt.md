@@ -155,3 +155,7 @@
 ## 2024-05-12 - Cache Expensive String Comparisons on Hot Paths
 **Learning:** C/ESP8266 Performance Pattern: Evaluating expensive string comparisons (e.g., `os_strcmp`) directly inside per-packet network hot paths (like `bridge_input_ap`) adds significant processing overhead to every single packet.
 **Action:** Cache the result of static string comparisons into a static boolean during initialization to minimize per-packet processing overhead.
+
+## 2026-07-30 - Cache Expensive String Comparisons on Network Hot Paths
+**Learning:** C/ESP8266 Performance Pattern: Avoid evaluating expensive string comparisons (e.g., `os_strcmp`) directly inside per-packet network hot paths (like `bridge_input_ap`).
+**Action:** Instead, cache the result into a static boolean during initialization (e.g., `bridge_init`) to minimize per-packet processing overhead.
