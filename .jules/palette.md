@@ -168,3 +168,7 @@
 ## 2026-08-03 - CSS Syntax Errors and Focus States
 **Learning:** Syntax errors like unclosed brackets in inline `<style>` blocks silently break subsequent CSS rules. In `index.html`, an unclosed bracket broke the `select:focus` rule, and duplicated `button[slot="activate"]:focus-visible` rules led to `box-shadow` being overridden, removing the focus indicator. This harms keyboard accessibility.
 **Action:** Always verify CSS syntax and ensure focus rules (`:focus` and `:focus-visible`) are correctly applied and not overridden by duplicate selectors to maintain robust keyboard accessibility.
+
+## 2026-08-04 - [Consistent Required Field Indicators]
+**Learning:** When enforcing an HTML5 `required` attribute on an input field, ensure its corresponding label includes a visual required indicator (e.g., `<span aria-hidden='true'>*</span>`). Inconsistent visual required indicators across forms can confuse users.
+**Action:** Always audit form labels to ensure they visually communicate the `required` state matching the underlying input constraint.
