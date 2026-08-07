@@ -172,3 +172,7 @@
 ## 2026-08-04 - [Consistent Required Field Indicators]
 **Learning:** When enforcing an HTML5 `required` attribute on an input field, ensure its corresponding label includes a visual required indicator (e.g., `<span aria-hidden='true'>*</span>`). Inconsistent visual required indicators across forms can confuse users.
 **Action:** Always audit form labels to ensure they visually communicate the `required` state matching the underlying input constraint.
+
+## 2026-07-29 - Missing Visual Required Indicators on Native Required Fields
+**Learning:** When enforcing an HTML5 `required` attribute on input fields (like the AP password), it is critical to ensure the corresponding label includes a visual required indicator (e.g., `<span aria-hidden='true'>*</span>`) to explicitly communicate the requirement to sighted users, otherwise the required state is hidden until the user attempts to submit.
+**Action:** Always verify that input fields with a `required` attribute have a corresponding visual indicator in their label, wrapped in `aria-hidden='true'` to prevent redundant screen reader announcements.
