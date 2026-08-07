@@ -164,3 +164,7 @@
 ## 2026-08-01 - Visual Required Indicators Consistency
 **Learning:** Inconsistent visual required indicators across forms can confuse users. When enforcing an HTML5 `required` attribute on an input field, ensure its corresponding label includes a visual required indicator (e.g., `<span aria-hidden='true'>*</span>`) to explicitly communicate the requirement.
 **Action:** Always verify that input fields with the `required` attribute have matching visual indicators in their labels to maintain a predictable UX.
+
+## 2026-08-03 - CSS Syntax Errors and Focus States
+**Learning:** Syntax errors like unclosed brackets in inline `<style>` blocks silently break subsequent CSS rules. In `index.html`, an unclosed bracket broke the `select:focus` rule, and duplicated `button[slot="activate"]:focus-visible` rules led to `box-shadow` being overridden, removing the focus indicator. This harms keyboard accessibility.
+**Action:** Always verify CSS syntax and ensure focus rules (`:focus` and `:focus-visible`) are correctly applied and not overridden by duplicate selectors to maintain robust keyboard accessibility.
