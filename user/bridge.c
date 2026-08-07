@@ -35,7 +35,11 @@ static netif_output_fn      s_orig_output_sta;
 static netif_output_fn      s_orig_output_ap;
 static netif_linkoutput_fn  s_orig_lo_sta;
 static netif_linkoutput_fn  s_orig_lo_ap;
+<<<<<<< HEAD
 static bool                 s_is_config_mode = false;
+=======
+static bool                 s_is_default_ssid = false;
+>>>>>>> pr-207
 
 /* -------------------------------------------------------------------------
  * Compact packed header types
@@ -735,6 +739,7 @@ void ICACHE_FLASH_ATTR bridge_init(struct netif *sta_nif, struct netif *ap_nif)
     s_orig_output_sta = sta_nif->output; sta_nif->output = bridge_output_sta;
     s_orig_output_ap = ap_nif->output; ap_nif->output = bridge_output_ap;
     s_orig_lo_sta = sta_nif->linkoutput; s_orig_lo_ap = ap_nif->linkoutput;
+    s_is_default_ssid = (os_strcmp(config.ssid, WIFI_SSID) == 0);
     netif_set_default(sta_nif); sta_nif->napt = 0; ap_nif->napt = 0;
     os_memset(s_fdb, 0, sizeof(s_fdb)); os_memset(s_xid_map, 0, sizeof(s_xid_map));
     struct softap_config ap_cfg; wifi_softap_get_config(&ap_cfg); ap_cfg.channel = my_channel; wifi_softap_set_config(&ap_cfg);
