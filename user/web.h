@@ -7,6 +7,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
 <title>ESP WiFi NAT Router Config</title>\
+<style>input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity: 0.6; }</style>\
 </head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
@@ -131,6 +132,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
 <title>ESP WiFi Repeater Config</title>\
+<style>input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity: 0.6; }</style>\
 </head>\
 <body>\
 <h1>ESP WiFi Repeater Config</h1>\
@@ -242,6 +244,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
 <title>ESP WiFi NAT Router Config</title>\
+<style>input:disabled, select:disabled, button:disabled { cursor: not-allowed; opacity: 0.6; }</style>\
 </head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
