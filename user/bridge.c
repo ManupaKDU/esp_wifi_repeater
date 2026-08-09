@@ -621,8 +621,6 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
 
 static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *inp)
 {
-    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
-
     Bytes_in += p->tot_len;
     Packets_in++;
 #if DAILY_LIMIT
@@ -630,13 +628,16 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
 #endif
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 0);
-        
+
+    /* ⚡ Bolt: Defer pbuf_alloc/pbuf_copy until after MAC address early return to avoid expensive heap ops */
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    if (os_memcmp(eth_p->src, s_ap_nif->hwaddr, 6) == 0) { return s_orig_input_sta(p, inp); }
+
+    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
     if (!q) return s_orig_input_sta(p, inp);
     pbuf_copy(q, p);
 
     eth_hdr_t *eth = (eth_hdr_t *)q->payload;
-    if (os_memcmp(eth->src, s_ap_nif->hwaddr, 6) == 0) { pbuf_free(q); return s_orig_input_sta(p, inp); }
-
     uint16_t eth_type = ntohs(eth->type);
     bool is_bcast = (eth->dst[0] & 0x01) != 0, is_to_sta_mac = (os_memcmp(eth->dst, s_sta_nif->hwaddr, 6) == 0);
     bool handled = false;
