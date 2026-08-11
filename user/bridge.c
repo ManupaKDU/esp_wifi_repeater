@@ -621,6 +621,10 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
 
 static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *inp)
 {
+    /* ⚡ Bolt: Defer expensive pbuf_alloc by checking for loopback packets early */
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    if (os_memcmp(eth_p->src, s_ap_nif->hwaddr, 6) == 0) { return s_orig_input_sta(p, inp); }
+
     struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
 
     Bytes_in += p->tot_len;
@@ -635,7 +639,6 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
     pbuf_copy(q, p);
 
     eth_hdr_t *eth = (eth_hdr_t *)q->payload;
-    if (os_memcmp(eth->src, s_ap_nif->hwaddr, 6) == 0) { pbuf_free(q); return s_orig_input_sta(p, inp); }
 
     uint16_t eth_type = ntohs(eth->type);
     bool is_bcast = (eth->dst[0] & 0x01) != 0, is_to_sta_mac = (os_memcmp(eth->dst, s_sta_nif->hwaddr, 6) == 0);
