@@ -35,14 +35,9 @@ static netif_output_fn      s_orig_output_sta;
 static netif_output_fn      s_orig_output_ap;
 static netif_linkoutput_fn  s_orig_lo_sta;
 static netif_linkoutput_fn  s_orig_lo_ap;
-<<<<<<< HEAD
 static bool                 s_is_config_mode = false;
-
-/* ⚡ Bolt: Cache whether bridging is enabled to avoid expensive per-packet string comparisons */
 static bool s_bridge_enabled = false;
-=======
 static bool                 s_is_default_ssid = false;
->>>>>>> pr-210
 
 /* -------------------------------------------------------------------------
  * Compact packed header types
@@ -554,19 +549,21 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 1);
 
-    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len + 16, PBUF_RAM);
-
     Bytes_out += p->tot_len;
     Packets_out++;
 #if DAILY_LIMIT
     Bytes_per_day += p->tot_len;
 #endif
 
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    bool is_bcast = (eth_p->dst[0] & 0x01) != 0, is_to_ap_mac = (os_memcmp(eth_p->dst, s_ap_nif->hwaddr, 6) == 0);
+
+    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len + 16, PBUF_RAM);
+
     if (!q) return s_orig_input_ap(p, inp);
     pbuf_copy(q, p);
 
     eth_hdr_t *eth = (eth_hdr_t *)q->payload;
-    bool is_bcast = (eth->dst[0] & 0x01) != 0, is_to_ap_mac = (os_memcmp(eth->dst, s_ap_nif->hwaddr, 6) == 0);
     uint16_t eth_type = ntohs(eth->type);
 
     /* Learn source IP→MAC before any early return so replies to the management
@@ -621,13 +618,16 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
 
 static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *inp)
 {
-    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
-
     Bytes_in += p->tot_len;
     Packets_in++;
 #if DAILY_LIMIT
     Bytes_per_day += p->tot_len;
 #endif
+
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    if (os_memcmp(eth_p->src, s_ap_nif->hwaddr, 6) == 0) { return s_orig_input_sta(p, inp); }
+
+    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 0);
         
@@ -635,7 +635,6 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
     pbuf_copy(q, p);
 
     eth_hdr_t *eth = (eth_hdr_t *)q->payload;
-    if (os_memcmp(eth->src, s_ap_nif->hwaddr, 6) == 0) { pbuf_free(q); return s_orig_input_sta(p, inp); }
 
     uint16_t eth_type = ntohs(eth->type);
     bool is_bcast = (eth->dst[0] & 0x01) != 0, is_to_sta_mac = (os_memcmp(eth->dst, s_sta_nif->hwaddr, 6) == 0);
@@ -734,13 +733,10 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
 */
 void ICACHE_FLASH_ATTR bridge_init(struct netif *sta_nif, struct netif *ap_nif)
 {
-<<<<<<< HEAD
     /* ⚡ Bolt: Pre-calculate and cache config mode to optimize hot paths */
     s_is_config_mode = (os_strcmp(config.ssid, WIFI_SSID) == 0);
     s_bridge_enabled = (os_strcmp(config.ssid, WIFI_SSID) != 0);
-=======
     s_is_default_ssid = (os_strcmp(config.ssid, WIFI_SSID) == 0);
->>>>>>> pr-210
     s_sta_nif = sta_nif; s_ap_nif = ap_nif;
     s_orig_input_sta = sta_nif->input; sta_nif->input = bridge_input_sta;
     s_orig_input_ap = ap_nif->input; ap_nif->input = bridge_input_ap;

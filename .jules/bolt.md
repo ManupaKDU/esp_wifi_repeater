@@ -162,3 +162,7 @@
 ## 2026-08-06 - Cache SSID String Comparison in Hot Paths
 **Learning:** C/ESP8266 Performance Pattern: Avoid evaluating expensive string comparisons (e.g., `os_strcmp(config.ssid, WIFI_SSID)`) directly inside per-packet network hot paths (like `bridge_input_ap`).
 **Action:** Cache the result into a static boolean during initialization (`bridge_init`) to minimize per-packet processing overhead.
+
+## 2024-08-12 - Defer Memory Allocation on Network Hot Paths
+**Learning:** C/ESP8266 Performance Pattern: On high-frequency network hot paths (like `bridge_input_ap` and `bridge_input_sta`), defer dynamic memory allocation (`pbuf_alloc`) and buffer copying (`pbuf_copy`) until after evaluating early return conditions (e.g., local MAC address matches).
+**Action:** Move early return checks before heap operations to avoid expensive allocation overhead for dropped or non-bridged packets.
