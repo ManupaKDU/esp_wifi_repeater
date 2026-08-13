@@ -181,3 +181,6 @@
 ## 2026-08-07 - Dynamic Visual Required Indicators for Form Validation
 **Learning:** UX/Accessibility Pattern: When enforcing conditional validation on a form field (e.g., dynamically disabling/enabling a password input via JavaScript based on a security dropdown's state), ensure any visual required indicators (like an asterisk) are also dynamically toggled to reflect the field's active state. Leaving a required asterisk visible on a disabled field confuses users about whether they still need to fill it out.
 **Action:** When toggling a field's disabled state dynamically, attach an ID to its visual required indicator (e.g., `<span id='ap_password_req'>*</span>`) and explicitly toggle its visibility (e.g., `display: none` or `display: inline`) along with the field's disabled state.
+## 2026-08-13 - Explicit Visual Feedback for Disabled Controls
+**Learning:** In unstyled or embedded HTML interfaces (like the ESP8266 config pages), native controls (inputs, selects, buttons) lack default visual distinction when set to `:disabled`. This makes synchronous actions or dynamic form state changes confusing for users.
+**Action:** Always explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) in unstyled embedded interfaces to provide clear visual feedback.
