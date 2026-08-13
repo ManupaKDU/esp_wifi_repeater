@@ -554,35 +554,38 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 1);
 
-    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len + 16, PBUF_RAM);
-
     Bytes_out += p->tot_len;
     Packets_out++;
 #if DAILY_LIMIT
     Bytes_per_day += p->tot_len;
 #endif
 
-    if (!q) return s_orig_input_ap(p, inp);
-    pbuf_copy(q, p);
-
-    eth_hdr_t *eth = (eth_hdr_t *)q->payload;
-    bool is_bcast = (eth->dst[0] & 0x01) != 0, is_to_ap_mac = (os_memcmp(eth->dst, s_ap_nif->hwaddr, 6) == 0);
-    uint16_t eth_type = ntohs(eth->type);
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    bool is_bcast = (eth_p->dst[0] & 0x01) != 0, is_to_ap_mac = (os_memcmp(eth_p->dst, s_ap_nif->hwaddr, 6) == 0);
+    uint16_t eth_type = ntohs(eth_p->type);
 
     /* Learn source IP→MAC before any early return so replies to the management
        address (which take the is_to_ap_mac path) can be routed back via the FDB. */
     {
-        const uint8_t *src_mac = ((eth_hdr_t *)p->payload)->src;
+        const uint8_t *src_mac = eth_p->src;
         if (eth_type == ETHTYPE_ARP) {
-            arp_hdr_t *arp = (arp_hdr_t *)pkt_at(q, sizeof(eth_hdr_t), sizeof(arp_hdr_t));
+            arp_hdr_t *arp = (arp_hdr_t *)pkt_at(p, sizeof(eth_hdr_t), sizeof(arp_hdr_t));
             if (arp) fdb_insert(arp->spa, src_mac);
         } else if (eth_type == ETHTYPE_IP) {
-            ip_hdr_t *ip = (ip_hdr_t *)pkt_at(q, sizeof(eth_hdr_t), sizeof(ip_hdr_t));
+            ip_hdr_t *ip = (ip_hdr_t *)pkt_at(p, sizeof(eth_hdr_t), sizeof(ip_hdr_t));
             if (ip) fdb_insert(ip->src, src_mac);
         }
     }
 
-    if (is_to_ap_mac && !is_bcast) { pbuf_free(q); return s_orig_input_ap(p, inp); }
+    /* ⚡ Bolt: Defer pbuf_alloc on the AP hot path until we are sure we are not dropping
+       the packet. This avoids expensive heap allocation for early dropped packets. */
+    if (is_to_ap_mac && !is_bcast) { return s_orig_input_ap(p, inp); }
+
+    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len + 16, PBUF_RAM);
+    if (!q) return s_orig_input_ap(p, inp);
+    pbuf_copy(q, p);
+
+    eth_hdr_t *eth = (eth_hdr_t *)q->payload;
 
     bool handled = false;
     os_memcpy(eth->src, s_sta_nif->hwaddr, 6);
@@ -621,8 +624,6 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
 
 static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *inp)
 {
-    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
-
     Bytes_in += p->tot_len;
     Packets_in++;
 #if DAILY_LIMIT
@@ -630,12 +631,17 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
 #endif
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 0);
-        
+
+    /* ⚡ Bolt: Defer pbuf_alloc on the STA input hot path until we are sure we are not
+       dropping the packet. */
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    if (os_memcmp(eth_p->src, s_ap_nif->hwaddr, 6) == 0) { return s_orig_input_sta(p, inp); }
+
+    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
     if (!q) return s_orig_input_sta(p, inp);
     pbuf_copy(q, p);
 
     eth_hdr_t *eth = (eth_hdr_t *)q->payload;
-    if (os_memcmp(eth->src, s_ap_nif->hwaddr, 6) == 0) { pbuf_free(q); return s_orig_input_sta(p, inp); }
 
     uint16_t eth_type = ntohs(eth->type);
     bool is_bcast = (eth->dst[0] & 0x01) != 0, is_to_sta_mac = (os_memcmp(eth->dst, s_sta_nif->hwaddr, 6) == 0);
