@@ -197,3 +197,7 @@
 ## 2024-08-11 - Explicit Styling for Disabled Native Controls
 **Learning:** In unstyled or embedded HTML interfaces, native controls (like inputs, selects, and submit buttons) often lack default visual distinction when transitioning to a disabled state. This can confuse users, especially when forms transition to disabled states during synchronous actions.
 **Action:** Explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) to provide clear visual feedback during synchronous actions or dynamic form state changes.
+
+## 2026-08-12 - Explicit Styling for Disabled Form Controls
+**Learning:** In unstyled or embedded HTML interfaces, native controls (like inputs, selects, and submit buttons) lack default visual distinction when disabled. To improve UX, explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) to provide clear visual feedback during synchronous actions or dynamic form state changes.
+**Action:** Always provide explicit visual styling for the `:disabled` state in embedded environments where external stylesheets or native operating system disabled styles are minimal or absent.
