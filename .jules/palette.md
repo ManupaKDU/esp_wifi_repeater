@@ -189,3 +189,7 @@
 ## 2026-08-09 - Visual Feedback for Disabled States in Unstyled UIs
 **Learning:** In unstyled or embedded HTML interfaces, native controls (like inputs, selects, and submit buttons) lack default visual distinction when disabled. This causes user confusion during synchronous actions or dynamic form state changes.
 **Action:** Explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) in unstyled interfaces to provide clear visual feedback.
+
+## 2026-08-11 - Explicit styling for disabled state
+**Learning:** In unstyled or embedded HTML interfaces, native controls (like inputs, selects, and submit buttons) lack default visual distinction when disabled. To improve UX, explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) to provide clear visual feedback during synchronous actions or dynamic form state changes.
+**Action:** Always provide explicit visual styling to `:disabled` controls in embedded interfaces that lack a CSS framework.
