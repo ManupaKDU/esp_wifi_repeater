@@ -169,3 +169,7 @@
 ## 2024-08-09 - Defer dynamic allocation on network hot paths
 **Learning:** Codebase C/ESP8266 Performance Pattern: On high-frequency network hot paths (like `bridge_input_sta`), eagerly performing dynamic memory allocation (`pbuf_alloc`) and buffer copying (`pbuf_copy`) before early return conditions (e.g., local MAC address checks) causes unnecessary heap fragmentation and wastes expensive CPU cycles for packets that end up being dropped.
 **Action:** Defer `pbuf_alloc` and `pbuf_copy` until after evaluating all O(1) early return conditions (like MAC address comparisons) to avoid expensive heap operations for non-bridged packets.
+
+## 2024-05-20 - Defer Memory Allocation on Bridge Hotpaths
+**Learning:** C/ESP8266 Performance Pattern: On high-frequency network hot paths (like bridge_input_ap and bridge_input_sta), defer dynamic memory allocation (pbuf_alloc) and buffer copying (pbuf_copy) until after evaluating early return conditions (e.g., local MAC address matches). This avoids expensive heap operations for dropped or non-bridged packets.
+**Action:** Always check if early returns can be evaluated using existing memory structures before dynamically allocating memory for processing in C network stacks.

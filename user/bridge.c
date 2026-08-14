@@ -550,14 +550,21 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 1);
 
-    eth_hdr_t *p_eth = (eth_hdr_t *)p->payload;
-    bool is_bcast = (p_eth->dst[0] & 0x01) != 0, is_to_ap_mac = (os_memcmp(p_eth->dst, s_ap_nif->hwaddr, 6) == 0);
-    uint16_t eth_type = ntohs(p_eth->type);
+    Bytes_out += p->tot_len;
+    Packets_out++;
+#if DAILY_LIMIT
+    Bytes_per_day += p->tot_len;
+#endif
+
+    /* ⚡ Bolt: Defer expensive pbuf_alloc and pbuf_copy until after early return conditions to save heap operations on dropped/looped packets */
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    bool is_bcast = (eth_p->dst[0] & 0x01) != 0, is_to_ap_mac = (os_memcmp(eth_p->dst, s_ap_nif->hwaddr, 6) == 0);
+    uint16_t eth_type = ntohs(eth_p->type);
 
     /* Learn source IP→MAC before any early return so replies to the management
        address (which take the is_to_ap_mac path) can be routed back via the FDB. */
     {
-        const uint8_t *src_mac = p_eth->src;
+        const uint8_t *src_mac = eth_p->src;
         if (eth_type == ETHTYPE_ARP) {
             arp_hdr_t *arp = (arp_hdr_t *)pkt_at(p, sizeof(eth_hdr_t), sizeof(arp_hdr_t));
             if (arp) fdb_insert(arp->spa, src_mac);
@@ -570,13 +577,6 @@ static err_t ICACHE_FLASH_ATTR bridge_input_ap(struct pbuf *p, struct netif *inp
     if (is_to_ap_mac && !is_bcast) { return s_orig_input_ap(p, inp); }
 
     struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len + 16, PBUF_RAM);
-
-    Bytes_out += p->tot_len;
-    Packets_out++;
-#if DAILY_LIMIT
-    Bytes_per_day += p->tot_len;
-#endif
-
     if (!q) return s_orig_input_ap(p, inp);
     pbuf_copy(q, p);
 
@@ -627,7 +627,7 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 0);
 
-    /* ⚡ Bolt: Defer pbuf_alloc/pbuf_copy until after MAC address early return to avoid expensive heap ops */
+    /* ⚡ Bolt: Defer expensive pbuf_alloc and pbuf_copy until after early return conditions to save heap operations on dropped/looped packets */
     eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
     if (os_memcmp(eth_p->src, s_ap_nif->hwaddr, 6) == 0) { return s_orig_input_sta(p, inp); }
 
