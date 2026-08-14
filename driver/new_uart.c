@@ -310,7 +310,6 @@ static void uart0_rx_intr_handler(void *para)
             {
                 uint8_t ch = (READ_PERI_REG(UART_FIFO(UART0)) & 0xFF);
 
-                //if (ch == '\r') ch = '\n';
 	        ringbuf_memcpy_into(rxBuff, &ch, 1);
                 #if _ENABLE_CONSOLE_INTEGRATION == 1
                 uart_tx_one_char(uart_no, ch);
