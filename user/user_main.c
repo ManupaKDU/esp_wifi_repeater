@@ -2178,7 +2178,8 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
                 os_sprintf_flash(response, "Password too long\r\n");
                 goto command_handled;
             }
-            os_sprintf(config.lock_password, "%s", tokens[1]);
+            os_strncpy((char *)config.lock_password, tokens[1], sizeof(config.lock_password) - 1);
+            config.lock_password[sizeof(config.lock_password) - 1] = '\0';
         }
         else
         {
@@ -2320,7 +2321,8 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
                 }
 
                 // WiFi pw of the uplink network is also the default lock pw (backward compatibility)
-                os_sprintf(config.lock_password, "%s", tokens[2]);
+                os_strncpy((char *)config.lock_password, tokens[2], sizeof(config.lock_password) - 1);
+                config.lock_password[sizeof(config.lock_password) - 1] = '\0';
 
                 os_sprintf_flash(response, "Password set\r\n");
                 goto command_handled;
