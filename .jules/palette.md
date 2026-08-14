@@ -185,3 +185,7 @@
 ## 2026-08-08 - [Disabled States]
 **Learning:** In unstyled embedded configuration pages, native HTML controls (like submit buttons and inputs) lack explicit disabled styling. This creates poor UX when disabling buttons during form submission or dynamically disabling inputs (like Wi-Fi passwords), as users lack visual feedback of the state change.
 **Action:** Explicitly style `:disabled` states using `cursor: not-allowed` and a lower `opacity` (e.g., `opacity: 0.6`) to provide clear visual cues of disabled elements.
+
+## 2026-08-09 - Visual Feedback for Disabled States in Unstyled UIs
+**Learning:** In unstyled or embedded HTML interfaces, native controls (like inputs, selects, and submit buttons) lack default visual distinction when disabled. This causes user confusion during synchronous actions or dynamic form state changes.
+**Action:** Explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) in unstyled interfaces to provide clear visual feedback.
