@@ -93,7 +93,6 @@ void spi_mode(uint8 spi_no, uint8 spi_cpha,uint8 spi_cpol){
 
 void spi_init_gpio(uint8 spi_no, uint8 sysclk_as_spiclk){
 
-//	if(spi_no > 1) return; //Not required. Valid spi_no is checked with if/elif below.
 
 	uint32 clock_div_flag = 0;
 	if(sysclk_as_spiclk){
