@@ -1,0 +1,13 @@
+CC=gcc
+CFLAGS=-I. -I./include -I./tests/mocks -D_POSIX_C_SOURCE=200809L -DDEBUG -Wno-implicit-function-declaration -Wno-builtin-declaration-mismatch -Wno-int-conversion -fno-builtin
+
+all: tests/test_acl
+
+tests/test_acl: tests/test_acl_init.c user/acl.c
+	$(CC) $(CFLAGS) -o tests/test_acl tests/test_acl_init.c
+
+test: tests/test_acl
+	./tests/test_acl
+
+clean:
+	rm -f tests/test_acl
