@@ -36,8 +36,6 @@ static netif_output_fn      s_orig_output_ap;
 static netif_linkoutput_fn  s_orig_lo_sta;
 static netif_linkoutput_fn  s_orig_lo_ap;
 static bool                 s_is_config_mode = false;
-
-/* ⚡ Bolt: Cache whether bridging is enabled to avoid expensive per-packet string comparisons */
 static bool s_bridge_enabled = false;
 
 /* -------------------------------------------------------------------------
@@ -624,6 +622,11 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
 #if DAILY_LIMIT
     Bytes_per_day += p->tot_len;
 #endif
+
+    eth_hdr_t *eth_p = (eth_hdr_t *)p->payload;
+    if (os_memcmp(eth_p->src, s_ap_nif->hwaddr, 6) == 0) { return s_orig_input_sta(p, inp); }
+
+    struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
     if (config.status_led <= 16)
         easygpio_outputSet(config.status_led, 0);
 
