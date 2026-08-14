@@ -93,7 +93,6 @@ rboot_write_status ICACHE_FLASH_ATTR rboot_write_init(uint32 start_addr) {
 	status.start_addr = start_addr;
 	status.start_sector = start_addr / SECTOR_SIZE;
 	status.last_sector_erased = status.start_sector - 1;
-	//status.max_sector_count = 200;
 	//os_printf("init addr: 0x%08x\r\n", start_addr);
 	return status;
 }
@@ -143,23 +142,19 @@ bool ICACHE_FLASH_ATTR rboot_write_flash(rboot_write_status *status, uint8 *data
 	len -= status->extra_count;
 	os_memcpy(status->extra_bytes, buffer + len, status->extra_count);
 
-	// check data will fit
-	//if (status->start_addr + len < (status->start_sector + status->max_sector_count) * SECTOR_SIZE) {
+	// erase any additional sectors needed by this chunk
+	lastsect = ((status->start_addr + len) - 1) / SECTOR_SIZE;
+	while (lastsect > status->last_sector_erased) {
+		status->last_sector_erased++;
+		spi_flash_erase_sector(status->last_sector_erased);
+	}
 
-		// erase any additional sectors needed by this chunk
-		lastsect = ((status->start_addr + len) - 1) / SECTOR_SIZE;
-		while (lastsect > status->last_sector_erased) {
-			status->last_sector_erased++;
-			spi_flash_erase_sector(status->last_sector_erased);
-		}
-
-		// write current chunk
-		//os_printf("write addr: 0x%08x, len: 0x%04x\r\n", status->start_addr, len);
-		if (spi_flash_write(status->start_addr, (uint32 *)((void*)buffer), len) == SPI_FLASH_RESULT_OK) {
-			ret = true;
-			status->start_addr += len;
-		}
-	//}
+	// write current chunk
+	//os_printf("write addr: 0x%08x, len: 0x%04x\r\n", status->start_addr, len);
+	if (spi_flash_write(status->start_addr, (uint32 *)((void*)buffer), len) == SPI_FLASH_RESULT_OK) {
+		ret = true;
+		status->start_addr += len;
+	}
 
 	os_free(buffer);
 	return ret;
