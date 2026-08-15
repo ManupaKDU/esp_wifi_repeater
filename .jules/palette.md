@@ -204,3 +204,6 @@
 ## 2026-08-13 - Explicit Visual Feedback for Disabled Controls
 **Learning:** In unstyled or embedded HTML interfaces (like the ESP8266 config pages), native controls (inputs, selects, buttons) lack default visual distinction when set to `:disabled`. This makes synchronous actions or dynamic form state changes confusing for users.
 **Action:** Always explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) in unstyled embedded interfaces to provide clear visual feedback.
+## $(date +%Y-%m-%d) - [Cursor Affordance]
+**Learning:** In unstyled or minimally styled HTML interfaces (common in embedded devices), native interactive controls like `input[type='submit']`, `input[type='checkbox']`, `select`, and `<label>` often default to a standard arrow cursor rather than a pointer.
+**Action:** Always verify that interactive elements use `cursor: pointer` to provide explicit visual affordance to the user that the element is clickable.
