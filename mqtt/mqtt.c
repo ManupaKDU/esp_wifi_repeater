@@ -954,11 +954,6 @@ MQTT_DeleteClient(MQTT_Client *mqttClient)
     return;
 
   mqttClient->connState = MQTT_DELETED;
-  // if(TCP_DISCONNECTED == mqttClient->connState) {
-  //  mqttClient->connState = MQTT_DELETED;
-  // } else if(MQTT_DELETED != mqttClient->connState) {
-  //  mqttClient->connState = MQTT_DELETING;
-  // }
 
   system_os_post(MQTT_TASK_PRIO, 0, (os_param_t)mqttClient);
   os_timer_disarm(&mqttClient->mqttTimer);
