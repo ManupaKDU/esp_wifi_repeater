@@ -190,3 +190,7 @@
 **Learning:** C/ESP8266 Performance Pattern: On high-frequency network hot paths (like `bridge_input_ap` and `bridge_input_sta`), deferring dynamic memory allocation (`pbuf_alloc`) and buffer copying (`pbuf_copy`) until after evaluating early return conditions (e.g., local MAC address matches) avoids expensive heap operations for dropped or non-bridged packets.
 **Action:** When modifying network packet processing callbacks, ensure that all quick validation checks and early returns are evaluated before allocating new packet buffers (`pbuf`). Use the original packet payload (`p->payload`) to perform these initial header checks.
 - Caching string lengths for static arrays instead of calling `os_strlen` in loops reduces unnecessary per-iteration processing overhead. Using a struct with `sizeof(string) - 1` ensures maintainability over hardcoding lengths.
+
+## 2026-08-15 - Cache String Length in Token Parsing
+**Learning:** In `parse_str_into_tokens`, caching the string length with `os_strlen(str)` before the loop avoids evaluating string length implicitly on every loop iteration during inner bounds checking. Because it shifts character-checking bounds validation to simple pointer math, the performance improves considerably for larger strings.
+
