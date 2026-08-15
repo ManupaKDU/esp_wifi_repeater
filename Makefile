@@ -194,3 +194,7 @@ $(MDNS_OBJ): $(BUILD_AREA)/esp-open-sdk/esp-open-lwip/lwip/core/mdns.c | $(BUILD
 	$(Q) $(CC) $(EXTRA_INCDIR) $(SDK_INCDIR) $(CFLAGS) -w -c $< -o $@
 
 $(foreach bdir,$(BUILD_DIR),$(eval $(call compile-objects,$(bdir))))
+
+# Test target
+test:
+	$(MAKE) -f Makefile.test test
