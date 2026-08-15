@@ -1745,8 +1745,6 @@
  *
  * Note - lcp shouldn't be allowed to negotiate stuff outside these
  *    limits.  See lcp.h in the pppd directory.
- * (XXX - these constants should simply be shared by lcp.c instead
- *    of living in lcp.h)
  */
 #define PPP_MTU                         1500     /* Default MTU (size of Info field) */
 #ifndef PPP_MAXMTU
