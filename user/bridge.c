@@ -677,58 +677,6 @@ static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *in
     if (is_bcast || (is_to_sta_mac && !handled)) return s_orig_input_sta(p, inp);
     pbuf_free(p); return ERR_OK;
 }
-/*
-static err_t ICACHE_FLASH_ATTR bridge_input_sta(struct pbuf *p, struct netif *inp)
-{
- //   struct pbuf *q = pbuf_alloc(PBUF_RAW, p->tot_len, PBUF_RAM);
- //   if (!q) return s_orig_input_sta(p, inp);
- //   pbuf_copy(q, p);
-
-    eth_hdr_t *eth = (eth_hdr_t *)p->payload;
-    if (os_memcmp(eth->src, s_ap_nif->hwaddr, 6) == 0) { return s_orig_input_sta(p, inp); }
-
-    uint16_t eth_type = ntohs(eth->type);
-    bool is_bcast = (eth->dst[0] & 0x01) != 0, is_to_sta_mac = (os_memcmp(eth->dst, s_sta_nif->hwaddr, 6) == 0);
-    bool handled = false;
-    os_memcpy(eth->src, s_ap_nif->hwaddr, 6);
-
-    if (eth_type == ETHTYPE_IP) {
-        ip_hdr_t *ip = (ip_hdr_t *)pkt_at(p, sizeof(eth_hdr_t), sizeof(ip_hdr_t));
-        if (ip) {
-            uint8_t ch[6]; bool have_dhcp = false;
-            if (ip->proto == 17) {
-                uint16_t udp_off = sizeof(eth_hdr_t) + (ip->vhl & 0x0f) * 4;
-                udp_hdr_t *udp = (udp_hdr_t *)pkt_at(p, udp_off, sizeof(udp_hdr_t));
-                if (udp && ntohs(udp->src_port) == 67 && ntohs(udp->dst_port) == 68) have_dhcp = snoop_dhcp_reply(p, udp_off + sizeof(udp_hdr_t), ch);
-            }
-            const uint8_t *mac = NULL;
-            if (have_dhcp) mac = ch; else if (!is_bcast) { if (s_sta_nif->ip_addr.addr && ip->dst != s_sta_nif->ip_addr.addr) mac = fdb_lookup(ip->dst); }
-            if (is_bcast || mac) {
-                if (mac) os_memcpy(eth->dst, mac, 6);
-                s_orig_lo_ap(s_ap_nif, p); handled = true;
-            }
-        }
-    } else if (eth_type == ETHTYPE_ARP) {
-        arp_hdr_t *arp = (arp_hdr_t *)pkt_at(p, sizeof(eth_hdr_t), sizeof(arp_hdr_t));
-        if (arp) {
-            if (ntohs(arp->op) == 1 && fdb_lookup(arp->tpa)) {
-                send_proxy_arp_reply(s_sta_nif, s_orig_lo_sta, arp, arp->tpa);
-                handled = true; pbuf_free(p); return ERR_OK;
-            }
-            os_memcpy(arp->sha, s_ap_nif->hwaddr, 6);
-            const uint8_t *mac = NULL;
-            if (!is_bcast) { if (s_sta_nif->ip_addr.addr && arp->tpa != s_sta_nif->ip_addr.addr) mac = fdb_lookup(arp->tpa); }
-            if (is_bcast || mac) {
-                if (mac) { os_memcpy(eth->dst, mac, 6); os_memcpy(arp->tha, mac, 6); }
-                s_orig_lo_ap(s_ap_nif, p); handled = true;
-            }
-        }
-    }
-    
-    if (is_bcast || (is_to_sta_mac && !handled)) return s_orig_input_sta(p, inp);
-    pbuf_free(p); return ERR_OK;
-}
-*/
 void ICACHE_FLASH_ATTR bridge_init(struct netif *sta_nif, struct netif *ap_nif)
 {
     /* ⚡ Bolt: Pre-calculate and cache config mode to optimize hot paths */
