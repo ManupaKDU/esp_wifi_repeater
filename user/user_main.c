@@ -1570,12 +1570,22 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
 #if ACLS
         if (nTokens == 2 && strcmp(tokens[1], "acl") == 0)
         {
-            char *txt[] = {"From STA:\r\n", "To STA:\r\n", "From AP:\r\n", "To AP:\r\n"};
+            struct acl_txt_entry {
+                const char *txt;
+                uint8_t len;
+            };
+            // ⚡ Bolt: Cache static string lengths to avoid os_strlen in loop
+            static const struct acl_txt_entry txt_entries[] = {
+                {"From STA:\r\n", sizeof("From STA:\r\n") - 1},
+                {"To STA:\r\n", sizeof("To STA:\r\n") - 1},
+                {"From AP:\r\n", sizeof("From AP:\r\n") - 1},
+                {"To AP:\r\n", sizeof("To AP:\r\n") - 1}
+            };
             for (i = 0; i < MAX_NO_ACLS; i++)
             {
                 if (!acl_is_empty(i))
                 {
-                    ringbuf_memcpy_into(console_tx_buffer, txt[i], os_strlen(txt[i]));
+                    ringbuf_memcpy_into(console_tx_buffer, txt_entries[i].txt, txt_entries[i].len);
                     acl_show(i, response);
                 }
             }
