@@ -225,7 +225,9 @@ static void ICACHE_FLASH_ATTR update_ip_chksum(ip_hdr_t *ip)
     uint32_t sum = 0;
     uint16_t *p = (uint16_t *)ip;
     int i;
-    for (i = 0; i < (ip->vhl & 0x0f) * 2; i++) sum += ntohs(p[i]);
+    /* ⚡ Bolt: Cache header length to prevent redundant arithmetic and memory access per loop iteration */
+    int len = (ip->vhl & 0x0f) * 2;
+    for (i = 0; i < len; i++) sum += ntohs(p[i]);
     while (sum >> 16) sum = (sum & 0xffff) + (sum >> 16);
     ip->chksum = htons(~((uint16_t)sum));
 }
