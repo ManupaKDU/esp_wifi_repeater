@@ -6,7 +6,7 @@
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
-<style>:disabled { cursor: not-allowed; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; }</style>\
+<style>:disabled { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; }</style>\
 <title>ESP WiFi NAT Router Config</title>\
 </head>\
 <body>\
@@ -131,7 +131,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
-<style>:disabled { cursor: not-allowed; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; }</style>\
+<style>:disabled { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; }</style>\
 <title>ESP WiFi Repeater Config</title>\
 </head>\
 <body>\
@@ -243,7 +243,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
-<style>:disabled { cursor: not-allowed; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; }</style>\
+<style>:disabled { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; }</style>\
 <title>ESP WiFi NAT Router Config</title>\
 </head>\
 <body>\
