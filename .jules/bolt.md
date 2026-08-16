@@ -194,3 +194,7 @@
 ## 2026-08-15 - Cache String Length in Token Parsing
 **Learning:** In `parse_str_into_tokens`, caching the string length with `os_strlen(str)` before the loop avoids evaluating string length implicitly on every loop iteration during inner bounds checking. Because it shifts character-checking bounds validation to simple pointer math, the performance improves considerably for larger strings.
 
+
+## 2024-05-27 - Hoist loop invariants on network hot paths
+**Learning:** C/ESP8266 Performance Pattern: In tight network loops (e.g., packet checksum calculations like `update_ip_chksum`), calculating invariant values `(ip->vhl & 0x0f) * 2` inside the `for` loop condition forces the compiler to re-evaluate the bitwise AND, multiplication, and pointer dereferencing on every single iteration, wasting valuable CPU cycles on the hot path.
+**Action:** Always hoist invariant arithmetic and bitwise operations out of `for` loop conditions into a local variable before the loop to prevent redundant per-iteration evaluation overhead.
