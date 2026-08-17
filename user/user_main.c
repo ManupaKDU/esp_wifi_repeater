@@ -3623,7 +3623,7 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
 
         /* ⚡ Bolt: Replace expensive software division with bitwise shift */
         Vcurr = (system_get_vdd33() * 1000) >> 10;
-        Vdd = (Vdd * 3 + Vcurr) / 4;
+        Vdd = (Vdd * 3 + Vcurr) >> 2;
 #if ALLOW_SLEEP
         if (config.Vmin != 0 && Vdd < config.Vmin)
         {
