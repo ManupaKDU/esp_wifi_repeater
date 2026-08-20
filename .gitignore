@@ -5,3 +5,4 @@ package-lock.json
 tests/test_acl
 tests/acl_no_includes.c
 tests/test_acl_combined.c
+node_modules
