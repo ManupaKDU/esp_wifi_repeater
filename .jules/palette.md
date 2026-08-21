@@ -211,3 +211,7 @@
 ## 2026-08-16 - [Disabled State Cursor Specificity]
 **Learning:** CSS Specificity: When applying custom cursor styles (like `cursor: pointer;`) to element selectors (e.g., `input[type='submit']` which has specificity 0,1,1), it overrides pseudo-class selectors (like `:disabled` which has specificity 0,1,0) appearing earlier or at the same level. This causes disabled elements to still show a pointer cursor, breaking UX affordance.
 **Action:** Always append `!important` to the `cursor` property in the `:disabled` rule (e.g., `cursor: not-allowed !important;`) to ensure the state overrides any element-specific cursor styles.
+
+## $(date +%Y-%m-%d) - Web component slot styling inheritance
+**Learning:** Default pseudo-classes (like `:disabled`) applied to elements slotted into Web Components (e.g. `<button slot="activate">` inside `<esp-web-install-button>`) often do not inherit expected visual affordances from the component wrapper.
+**Action:** When working with slotted Web Components, explicitly style the specific pseudo-classes of the slotted element (e.g., `button[slot="activate"]:disabled`) using `!important` if necessary to guarantee proper interaction feedback.
