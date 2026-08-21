@@ -198,3 +198,10 @@
 ## 2024-05-27 - Hoist loop invariants on network hot paths
 **Learning:** C/ESP8266 Performance Pattern: In tight network loops (e.g., packet checksum calculations like `update_ip_chksum`), calculating invariant values `(ip->vhl & 0x0f) * 2` inside the `for` loop condition forces the compiler to re-evaluate the bitwise AND, multiplication, and pointer dereferencing on every single iteration, wasting valuable CPU cycles on the hot path.
 **Action:** Always hoist invariant arithmetic and bitwise operations out of `for` loop conditions into a local variable before the loop to prevent redundant per-iteration evaluation overhead.
+## 2024-08-21 - C Networking Performance Pattern
+**Learning:** When calculating IP or TCP/UDP checksums, compute the 16-bit one's complement sum directly on the network-byte-order array (avoiding `ntohs` per iteration). Because one's complement addition is associative and commutative with byte-swapping on even boundaries, the final complement `~((uint16_t)sum)` yields the mathematically identical correct checksum while saving CPU cycles in hot loops.
+**Action:** Apply this pattern on network packet inspection/modification hot paths to minimize CPU overhead per packet.
+
+## 2024-08-21 - Execution environment cleanup
+**Learning:** When generating temporary C files or Python scripts for testing or modifications, ensure that all of these files and the resulting compiled binaries are removed before completing the task.
+**Action:** Run `rm <files>` to ensure a clean working directory before submission.
