@@ -206,3 +206,11 @@
 **Learning:** C/ESP8266 Performance Pattern: Operations like `/ 4`, `/ 128`, `% 128`, and `* 1024 / 8` (`* 128`) are unnecessarily expensive because the ESP8266 lacks a hardware division unit.
 **Action:** Replace these operations with equivalent and faster bitwise operations (`>>`, `<<`, `&`) to save CPU cycles during execution of packet telemetry mapping, power measurement, and MQTT protocol packet generation without sacrificing readability. Verify using small local test scripts.
 
+## 2024-08-21 - C Networking Performance Pattern
+**Learning:** When calculating IP or TCP/UDP checksums, compute the 16-bit one's complement sum directly on the network-byte-order array (avoiding `ntohs` per iteration). Because one's complement addition is associative and commutative with byte-swapping on even boundaries, the final complement `~((uint16_t)sum)` yields the mathematically identical correct checksum while saving CPU cycles in hot loops.
+**Action:** Apply this pattern on network packet inspection/modification hot paths to minimize CPU overhead per packet.
+
+## 2024-08-21 - Execution environment cleanup
+**Learning:** When generating temporary C files or Python scripts for testing or modifications, ensure that all of these files and the resulting compiled binaries are removed before completing the task.
+**Action:** Run `rm <files>` to ensure a clean working directory before submission.
+
