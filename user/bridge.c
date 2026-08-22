@@ -227,11 +227,11 @@ static void ICACHE_FLASH_ATTR update_ip_chksum(ip_hdr_t *ip)
     int i;
     /* ⚡ Bolt: Cache header length to prevent redundant arithmetic and memory access per loop iteration */
     int len = (ip->vhl & 0x0f) * 2;
-    for (i = 0; i < len; i++) sum += ntohs(p[i]);
+    /* ⚡ Bolt: Compute checksum directly on network-byte-order array to eliminate ntohs/htons overhead */
+    for (i = 0; i < len; i++) sum += p[i];
     while (sum >> 16) sum = (sum & 0xffff) + (sum >> 16);
-    ip->chksum = htons(~((uint16_t)sum));
+    ip->chksum = ~((uint16_t)sum);
 }
-
 static uint8_t * ICACHE_FLASH_ATTR dhcp_find_option(uint8_t *opts, uint16_t opts_len, uint8_t tag, uint8_t *out_len)
 {
     uint16_t i = 0;

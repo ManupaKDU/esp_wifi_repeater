@@ -198,3 +198,6 @@
 ## 2024-05-27 - Hoist loop invariants on network hot paths
 **Learning:** C/ESP8266 Performance Pattern: In tight network loops (e.g., packet checksum calculations like `update_ip_chksum`), calculating invariant values `(ip->vhl & 0x0f) * 2` inside the `for` loop condition forces the compiler to re-evaluate the bitwise AND, multiplication, and pointer dereferencing on every single iteration, wasting valuable CPU cycles on the hot path.
 **Action:** Always hoist invariant arithmetic and bitwise operations out of `for` loop conditions into a local variable before the loop to prevent redundant per-iteration evaluation overhead.
+## 2026-08-16 - Eliminate Redundant Byte-Swapping in Checksum Calculations
+**Learning:** C Networking Performance Pattern: When computing IP checksums, using `ntohs` inside the summation loop and then `htons` on the inverted final sum wastes CPU cycles. Because 16-bit one's complement addition is associative and commutative with byte swapping on even boundaries, the checksum is intrinsically endian-independent.
+**Action:** When calculating IP or UDP/TCP checksums, sum the 16-bit array directly in network byte order without converting each word, and take the bitwise complement `~` directly. This yields the identical mathematical result and eliminates repeated byte-swapping function/macro overhead per packet.
