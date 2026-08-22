@@ -211,6 +211,7 @@
 ## 2026-08-16 - [Disabled State Cursor Specificity]
 **Learning:** CSS Specificity: When applying custom cursor styles (like `cursor: pointer;`) to element selectors (e.g., `input[type='submit']` which has specificity 0,1,1), it overrides pseudo-class selectors (like `:disabled` which has specificity 0,1,0) appearing earlier or at the same level. This causes disabled elements to still show a pointer cursor, breaking UX affordance.
 **Action:** Always append `!important` to the `cursor` property in the `:disabled` rule (e.g., `cursor: not-allowed !important;`) to ensure the state overrides any element-specific cursor styles.
+<<<<<<< HEAD
 ## 2024-05-13 - Focus/Cursor styling improvements
 
 **Learning:** This repository has an embedded HTML configuration page in `user/web.h`. It previously lacked pointer cursors for interactive elements which hurts UX affordance, especially because disabled buttons have default cursors. Also focus-visible wasn't highlighted properly.
@@ -223,4 +224,8 @@
 ## 2026-08-21 - Web component slot styling inheritance
 **Learning:** Default pseudo-classes (like `:disabled`) applied to elements slotted into Web Components (e.g. `<button slot="activate">` inside `<esp-web-install-button>`) often do not inherit expected visual affordances from the component wrapper.
 **Action:** When working with slotted Web Components, explicitly style the specific pseudo-classes of the slotted element (e.g., `button[slot="activate"]:disabled`) using `!important` if necessary to guarantee proper interaction feedback.
+
+## 2026-08-22 - [Disabled State Specificity Fix for Web Component Slots]
+**Learning:** When styling HTML elements slotted into Web Components (like `<button slot="activate">`), applying custom element-specific cursor styles (e.g., `cursor: pointer`) can override subsequent or generic `:disabled` pseudo-class rules due to CSS specificity rules. This causes disabled elements to retain interactive cursors, breaking visual affordance.
+**Action:** Always use `!important` on properties like `cursor` within the `:disabled` pseudo-class (e.g., `cursor: not-allowed !important;`) to ensure the disabled state consistently overrides any active state styles, regardless of selector specificity.
 
