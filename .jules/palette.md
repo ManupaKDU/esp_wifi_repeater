@@ -211,3 +211,7 @@
 ## 2026-08-16 - [Disabled State Cursor Specificity]
 **Learning:** CSS Specificity: When applying custom cursor styles (like `cursor: pointer;`) to element selectors (e.g., `input[type='submit']` which has specificity 0,1,1), it overrides pseudo-class selectors (like `:disabled` which has specificity 0,1,0) appearing earlier or at the same level. This causes disabled elements to still show a pointer cursor, breaking UX affordance.
 **Action:** Always append `!important` to the `cursor` property in the `:disabled` rule (e.g., `cursor: not-allowed !important;`) to ensure the state overrides any element-specific cursor styles.
+
+## 2026-08-22 - [Disabled State Specificity Fix for Web Component Slots]
+**Learning:** When styling HTML elements slotted into Web Components (like `<button slot="activate">`), applying custom element-specific cursor styles (e.g., `cursor: pointer`) can override subsequent or generic `:disabled` pseudo-class rules due to CSS specificity rules. This causes disabled elements to retain interactive cursors, breaking visual affordance.
+**Action:** Always use `!important` on properties like `cursor` within the `:disabled` pseudo-class (e.g., `cursor: not-allowed !important;`) to ensure the disabled state consistently overrides any active state styles, regardless of selector specificity.
