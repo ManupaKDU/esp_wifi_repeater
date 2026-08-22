@@ -215,3 +215,8 @@
 
 **Learning:** This repository has an embedded HTML configuration page in `user/web.h`. It previously lacked pointer cursors for interactive elements which hurts UX affordance, especially because disabled buttons have default cursors. Also focus-visible wasn't highlighted properly.
 **Action:** Always verify keyboard accessibility (`focus-visible`) and mouse affordances (`cursor: pointer;` on interactive controls, `cursor: not-allowed` on disabled) when writing raw HTML UIs.
+
+## 2026-08-20 - Explicit Styling for Slotted Web Component Elements
+**Learning:** When applying styles to native HTML elements slotted into Web Components (like `<button slot="activate">` inside an `<esp-web-install-button>`), default visual state changes (like `:disabled`) often do not correctly inherit from or are not provided by the component wrapper. This causes interactive elements to lose visual affordance when their state changes programmatically.
+**Action:** Always explicitly style the slotted element's pseudo-classes (e.g., `button[slot="activate"]:disabled { cursor: not-allowed; opacity: 0.6; }`) in the host document to ensure proper visual feedback, rather than assuming the Web Component will handle it.
+
