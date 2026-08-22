@@ -214,3 +214,7 @@
 **Learning:** When generating temporary C files or Python scripts for testing or modifications, ensure that all of these files and the resulting compiled binaries are removed before completing the task.
 **Action:** Run `rm <files>` to ensure a clean working directory before submission.
 
+## 2026-08-16 - Eliminate Redundant Byte-Swapping in Checksum Calculations
+**Learning:** C Networking Performance Pattern: When computing IP checksums, using `ntohs` inside the summation loop and then `htons` on the inverted final sum wastes CPU cycles. Because 16-bit one's complement addition is associative and commutative with byte swapping on even boundaries, the checksum is intrinsically endian-independent.
+**Action:** When calculating IP or UDP/TCP checksums, sum the 16-bit array directly in network byte order without converting each word, and take the bitwise complement `~` directly. This yields the identical mathematical result and eliminates repeated byte-swapping function/macro overhead per packet.
+
