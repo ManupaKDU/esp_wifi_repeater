@@ -3662,14 +3662,14 @@ void ICACHE_FLASH_ATTR timer_func(void *arg)
     t_diff = (uint32_t)((t_new - t_old_tb) / 1000);
     if (config.kbps_ds != 0)
     {
-        Bps = config.kbps_ds * 1024 / 8;
+        Bps = config.kbps_ds << 7; /* kbps * 1024 / 8  = kbps * 128 = kbps << 7 */
         token_bucket_ds += (t_diff * Bps) / 1000;
         if (token_bucket_ds > MAX_TOKEN_RATIO * Bps)
             token_bucket_ds = MAX_TOKEN_RATIO * Bps;
     }
     if (config.kbps_us != 0)
     {
-        Bps = config.kbps_us * 1024 / 8;
+        Bps = config.kbps_us << 7; /* kbps * 1024 / 8  = kbps * 128 = kbps << 7 */
         token_bucket_us += (t_diff * Bps) / 1000;
         if (token_bucket_us > MAX_TOKEN_RATIO * Bps)
             token_bucket_us = MAX_TOKEN_RATIO * Bps;

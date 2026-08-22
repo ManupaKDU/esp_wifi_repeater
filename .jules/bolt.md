@@ -198,7 +198,11 @@
 ## 2024-05-27 - Hoist loop invariants on network hot paths
 **Learning:** C/ESP8266 Performance Pattern: In tight network loops (e.g., packet checksum calculations like `update_ip_chksum`), calculating invariant values `(ip->vhl & 0x0f) * 2` inside the `for` loop condition forces the compiler to re-evaluate the bitwise AND, multiplication, and pointer dereferencing on every single iteration, wasting valuable CPU cycles on the hot path.
 **Action:** Always hoist invariant arithmetic and bitwise operations out of `for` loop conditions into a local variable before the loop to prevent redundant per-iteration evaluation overhead.
-
 ## 2024-05-28 - Replace Software Division with Bitwise Shifts for Constants
 **Learning:** The ESP8266 lacks a hardware division unit. Performing division by constants (like `/ 4`) in periodic tasks incurs unnecessary CPU overhead due to software division routines.
 **Action:** When calculating sliding averages or other divisions by exact powers of 2 (e.g., `/ 4`), replace the division operator with a bitwise right shift (e.g., `>> 2`) to save CPU cycles while maintaining correctness on unsigned integers.
+
+## 2026-08-16 - Replace Software Division by Powers of 2 with Bitwise Shifts
+**Learning:** C/ESP8266 Performance Pattern: Operations like `/ 4`, `/ 128`, `% 128`, and `* 1024 / 8` (`* 128`) are unnecessarily expensive because the ESP8266 lacks a hardware division unit.
+**Action:** Replace these operations with equivalent and faster bitwise operations (`>>`, `<<`, `&`) to save CPU cycles during execution of packet telemetry mapping, power measurement, and MQTT protocol packet generation without sacrificing readability. Verify using small local test scripts.
+

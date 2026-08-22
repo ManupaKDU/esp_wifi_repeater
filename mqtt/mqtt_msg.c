@@ -115,8 +115,8 @@ static mqtt_message_t* ICACHE_FLASH_ATTR fini_message(mqtt_connection_t* connect
   if (remaining_length > 127)
   {
     connection->buffer[0] = ((type & 0x0f) << 4) | ((dup & 1) << 3) | ((qos & 3) << 1) | (retain & 1);
-    connection->buffer[1] = 0x80 | (remaining_length % 128);
-    connection->buffer[2] = remaining_length / 128;
+    connection->buffer[1] = 0x80 | (remaining_length & 0x7f);
+    connection->buffer[2] = remaining_length >> 7;
     connection->message.length = remaining_length + 3;
     connection->message.data = connection->buffer;
   }
