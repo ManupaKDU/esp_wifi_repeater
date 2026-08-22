@@ -211,3 +211,7 @@
 ## 2026-08-16 - [Disabled State Cursor Specificity]
 **Learning:** CSS Specificity: When applying custom cursor styles (like `cursor: pointer;`) to element selectors (e.g., `input[type='submit']` which has specificity 0,1,1), it overrides pseudo-class selectors (like `:disabled` which has specificity 0,1,0) appearing earlier or at the same level. This causes disabled elements to still show a pointer cursor, breaking UX affordance.
 **Action:** Always append `!important` to the `cursor` property in the `:disabled` rule (e.g., `cursor: not-allowed !important;`) to ensure the state overrides any element-specific cursor styles.
+## 2024-05-13 - Focus/Cursor styling improvements
+
+**Learning:** This repository has an embedded HTML configuration page in `user/web.h`. It previously lacked pointer cursors for interactive elements which hurts UX affordance, especially because disabled buttons have default cursors. Also focus-visible wasn't highlighted properly.
+**Action:** Always verify keyboard accessibility (`focus-visible`) and mouse affordances (`cursor: pointer;` on interactive controls, `cursor: not-allowed` on disabled) when writing raw HTML UIs.
