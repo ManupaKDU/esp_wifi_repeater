@@ -220,3 +220,7 @@
 **Learning:** When applying styles to native HTML elements slotted into Web Components (like `<button slot="activate">` inside an `<esp-web-install-button>`), default visual state changes (like `:disabled`) often do not correctly inherit from or are not provided by the component wrapper. This causes interactive elements to lose visual affordance when their state changes programmatically.
 **Action:** Always explicitly style the slotted element's pseudo-classes (e.g., `button[slot="activate"]:disabled { cursor: not-allowed; opacity: 0.6; }`) in the host document to ensure proper visual feedback, rather than assuming the Web Component will handle it.
 
+## 2026-08-21 - Web component slot styling inheritance
+**Learning:** Default pseudo-classes (like `:disabled`) applied to elements slotted into Web Components (e.g. `<button slot="activate">` inside `<esp-web-install-button>`) often do not inherit expected visual affordances from the component wrapper.
+**Action:** When working with slotted Web Components, explicitly style the specific pseudo-classes of the slotted element (e.g., `button[slot="activate"]:disabled`) using `!important` if necessary to guarantee proper interaction feedback.
+
