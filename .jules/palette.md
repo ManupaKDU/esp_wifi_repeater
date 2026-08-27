@@ -229,6 +229,7 @@
 **Learning:** When styling HTML elements slotted into Web Components (like `<button slot="activate">`), applying custom element-specific cursor styles (e.g., `cursor: pointer`) can override subsequent or generic `:disabled` pseudo-class rules due to CSS specificity rules. This causes disabled elements to retain interactive cursors, breaking visual affordance.
 **Action:** Always use `!important` on properties like `cursor` within the `:disabled` pseudo-class (e.g., `cursor: not-allowed !important;`) to ensure the disabled state consistently overrides any active state styles, regardless of selector specificity.
 
-## 2024-05-24 - CSS Compatibility with modern pseudo-classes
-**Learning:** When adding modern CSS pseudo-classes like `:has()` to improve UX (e.g., fading out labels containing disabled inputs), grouping them with baseline selectors using a comma (e.g., `:disabled, label:has(...) { ... }`) causes older browsers to discard the entire rule, breaking baseline functionality. This is especially risky for IoT devices accessed via captive portals or older mobile devices.
-**Action:** Always separate modern CSS rules from foundational rules (e.g., `:disabled { ... } label:has(...) { ... }`) to ensure graceful degradation.
+
+## 2024-05-24 - Add disabled styling to labels wrapping inputs
+**Learning:** By default, labels wrapping disabled inputs do not show a 'not-allowed' cursor or opacity change, leading to poor visual affordance.
+**Action:** Used `:has()` selector on labels (`label:has(input:disabled)`) to propagate the disabled styling up to the label wrapper.
