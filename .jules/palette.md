@@ -229,3 +229,6 @@
 **Learning:** When styling HTML elements slotted into Web Components (like `<button slot="activate">`), applying custom element-specific cursor styles (e.g., `cursor: pointer`) can override subsequent or generic `:disabled` pseudo-class rules due to CSS specificity rules. This causes disabled elements to retain interactive cursors, breaking visual affordance.
 **Action:** Always use `!important` on properties like `cursor` within the `:disabled` pseudo-class (e.g., `cursor: not-allowed !important;`) to ensure the disabled state consistently overrides any active state styles, regardless of selector specificity.
 
+## 2026-08-27 - [Label Disabled Affordance]
+**Learning:** When a checkbox inside a label is disabled, the label itself still appears interactive unless explicitly styled.
+**Action:** Use label:has(input:disabled) to propagate the disabled visual state to the parent label, improving UX affordance.
