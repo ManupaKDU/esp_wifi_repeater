@@ -218,3 +218,6 @@
 **Learning:** C Networking Performance Pattern: When computing IP checksums, using `ntohs` inside the summation loop and then `htons` on the inverted final sum wastes CPU cycles. Because 16-bit one's complement addition is associative and commutative with byte swapping on even boundaries, the checksum is intrinsically endian-independent.
 **Action:** When calculating IP or UDP/TCP checksums, sum the 16-bit array directly in network byte order without converting each word, and take the bitwise complement `~` directly. This yields the identical mathematical result and eliminates repeated byte-swapping function/macro overhead per packet.
 
+## 2024-05-18 - ⚡ Bolt: Optimize array parsing loops with pointer arithmetic
+**Learning:** In hot paths (like packet header parsing), relying on index-based array access (`opts[i]`) and length checks (`i < opts_len`) introduces hidden overhead on every loop iteration due to pointer scaling and bounds recalculation. On embedded targets (like the ESP8266) compiled with `-Os`, explicitly guiding the compiler with pointer arithmetic (`*p`, `p < end`) reliably produces faster, tighter machine code.
+**Action:** When optimizing tight `for` or `while` loops that traverse arrays or buffers, convert array indices to pointers and hoist the boundary condition by pre-calculating the `end` pointer outside the loop.
