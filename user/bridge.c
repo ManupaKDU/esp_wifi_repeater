@@ -234,14 +234,13 @@ static void ICACHE_FLASH_ATTR update_ip_chksum(ip_hdr_t *ip)
 }
 static uint8_t * ICACHE_FLASH_ATTR dhcp_find_option(uint8_t *opts, uint16_t opts_len, uint8_t tag, uint8_t *out_len)
 {
+    /* ⚡ Bolt: Replace array indexing with pointer arithmetic and pre-calculated end pointer to eliminate per-iteration index arithmetic in loop */
     uint8_t *p = opts;
-    /* ⚡ Bolt: Use pointer arithmetic and calculate boundary once to eliminate per-iteration indexing and bound checks */
     uint8_t *end = opts + opts_len;
     while (p < end) {
-        uint8_t t = *p;
-        if (t == 255) { if (tag == 255) return p; break; }
-        if (t == 0)  { p++; continue; }
-        uint8_t l = (p + 1 < end) ? p[1] : 0;
+        if (*p == 255) { if (tag == 255) return p; break; }
+        if (*p == 0)  { p++; continue; }
+        uint8_t t = *p, l = (p + 1 < end) ? *(p + 1) : 0;
         if (t == tag) { if (out_len) *out_len = l; return p + 2; }
         p += 2 + l;
     }
