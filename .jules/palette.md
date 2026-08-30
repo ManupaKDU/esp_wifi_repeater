@@ -232,7 +232,6 @@
 ## 2026-08-27 - [Label Disabled Affordance]
 **Learning:** When a checkbox inside a label is disabled, the label itself still appears interactive unless explicitly styled.
 **Action:** Use label:has(input:disabled) to propagate the disabled visual state to the parent label, improving UX affordance.
-
-## 2024-08-29 - Select Interactive Hover Affordance
-**Learning:** In custom-styled HTML pages, native `<select>` elements often lack hover states, making them feel less interactive compared to primary buttons.
-**Action:** Add a `:hover` pseudo-class (e.g., changing `border-color`) and `transition` to `<select>` elements to provide consistent visual affordance and polish.
+## $(date +%Y-%m-%d) - [Select Hover Affordance]
+**Learning:** Native `<select>` elements in custom-styled UIs often lack default hover states. This reduces interactive affordance.
+**Action:** Explicitly add `:hover` pseudo-classes (e.g., changing `border-color`) to `<select>` elements to provide consistent visual feedback across interactive elements.
