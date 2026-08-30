@@ -218,3 +218,6 @@
 **Learning:** C Networking Performance Pattern: When computing IP checksums, using `ntohs` inside the summation loop and then `htons` on the inverted final sum wastes CPU cycles. Because 16-bit one's complement addition is associative and commutative with byte swapping on even boundaries, the checksum is intrinsically endian-independent.
 **Action:** When calculating IP or UDP/TCP checksums, sum the 16-bit array directly in network byte order without converting each word, and take the bitwise complement `~` directly. This yields the identical mathematical result and eliminates repeated byte-swapping function/macro overhead per packet.
 
+## 2026-08-16 - Replace Array Indexing with Pointer Arithmetic
+**Learning:** C/ESP8266 Performance Pattern: When iterating through arrays in performance-critical paths (like parsing DHCP options), replace array indexing (e.g., `opts[i]`) and index-based loop conditions (`i < len`) with pointer arithmetic (`*p`) and a pre-calculated end pointer (`end = opts + len`, `p < end`). This eliminates per-iteration index arithmetic and bounds recalculations, yielding more efficient machine code on size-optimized embedded targets like the ESP8266.
+**Action:** When refactoring tight loops over arrays, prefer pointer arithmetic to index variables to save CPU cycles.
