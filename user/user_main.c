@@ -726,11 +726,10 @@ int ICACHE_FLASH_ATTR parse_str_into_tokens(char *str, char **tokens, int max_to
     bool in_token = false;
 
     // preprocessing
-    int len = os_strlen(str);
-    char *str_end = str + len;
-    for (p = q = str; p < str_end; p++)
+    /* ⚡ Bolt: Removed redundant os_strlen to prevent O(N) overhead in tight parsing loop, relying on boundary logic */
+    for (p = q = str; *p; p++)
     {
-        if (*(p) == '%' && (str_end - p) > 2)
+        if (*(p) == '%' && *(p+1) && *(p+2))
         {
             // quoted hex
             uint8_t a;
@@ -747,7 +746,7 @@ int ICACHE_FLASH_ATTR parse_str_into_tokens(char *str, char **tokens, int max_to
                 a += toupper(*p) - 'A' + 10;
             *q++ = a;
         }
-        else if (*p == '\\' && (str_end - p) > 1)
+        else if (*p == '\\' && *(p+1))
         {
             // next char is quoted - just copy it, skip this one
             *q++ = *++p;
