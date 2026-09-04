@@ -235,3 +235,7 @@
 ## $(date +%Y-%m-%d) - [Select Hover Affordance]
 **Learning:** Native `<select>` elements in custom-styled UIs often lack default hover states. This reduces interactive affordance.
 **Action:** Explicitly add `:hover` pseudo-classes (e.g., changing `border-color`) to `<select>` elements to provide consistent visual feedback across interactive elements.
+
+## $(date +%Y-%m-%d) - [Hover Affordance]
+**Learning:** Native interactive controls (like `input[type='submit']` and `select`) in unstyled embedded HTML interfaces lack default hover feedback, reducing interactive affordance.
+**Action:** Explicitly add `:hover:not(:disabled)` pseudo-classes (e.g., using `opacity: 0.8; transition: opacity 0.2s;`) to interactive elements to provide visual feedback while avoiding conflicts with disabled states.
