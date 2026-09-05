@@ -246,3 +246,7 @@
 ## $(date +%Y-%m-%d) - [Hover Affordance]
 **Learning:** Native interactive controls (like `input[type='submit']` and `select`) in unstyled embedded HTML interfaces lack default hover feedback, reducing interactive affordance.
 **Action:** Explicitly add `:hover:not(:disabled)` pseudo-classes (e.g., using `opacity: 0.8; transition: opacity 0.2s;`) to interactive elements to provide visual feedback while avoiding conflicts with disabled states.
+
+## 2026-09-05 - [Hover Affordance for Unstyled Controls]
+**Learning:** In unstyled or minimally styled HTML interfaces, native interactive controls like `input[type='submit']` and `select` often lack explicit hover states, reducing interactive affordance.
+**Action:** Explicitly add `:hover` pseudo-classes combined with `:not(:disabled)` (e.g., `opacity: 0.8;`) to these elements to provide clear visual feedback without overriding disabled states.
