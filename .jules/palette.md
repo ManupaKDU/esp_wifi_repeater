@@ -242,3 +242,7 @@
 ## $(date +%Y-%m-%d) - [Hover States on Disabled Controls]
 **Learning:** When adding hover effects (like opacity changes) to interactive elements (e.g., `<select>`, `<input type="submit">`), applying `:hover` globally can override the visual presentation of disabled elements, making them incorrectly appear interactive on hover.
 **Action:** Always combine the `:hover` pseudo-class with `:not(:disabled)` (e.g., `select:hover:not(:disabled)`) to ensure disabled elements remain visually distinct and do not incorrectly respond to pointer interactions.
+
+## $(date +%Y-%m-%d) - [Hover Affordance]
+**Learning:** Native interactive controls (like `input[type='submit']` and `select`) in unstyled embedded HTML interfaces lack default hover feedback, reducing interactive affordance.
+**Action:** Explicitly add `:hover:not(:disabled)` pseudo-classes (e.g., using `opacity: 0.8; transition: opacity 0.2s;`) to interactive elements to provide visual feedback while avoiding conflicts with disabled states.
