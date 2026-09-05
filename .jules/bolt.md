@@ -224,3 +224,7 @@
 ## 2024-05-24 - O(N) Traversal in String Preprocessing
 **Learning:** Found an unnecessary `os_strlen()` call in `parse_str_into_tokens` in `user/user_main.c` that caused an O(N) string traversal just to compute a boundary pointer (`str_end`) for parsing. In string parsing loops, we can avoid this overhead by using inline null-terminator boundary checks (`*p` or `*(p+1)`).
 **Action:** When parsing strings of unknown lengths in hot paths, check boundaries dynamically within the single pass rather than doing an upfront length computation. Reserve boundary pointers for cases where the length is already provided by the caller.
+
+## 2024-05-19 - Inline null-terminator checks over os_strlen
+**Learning:** In C, computing string length using `os_strlen()` before iterating over the string to parse it results in a redundant O(N) pass.
+**Action:** When parsing strings sequentially, omit `os_strlen()` and instead evaluate the end condition iteratively within the parsing loop using inline null-terminator checks (`*p != 0` or `*(p+x) != 0`).
