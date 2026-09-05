@@ -221,3 +221,6 @@
 ## 2026-08-16 - Replace Array Indexing with Pointer Arithmetic
 **Learning:** C/ESP8266 Performance Pattern: When iterating through arrays in performance-critical paths (like parsing DHCP options), replace array indexing (e.g., `opts[i]`) and index-based loop conditions (`i < len`) with pointer arithmetic (`*p`) and a pre-calculated end pointer (`end = opts + len`, `p < end`). This eliminates per-iteration index arithmetic and bounds recalculations, yielding more efficient machine code on size-optimized embedded targets like the ESP8266.
 **Action:** When refactoring tight loops over arrays, prefer pointer arithmetic to index variables to save CPU cycles.
+## 2024-05-24 - O(N) Traversal in String Preprocessing
+**Learning:** Found an unnecessary `os_strlen()` call in `parse_str_into_tokens` in `user/user_main.c` that caused an O(N) string traversal just to compute a boundary pointer (`str_end`) for parsing. In string parsing loops, we can avoid this overhead by using inline null-terminator boundary checks (`*p` or `*(p+1)`).
+**Action:** When parsing strings of unknown lengths in hot paths, check boundaries dynamically within the single pass rather than doing an upfront length computation. Reserve boundary pointers for cases where the length is already provided by the caller.
