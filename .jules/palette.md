@@ -235,7 +235,10 @@
 ## $(date +%Y-%m-%d) - [Select Hover Affordance]
 **Learning:** Native `<select>` elements in custom-styled UIs often lack default hover states. This reduces interactive affordance.
 **Action:** Explicitly add `:hover` pseudo-classes (e.g., changing `border-color`) to `<select>` elements to provide consistent visual feedback across interactive elements.
-
 ## $(date +%Y-%m-%d) - Native Submit and Select Hover Transitions
 **Learning:** Native `input[type='submit']` and `select` elements in unstyled/embedded HTML lack hover states, which hurts interactive affordance.
 **Action:** Always add hover states using `opacity: 0.8` (or similar) with a subtle `transition` (e.g., `transition: opacity 0.2s;`) to ensure native controls feel responsive without conflicting with baseline OS rendering.
+
+## $(date +%Y-%m-%d) - [Hover States on Disabled Controls]
+**Learning:** When adding hover effects (like opacity changes) to interactive elements (e.g., `<select>`, `<input type="submit">`), applying `:hover` globally can override the visual presentation of disabled elements, making them incorrectly appear interactive on hover.
+**Action:** Always combine the `:hover` pseudo-class with `:not(:disabled)` (e.g., `select:hover:not(:disabled)`) to ensure disabled elements remain visually distinct and do not incorrectly respond to pointer interactions.
