@@ -6,7 +6,7 @@
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
-<style>:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; } :disabled { cursor: not-allowed !important; opacity: 0.6; } label:has(input:disabled) { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; transition: opacity 0.2s; } input[type='submit']:hover:not(:disabled), input[type='checkbox']:hover:not(:disabled), select:hover:not(:disabled) { opacity: 0.8; } label:hover { opacity: 0.8; }</style>\
+<style>body { font-family: system-ui, -apple-system, sans-serif; } input[type='text'], input[type='password'], select { font-size: 16px; padding: 4px; box-sizing: border-box; } input[type='submit'] { font-size: 16px; padding: 6px 12px; } :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; } :disabled { cursor: not-allowed !important; opacity: 0.6; } label:has(input:disabled) { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; transition: opacity 0.2s; } input[type='submit']:hover:not(:disabled), input[type='checkbox']:hover:not(:disabled), select:hover:not(:disabled) { opacity: 0.8; } label:hover { opacity: 0.8; }</style>\
 <title>ESP WiFi NAT Router Config</title>\
 </head>\
 <body>\
@@ -131,7 +131,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
-<style>:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; } :disabled { cursor: not-allowed !important; opacity: 0.6; } label:has(input:disabled) { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; transition: opacity 0.2s; } input[type='submit']:hover:not(:disabled), input[type='checkbox']:hover:not(:disabled), select:hover:not(:disabled) { opacity: 0.8; } label:hover { opacity: 0.8; }</style>\
+<style>body { font-family: system-ui, -apple-system, sans-serif; } input[type='text'], input[type='password'], select { font-size: 16px; padding: 4px; box-sizing: border-box; } input[type='submit'] { font-size: 16px; padding: 6px 12px; } :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; } :disabled { cursor: not-allowed !important; opacity: 0.6; } label:has(input:disabled) { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; transition: opacity 0.2s; } input[type='submit']:hover:not(:disabled), input[type='checkbox']:hover:not(:disabled), select:hover:not(:disabled) { opacity: 0.8; } label:hover { opacity: 0.8; }</style>\
 <title>ESP WiFi Repeater Config</title>\
 </head>\
 <body>\
@@ -243,7 +243,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <head>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <meta name='color-scheme' content='light dark'>\
-<style>:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; } :disabled { cursor: not-allowed !important; opacity: 0.6; } label:has(input:disabled) { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; transition: opacity 0.2s; } input[type='submit']:hover:not(:disabled), input[type='checkbox']:hover:not(:disabled), select:hover:not(:disabled) { opacity: 0.8; } label:hover { opacity: 0.8; }</style>\
+<style>body { font-family: system-ui, -apple-system, sans-serif; } input[type='text'], input[type='password'], select { font-size: 16px; padding: 4px; box-sizing: border-box; } input[type='submit'] { font-size: 16px; padding: 6px 12px; } :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; } :disabled { cursor: not-allowed !important; opacity: 0.6; } label:has(input:disabled) { cursor: not-allowed !important; opacity: 0.6; } input[type='submit'], input[type='checkbox'], label, select { cursor: pointer; transition: opacity 0.2s; } input[type='submit']:hover:not(:disabled), input[type='checkbox']:hover:not(:disabled), select:hover:not(:disabled) { opacity: 0.8; } label:hover { opacity: 0.8; }</style>\
 <title>ESP WiFi NAT Router Config</title>\
 </head>\
 <body>\
