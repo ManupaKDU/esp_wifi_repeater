@@ -35,7 +35,7 @@
       background-color: #fafafa;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    select:hover {
+    select:hover:not(:disabled) {
       border-color: #b0bec5;
     }
     select:focus {
@@ -60,7 +60,7 @@
       cursor: pointer;
       transition: background 0.3s, box-shadow 0.2s;
     }
-    button[slot="activate"]:hover {
+    button[slot="activate"]:hover:not(:disabled) {
       background: #303f9f;
     }
     button[slot="activate"]:active:not(:disabled) {
