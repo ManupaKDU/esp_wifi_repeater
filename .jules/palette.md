@@ -251,6 +251,6 @@
 **Learning:** In unstyled or minimally styled HTML interfaces, native interactive controls like `input[type='submit']` and `select` often lack explicit hover states, reducing interactive affordance.
 **Action:** Explicitly add `:hover` pseudo-classes combined with `:not(:disabled)` (e.g., `opacity: 0.8;`) to these elements to provide clear visual feedback without overriding disabled states.
 
-## $(date +%Y-%m-%d) - Mobile Input Touch Targets
+## 2026-09-08 - Mobile Input Touch Targets
 **Learning:** In unstyled or minimally-styled HTML interfaces (like this embedded C macro configuration page), native inputs `<input type="text">` and selects often lack sufficient touch targets for mobile devices, and iOS Safari will automatically zoom in if the font-size is below 16px, breaking layout flow.
 **Action:** Always add explicit `font-size: 16px; padding: 4px; box-sizing: border-box;` (or similar padding) to inputs and selects to ensure minimum viable mobile touch target sizes and prevent unwanted iOS zooming behavior without relying on massive design system changes.
