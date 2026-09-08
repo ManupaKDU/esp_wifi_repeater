@@ -147,12 +147,12 @@ static uint8_t *
 ringbuf_nextp(ringbuf_t rb, const uint8_t *p)
 {
     /*
-     * The assert guarantees the expression (++p - rb->buf) is
-     * non-negative; therefore, the modulus operation is safe and
-     * portable.
+     * ⚡ Bolt: Removed expensive modulo operation in favor of a branch.
+     * The assert guarantees the pointer is within bounds.
      */
     assert((p >= rb->buf) && (p < ringbuf_end(rb)));
-    return rb->buf + ((++p - rb->buf) % ringbuf_buffer_size(rb));
+    p++;
+    return (uint8_t *)(p >= ringbuf_end(rb) ? rb->buf : p);
 }
 
 void *

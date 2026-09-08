@@ -228,3 +228,6 @@
 ## 2024-05-19 - Inline null-terminator checks over os_strlen
 **Learning:** In C, computing string length using `os_strlen()` before iterating over the string to parse it results in a redundant O(N) pass.
 **Action:** When parsing strings sequentially, omit `os_strlen()` and instead evaluate the end condition iteratively within the parsing loop using inline null-terminator checks (`*p != 0` or `*(p+x) != 0`).
+## 2024-05-18 - Avoid modulo in ringbuffer indexing
+**Learning:** In `ringbuf.c`, the `ringbuf_nextp` function previously used an expensive modulo operator (`%`) to compute the next pointer position: `rb->buf + ((++p - rb->buf) % ringbuf_buffer_size(rb))`. Since `p` only increments by 1 at a time, this can be safely replaced by a simple increment and a branch (or ternary operator) to wrap around, saving significant CPU cycles on embedded architectures lacking hardware division units.
+**Action:** Replace modulo logic with branch/ternary wrapping for sequential pointer iteration in ringbuffers.
