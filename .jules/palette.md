@@ -250,3 +250,6 @@
 ## 2026-09-05 - [Hover Affordance for Unstyled Controls]
 **Learning:** In unstyled or minimally styled HTML interfaces, native interactive controls like `input[type='submit']` and `select` often lack explicit hover states, reducing interactive affordance.
 **Action:** Explicitly add `:hover` pseudo-classes combined with `:not(:disabled)` (e.g., `opacity: 0.8;`) to these elements to provide clear visual feedback without overriding disabled states.
+## $(date +%Y-%m-%d) - [Label Disabled Affordance Fix]
+**Learning:** When applying hover styles (like opacity changes) to a `<label>`, if the label wraps a disabled child input (e.g., a disabled checkbox), a generic `label:hover` rule will override the disabled state, making the label look interactive when hovered.
+**Action:** Use the selector `label:hover:not(:has(input:disabled))` to ensure hover affordances are only applied to labels that wrap active, interactable inputs.
