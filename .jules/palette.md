@@ -258,3 +258,6 @@
 ## $(date +%Y-%m-%d) - [Label Hover State Affordance Exclusion]
 **Learning:** When applying hover effects (like `opacity: 0.8`) to `<label>` elements, it can inadvertently make labels wrapping disabled inputs (like `<label><input type="checkbox" disabled></label>`) appear interactive when hovered, confusing users.
 **Action:** When styling `<label>` hover effects, always combine the `:hover` pseudo-class with `:not(:has(input:disabled))` (e.g., `label:hover:not(:has(input:disabled))`) to ensure labels with disabled inputs do not show interactive hover states.
+## 2026-09-11 - Helper text for abstract select options
+**Learning:** When presenting abstract or technical choices in a <select> dropdown, adding descriptive helper text below the dropdown and linking it via aria-describedby provides immediate context and improves accessibility for screen reader users without altering the core layout.
+**Action:** Add descriptive helper text below dropdowns and link it via aria-describedby to improve accessibility and context.

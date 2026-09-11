@@ -92,10 +92,13 @@
   <label for="variant-select" style="display:block; text-align:left; font-weight:bold; margin-bottom:5px;">
     Select Variant:
   </label>
-  <select id="variant-select">
+  <select id="variant-select" aria-describedby="variant-help" style="margin-bottom: 8px;">
     <option value="manifest.json">Standard NAT Router Firmware</option>
     <option value="manifest_repeater.json">WiFi Repeater Firmware</option>
   </select>
+  <div id="variant-help" style="text-align: left; font-size: 13px; color: #546e7a; margin-bottom: 25px;">
+    NAT Router creates a separate private network, while Repeater extends an existing one.
+  </div>
 
   <esp-web-install-button id="install-button" manifest="manifest.json">
     <button slot="activate">Connect & Install</button>
