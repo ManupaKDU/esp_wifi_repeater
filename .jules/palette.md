@@ -261,3 +261,6 @@
 ## 2024-05-15 - Contextual Help Text for Select Elements
 **Learning:** When presenting users with technical or abstract choices in a dropdown (like firmware variants where "NAT Router" vs "Repeater" might be confusing), the label alone is often insufficient.
 **Action:** Adding brief, descriptive helper text immediately below the `<select>` element and linking it using `aria-describedby` not only clarifies the choice visually but ensures screen readers provide the context exactly when the user focuses the control.
+## 2024-05-23 - Accessibility hints for select inputs
+**Learning:** Adding `aria-describedby` to native `<select>` elements and associating it with a `<small>` element containing helper text significantly improves screen reader comprehension without disrupting visual layout or requiring new CSS classes.
+**Action:** Always link dropdown choices to supplementary descriptive text using `aria-describedby` when complex technical choices are presented.
