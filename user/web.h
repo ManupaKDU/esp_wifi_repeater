@@ -70,10 +70,13 @@ setTimeout(\"location.href = '/'\",10000);\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
 <td>\
- <select id='ap_open' name='ap_open' onchange=\"var isOpen = (this.value === 'open'); document.getElementById('ap_password').disabled = isOpen; document.getElementById('ap_show').disabled = isOpen; var req = document.getElementById('ap_pwd_req'); if(req) req.style.display = isOpen ? 'none' : 'inline';\">\
+ <select id='ap_open' name='ap_open' aria-describedby='ap_open_help' onchange=\"var isOpen = (this.value === 'open'); document.getElementById('ap_password').disabled = isOpen; document.getElementById('ap_show').disabled = isOpen; var req = document.getElementById('ap_pwd_req'); if(req) req.style.display = isOpen ? 'none' : 'inline';\">\
  <option value='open'%s>Open</option>\
  <option value='wpa2'%s>WPA2</option>\
 </select>\
+<small id='ap_open_help' style='display:block; margin-top:2px;'>\
+<i>Note:</i> WPA2 requires password\
+</small>\
 </td>\
 </tr>\
 <tr>\
@@ -188,10 +191,13 @@ setTimeout(\"location.href = '/'\",10000);\
 <tr>\
 <td><label for='repeater_ap_open'>Security:</label></td>\
 <td>\
- <select id='repeater_ap_open' name='ap_open' onchange=\"var isOpen = (this.value === 'open'); document.getElementById('repeater_ap_password').disabled = isOpen; document.getElementById('repeater_ap_show').disabled = isOpen; var req = document.getElementById('repeater_ap_pwd_req'); if(req) req.style.display = isOpen ? 'none' : 'inline';\">\
+ <select id='repeater_ap_open' name='ap_open' aria-describedby='repeater_ap_open_help' onchange=\"var isOpen = (this.value === 'open'); document.getElementById('repeater_ap_password').disabled = isOpen; document.getElementById('repeater_ap_show').disabled = isOpen; var req = document.getElementById('repeater_ap_pwd_req'); if(req) req.style.display = isOpen ? 'none' : 'inline';\">\
  <option value='open'%s>Open</option>\
  <option value='wpa2'%s>WPA2</option>\
 </select>\
+<small id='repeater_ap_open_help' style='display:block; margin-top:2px;'>\
+<i>Note:</i> WPA2 requires password\
+</small>\
 </td>\
 </tr>\
 <tr>\
