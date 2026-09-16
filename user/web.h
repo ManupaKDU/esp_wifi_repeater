@@ -99,11 +99,11 @@ setTimeout(\"location.href = '/'\",10000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='lock_device'>Lock Device:</label></td>\
-<td><input id='lock_device' type='checkbox' name='lock' value='l' aria-describedby='lock_help' onchange=\"document.getElementById('lock_submit').disabled = !this.checked;\"></td>\
+<td><input id='lock_device' type='checkbox' name='lock' value='l' aria-describedby='lock_help' onchange=\"var btn=document.getElementById('lock_submit'); btn.disabled = !this.checked; btn.title = this.checked ? '' : 'Check the box above to enable locking';\"></td>\
 </tr>\
 <tr>\
 <td></td>\
-<td><input id='lock_submit' type='submit' name='dolock' value='Lock' disabled onclick='return confirm(\"Are you sure you want to lock the config? You will need the STA password to unlock it.\");'/></td>\
+<td><input id='lock_submit' type='submit' name='dolock' value='Lock' disabled title='Check the box above to enable locking' onclick='return confirm(\"Are you sure you want to lock the config? You will need the STA password to unlock it.\");'/></td>\
 </tr>\
 </table>\
 <small id='lock_help'>\
@@ -210,11 +210,11 @@ setTimeout(\"location.href = '/'\",10000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='repeater_lock_device'>Lock Device:</label></td>\
-<td><input id='repeater_lock_device' type='checkbox' name='lock' value='l' aria-describedby='repeater_lock_help' onchange=\"document.getElementById('repeater_lock_submit').disabled = !this.checked;\"></td>\
+<td><input id='repeater_lock_device' type='checkbox' name='lock' value='l' aria-describedby='repeater_lock_help' onchange=\"var btn=document.getElementById('repeater_lock_submit'); btn.disabled = !this.checked; btn.title = this.checked ? '' : 'Check the box above to enable locking';\"></td>\
 </tr>\
 <tr>\
 <td></td>\
-<td><input id='repeater_lock_submit' type='submit' name='dolock' value='Lock' disabled onclick='return confirm(\"Are you sure you want to lock the config? You will need the STA password to unlock it.\");'/></td>\
+<td><input id='repeater_lock_submit' type='submit' name='dolock' value='Lock' disabled title='Check the box above to enable locking' onclick='return confirm(\"Are you sure you want to lock the config? You will need the STA password to unlock it.\");'/></td>\
 </tr>\
 </table>\
 <small id='repeater_lock_help'>\
