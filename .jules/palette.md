@@ -261,3 +261,6 @@
 ## 2024-05-15 - Contextual Help Text for Select Elements
 **Learning:** When presenting users with technical or abstract choices in a dropdown (like firmware variants where "NAT Router" vs "Repeater" might be confusing), the label alone is often insufficient.
 **Action:** Adding brief, descriptive helper text immediately below the `<select>` element and linking it using `aria-describedby` not only clarifies the choice visually but ensures screen readers provide the context exactly when the user focuses the control.
+## 2024-05-19 - Added Tooltips to Disabled Configuration Buttons
+**Learning:** In unstyled or minimally styled HTML interfaces (like those served by embedded devices), native elements like `<input type="submit" disabled>` often lack sufficient visual or descriptive affordance to explain *why* they are disabled. Users might think the interface is broken if they cannot interact with a button and there is no inline explanation.
+**Action:** When buttons are disabled by default (e.g., waiting for a checkbox to be toggled, like a safety lock), add a `title` attribute explaining what action is required to enable it (e.g., `title='Check Lock Device to enable'`). Ensure JavaScript that toggles the `disabled` state also clears the `title` attribute when the button is enabled, as the tooltip is no longer necessary and could be confusing.
