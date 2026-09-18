@@ -155,11 +155,16 @@ uint8_t allow;
 //		IP2STR(&ip_h->src), IP2STR(&ip_h->dest), 
 //		proto==IP_PROTO_TCP?"TCP":proto==IP_PROTO_UDP?"UDP":"IP4", src_port, dest_port);
 
-    for(i=0; i<acl_freep[acl_no]; i++) {
-	my_entry = &acl[acl_no][i];
+    /* ⚡ Bolt: Cache IP addresses and use pointer iteration instead of index arithmetic in the hot packet processing loop */
+    uint32_t src_addr = ip_h->src.addr;
+    uint32_t dest_addr = ip_h->dest.addr;
+    my_entry = &acl[acl_no][0];
+    acl_entry *end = my_entry + acl_freep[acl_no];
+
+    for (; my_entry < end; my_entry++) {
 	if ((my_entry->proto == 0  || proto == my_entry->proto) &&
-	    (my_entry->src == 0    || my_entry->src == (ip_h->src.addr&my_entry->s_mask)) &&
-	    (my_entry->dest == 0   || my_entry->dest == (ip_h->dest.addr&my_entry->d_mask)) &&
+	    (my_entry->src == 0    || my_entry->src == (src_addr&my_entry->s_mask)) &&
+	    (my_entry->dest == 0   || my_entry->dest == (dest_addr&my_entry->d_mask)) &&
 	    (my_entry->s_port == 0 || my_entry->s_port == src_port) &&
 	    (my_entry->d_port == 0 || my_entry->d_port == dest_port)) {
 		allow = my_entry->allow;
