@@ -103,9 +103,8 @@
     <option value="manifest.json">Standard NAT Router Firmware</option>
     <option value="manifest_repeater.json">WiFi Repeater Firmware</option>
   </select>
-  <div id="variant-help" class="help-text">
-    <strong>NAT Router:</strong> Creates a private, isolated subnet.<br>
-    <strong>Repeater:</strong> Transparently extends your existing network.
+  <div id="variant-help" class="help-text" aria-live="polite">
+    <strong>NAT Router:</strong> Creates a private, isolated subnet.
   </div>
 
   <esp-web-install-button id="install-button" manifest="manifest.json">
@@ -123,9 +122,16 @@
   const selectEl = document.querySelector("#variant-select");
   const installEl = document.querySelector("#install-button");
 
+  const helpEl = document.querySelector("#variant-help");
+
   selectEl.addEventListener("change", () => {
     installEl.setAttribute("manifest", selectEl.value);
     console.log("Switched manifest to: " + selectEl.value);
+    if (selectEl.value === "manifest.json") {
+      helpEl.innerHTML = "<strong>NAT Router:</strong> Creates a private, isolated subnet.";
+    } else {
+      helpEl.innerHTML = "<strong>Repeater:</strong> Transparently extends your existing network.";
+    }
   });
 </script>
 
