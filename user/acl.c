@@ -196,7 +196,8 @@ uint8_t clidr;
     }
 
     mask = ntohl(mask);
-    for (clidr = 0; mask; mask <<= 1,clidr++);
+    /* ⚡ Bolt: Replace O(N) loop with O(1) compiler builtin to count set bits (CIDR length) */
+    clidr = __builtin_popcount(mask);
     if (clidr < 32)
 	os_sprintf(buf, "%d.%d.%d.%d/%d", IP2STR((ip_addr_t*)&addr), clidr);
     else
