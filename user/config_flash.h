@@ -156,6 +156,7 @@ typedef struct {
         gpio_trigger_type gpio_trigger_type[17];
         uint8_t gpio_trigger_pin[17];
 #endif
+        char country_code[3]; // ISO 3166-1 alpha-2 (e.g. "US","DE","CN"); empty = SDK default
 } sysconfig_t, *sysconfig_p;
 
 int config_load(sysconfig_p config);

@@ -101,6 +101,7 @@ Any part of a command line input after a single "#" until the end of the line wi
 - set auto_connect [0|1]: selects, whether the STA should keep retrying to reconnect to the AP. auto_connect is off (0) after first flashing or after "reset factory". When you enter a new SSID it will be automatically set on (1).
 - set ssid_hidden [0|1]: selects, whether the SSID of the soft-AP is hidden (ssid_hidden=1) or visible (ssid_hidden=0, default)
 - set phy_mode [1|2|3]: sets the PHY_MODE of the WiFi (1=b, 2=g, 3=n(default))
+- set country _CC_: sets the WiFi regulatory country code as a 2-letter ISO 3166-1 code (e.g. "US", "DE", "CN", "JP"). Non-US codes unlock channels 12 and 13. Empty (default) leaves the SDK default unchanged. The setting is saved to flash and re-applied on every boot.
 - set bssid _xx:xx:xx:xx:xx:xx_: sets the specific BSSID of the uplink AP to connect to (default 00:00:00:00:00:00 which means any)
 - set [ap_mac|sta_mac] _xx:xx:xx:xx:xx:xx_: sets the MAC address of the STA and SOFTAP to a user defined value (bit 0 of the first byte of the MAC address can not be 1)
 - set sta_mac random: set a new random STA MAC after each reboot
