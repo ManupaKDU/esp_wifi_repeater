@@ -204,7 +204,7 @@
 ## 2026-08-13 - Explicit Visual Feedback for Disabled Controls
 **Learning:** In unstyled or embedded HTML interfaces (like the ESP8266 config pages), native controls (inputs, selects, buttons) lack default visual distinction when set to `:disabled`. This makes synchronous actions or dynamic form state changes confusing for users.
 **Action:** Always explicitly style `:disabled` pseudo-classes (e.g., using `cursor: not-allowed; opacity: 0.6;`) in unstyled embedded interfaces to provide clear visual feedback.
-## $(date +%Y-%m-%d) - [Cursor Affordance]
+## 2026-09-20 - [Cursor Affordance]
 **Learning:** In unstyled or minimally styled HTML interfaces (common in embedded devices), native interactive controls like `input[type='submit']`, `input[type='checkbox']`, `select`, and `<label>` often default to a standard arrow cursor rather than a pointer.
 **Action:** Always verify that interactive elements use `cursor: pointer` to provide explicit visual affordance to the user that the element is clickable.
 
@@ -232,18 +232,18 @@
 ## 2026-08-27 - [Label Disabled Affordance]
 **Learning:** When a checkbox inside a label is disabled, the label itself still appears interactive unless explicitly styled.
 **Action:** Use label:has(input:disabled) to propagate the disabled visual state to the parent label, improving UX affordance.
-## $(date +%Y-%m-%d) - [Select Hover Affordance]
+## 2026-09-20 - [Select Hover Affordance]
 **Learning:** Native `<select>` elements in custom-styled UIs often lack default hover states. This reduces interactive affordance.
 **Action:** Explicitly add `:hover` pseudo-classes (e.g., changing `border-color`) to `<select>` elements to provide consistent visual feedback across interactive elements.
-## $(date +%Y-%m-%d) - Native Submit and Select Hover Transitions
+## 2026-09-20 - Native Submit and Select Hover Transitions
 **Learning:** Native `input[type='submit']` and `select` elements in unstyled/embedded HTML lack hover states, which hurts interactive affordance.
 **Action:** Always add hover states using `opacity: 0.8` (or similar) with a subtle `transition` (e.g., `transition: opacity 0.2s;`) to ensure native controls feel responsive without conflicting with baseline OS rendering.
 
-## $(date +%Y-%m-%d) - [Hover States on Disabled Controls]
+## 2026-09-20 - [Hover States on Disabled Controls]
 **Learning:** When adding hover effects (like opacity changes) to interactive elements (e.g., `<select>`, `<input type="submit">`), applying `:hover` globally can override the visual presentation of disabled elements, making them incorrectly appear interactive on hover.
 **Action:** Always combine the `:hover` pseudo-class with `:not(:disabled)` (e.g., `select:hover:not(:disabled)`) to ensure disabled elements remain visually distinct and do not incorrectly respond to pointer interactions.
 
-## $(date +%Y-%m-%d) - [Hover Affordance]
+## 2026-09-20 - [Hover Affordance]
 **Learning:** Native interactive controls (like `input[type='submit']` and `select`) in unstyled embedded HTML interfaces lack default hover feedback, reducing interactive affordance.
 **Action:** Explicitly add `:hover:not(:disabled)` pseudo-classes (e.g., using `opacity: 0.8; transition: opacity 0.2s;`) to interactive elements to provide visual feedback while avoiding conflicts with disabled states.
 
@@ -255,7 +255,7 @@
 **Learning:** In unstyled or minimally-styled HTML interfaces (like this embedded C macro configuration page), native inputs `<input type="text">` and selects often lack sufficient touch targets for mobile devices, and iOS Safari will automatically zoom in if the font-size is below 16px, breaking layout flow.
 **Action:** Always add explicit `font-size: 16px; padding: 4px; box-sizing: border-box;` (or similar padding) to inputs and selects to ensure minimum viable mobile touch target sizes and prevent unwanted iOS zooming behavior without relying on massive design system changes.
 
-## $(date +%Y-%m-%d) - [Label Hover State Affordance Exclusion]
+## 2026-09-20 - [Label Hover State Affordance Exclusion]
 **Learning:** When applying hover effects (like `opacity: 0.8`) to `<label>` elements, it can inadvertently make labels wrapping disabled inputs (like `<label><input type="checkbox" disabled></label>`) appear interactive when hovered, confusing users.
 **Action:** When styling `<label>` hover effects, always combine the `:hover` pseudo-class with `:not(:has(input:disabled))` (e.g., `label:hover:not(:has(input:disabled))`) to ensure labels with disabled inputs do not show interactive hover states.
 ## 2024-05-15 - Contextual Help Text for Select Elements
@@ -267,3 +267,6 @@
 ## 2024-05-23 - [Processing State Cursor Affordance]
 **Learning:** In minimal HTML interfaces, combining a "Processing..." disabled button state with a global `:disabled { cursor: not-allowed !important; }` rule causes the user to see a prohibited/error cursor during an active async operation, which breaks UX feedback.
 **Action:** Always inject explicit processing cursor states (e.g., `b.style.setProperty('cursor','wait','important');`) when programmatically disabling native buttons during form submissions to correctly signal that the system is working.
+## 2026-09-20 - Dynamic Helper Text for Select Elements
+**Learning:** When a `<select>` dropdown offers discrete choices, the static helper text might contain explanations for all options, causing visual clutter.
+**Action:** Use JavaScript to dynamically update its `aria-describedby` helper text to show only the relevant explanation for the currently selected option. Apply `aria-live="polite"` to the helper text container so screen readers correctly announce the context change.
