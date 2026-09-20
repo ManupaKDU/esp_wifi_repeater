@@ -267,3 +267,6 @@
 ## 2024-05-23 - [Processing State Cursor Affordance]
 **Learning:** In minimal HTML interfaces, combining a "Processing..." disabled button state with a global `:disabled { cursor: not-allowed !important; }` rule causes the user to see a prohibited/error cursor during an active async operation, which breaks UX feedback.
 **Action:** Always inject explicit processing cursor states (e.g., `b.style.setProperty('cursor','wait','important');`) when programmatically disabling native buttons during form submissions to correctly signal that the system is working.
+## 2026-09-19 - Contextual Dynamic Help Text for Select Elements
+**Learning:** In minimal static interfaces, showing help text for all available `<select>` options simultaneously causes unnecessary cognitive load.
+**Action:** When a dropdown offers discrete paths (like choosing firmware), use JavaScript to dynamically update the helper text (`aria-describedby` linked) so it only explains the currently selected choice. Ensure the updated text container has `aria-live="polite"` so screen readers announce the change.
