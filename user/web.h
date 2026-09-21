@@ -39,7 +39,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='sta_password'>Password:</label></td>\
-<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='sta_password' aria-label='Show STA password' title='Toggle password visibility' onclick=\"document.getElementById('sta_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='sta_password' aria-label='Toggle STA password visibility' title='Toggle password visibility' onclick=\"document.getElementById('sta_password').type = this.checked ? 'text' : 'password'; document.getElementById('sta_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='sta_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
 <td><label for='sta_am'>Automesh:</label></td>\
@@ -65,7 +65,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='ap_password'>Password <span id='ap_pwd_req' aria-hidden='true'>*</span>:</label></td>\
-<td><input id='ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='ap_show' type='checkbox' aria-controls='ap_password' aria-label='Show AP password' title='Toggle password visibility' onclick=\"document.getElementById('ap_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><input id='ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='ap_show' type='checkbox' aria-controls='ap_password' aria-label='Toggle AP password visibility' title='Toggle password visibility' onclick=\"document.getElementById('ap_password').type = this.checked ? 'text' : 'password'; document.getElementById('ap_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='ap_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
 <td><label for='ap_open'>Security:</label></td>\
@@ -167,7 +167,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='repeater_sta_password'>Password:</label></td>\
-<td><input id='repeater_sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='repeater_sta_password' aria-label='Show STA password' title='Toggle password visibility' onclick=\"document.getElementById('repeater_sta_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><input id='repeater_sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='repeater_sta_password' aria-label='Toggle STA password visibility' title='Toggle password visibility' onclick=\"document.getElementById('repeater_sta_password').type = this.checked ? 'text' : 'password'; document.getElementById('repeater_sta_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='repeater_sta_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
 <td></td>\
@@ -186,7 +186,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='repeater_ap_password'>Password <span id='repeater_ap_pwd_req' aria-hidden='true'>*</span>:</label></td>\
-<td><input id='repeater_ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='repeater_ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='repeater_ap_show' type='checkbox' aria-controls='repeater_ap_password' aria-label='Show AP password' title='Toggle password visibility' onclick=\"document.getElementById('repeater_ap_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><input id='repeater_ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='repeater_ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='repeater_ap_show' type='checkbox' aria-controls='repeater_ap_password' aria-label='Toggle AP password visibility' title='Toggle password visibility' onclick=\"document.getElementById('repeater_ap_password').type = this.checked ? 'text' : 'password'; document.getElementById('repeater_ap_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='repeater_ap_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
 <td><label for='repeater_ap_open'>Security:</label></td>\
@@ -274,7 +274,7 @@ setTimeout(\"location.href = '/'\",1000);\
 <table role='presentation'>\
 <tr>\
 <td><label for='unlock_password'>Password <span aria-hidden='true'>*</span>:</label></td>\
-<td><input id='unlock_password' type='password' name='unlock_password' autofocus required maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='unlock_password' aria-label='Show unlock password' title='Toggle password visibility' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'\"> Show</label></td>\
+<td><input id='unlock_password' type='password' name='unlock_password' autofocus required maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='unlock_password' aria-label='Toggle unlock password visibility' title='Toggle password visibility' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'; document.getElementById('unlock_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='unlock_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
 <td></td>\
