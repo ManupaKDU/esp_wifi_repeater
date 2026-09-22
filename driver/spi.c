@@ -283,7 +283,7 @@ uint32 spi_transaction(uint8 spi_no, uint8 cmd_bits, uint16 cmd_data, uint32 add
 		WRITE_PERI_REG(SPI_W0(spi_no), dout_data<<(32-dout_bits));
 	} else {
 
-		uint8 dout_extra_bits = dout_bits%8;
+		uint8 dout_extra_bits = dout_bits & 7; // ESP8266: Use bitwise AND instead of modulo 8 to avoid expensive software division
 
 		if(dout_extra_bits){
 			//if your data isn't a byte multiple (8/16/24/32 bits)and you don't have SPI_WR_BYTE_ORDER set, you need this to move the non-8bit remainder to the MSBs
