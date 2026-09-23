@@ -141,27 +141,34 @@ static void ICACHE_FLASH_ATTR fdb_insert(uint32_t ip, const uint8_t *mac)
     if (s_sta_nif && ip == s_sta_nif->ip_addr.addr) return;
     if (s_ap_nif  && ip == s_ap_nif->ip_addr.addr)  return;
     uint32_t now = now_secs();
-    int free_idx = -1, oldest_idx = 0;
+    /* ⚡ Bolt: Optimize fdb_insert by replacing O(N) array indexing with pointer arithmetic */
+    fdb_entry_t *p = s_fdb;
+    fdb_entry_t *end = s_fdb + FDB_SIZE;
+    fdb_entry_t *free_p = NULL, *oldest_p = s_fdb;
     uint32_t oldest_exp = 0xFFFFFFFFUL;
-    int i;
-    for (i = 0; i < FDB_SIZE; i++) {
-        if (s_fdb[i].ip == ip) {
-            os_memcpy(s_fdb[i].mac, mac, 6); s_fdb[i].expires_s = now + FDB_TTL_S;
+
+    while (p < end) {
+        if (p->ip == ip) {
+            os_memcpy(p->mac, mac, 6); p->expires_s = now + FDB_TTL_S;
             return;
         }
-        if (s_fdb[i].ip == 0 || s_fdb[i].expires_s <= now) { if (free_idx < 0) free_idx = i; }
-        if (s_fdb[i].expires_s < oldest_exp) { oldest_exp = s_fdb[i].expires_s; oldest_idx = i; }
+        if (p->ip == 0 || p->expires_s <= now) { if (!free_p) free_p = p; }
+        if (p->expires_s < oldest_exp) { oldest_exp = p->expires_s; oldest_p = p; }
+        p++;
     }
-    int idx = (free_idx >= 0) ? free_idx : oldest_idx;
-    s_fdb[idx].ip = ip; os_memcpy(s_fdb[idx].mac, mac, 6); s_fdb[idx].expires_s = now + FDB_TTL_S;
+    fdb_entry_t *target = free_p ? free_p : oldest_p;
+    target->ip = ip; os_memcpy(target->mac, mac, 6); target->expires_s = now + FDB_TTL_S;
 }
 
 static const uint8_t * ICACHE_FLASH_ATTR fdb_lookup(uint32_t ip)
 {
     uint32_t now = now_secs();
-    int i;
-    for (i = 0; i < FDB_SIZE; i++) {
-        if (s_fdb[i].ip == ip && s_fdb[i].expires_s > now) return s_fdb[i].mac;
+    /* ⚡ Bolt: Optimize fdb_lookup by replacing O(N) array indexing with pointer arithmetic to save CPU cycles on this critical hot path */
+    fdb_entry_t *p = s_fdb;
+    fdb_entry_t *end = s_fdb + FDB_SIZE;
+    while (p < end) {
+        if (p->ip == ip && p->expires_s > now) return p->mac;
+        p++;
     }
     return NULL;
 }
@@ -184,27 +191,34 @@ static xid_entry_t s_xid_map[XID_MAP_SIZE];
 static void ICACHE_FLASH_ATTR xid_map_insert(uint32_t xid, const uint8_t *chaddr)
 {
     uint32_t now = now_secs();
-    int free_idx = -1, oldest_idx = 0;
+    /* ⚡ Bolt: Optimize xid_map_insert by replacing O(N) array indexing with pointer arithmetic */
+    xid_entry_t *p = s_xid_map;
+    xid_entry_t *end = s_xid_map + XID_MAP_SIZE;
+    xid_entry_t *free_p = NULL, *oldest_p = s_xid_map;
     uint32_t oldest_exp = 0xFFFFFFFFUL;
-    int i;
-    for (i = 0; i < XID_MAP_SIZE; i++) {
-        if (s_xid_map[i].xid == xid) {
-            os_memcpy(s_xid_map[i].chaddr, chaddr, 6); s_xid_map[i].expires_s = now + XID_TTL_S;
+
+    while (p < end) {
+        if (p->xid == xid) {
+            os_memcpy(p->chaddr, chaddr, 6); p->expires_s = now + XID_TTL_S;
             return;
         }
-        if (s_xid_map[i].xid == 0 || s_xid_map[i].expires_s <= now) { if (free_idx < 0) free_idx = i; }
-        if (s_xid_map[i].expires_s < oldest_exp) { oldest_exp = s_fdb[i].expires_s; oldest_idx = i; }
+        if (p->xid == 0 || p->expires_s <= now) { if (!free_p) free_p = p; }
+        if (p->expires_s < oldest_exp) { oldest_exp = p->expires_s; oldest_p = p; }
+        p++;
     }
-    int idx = (free_idx >= 0) ? free_idx : oldest_idx;
-    s_xid_map[idx].xid = xid; os_memcpy(s_xid_map[idx].chaddr, chaddr, 6); s_xid_map[idx].expires_s = now + XID_TTL_S;
+    xid_entry_t *target = free_p ? free_p : oldest_p;
+    target->xid = xid; os_memcpy(target->chaddr, chaddr, 6); target->expires_s = now + XID_TTL_S;
 }
 
 static const uint8_t * ICACHE_FLASH_ATTR xid_map_lookup(uint32_t xid)
 {
     uint32_t now = now_secs();
-    int i;
-    for (i = 0; i < XID_MAP_SIZE; i++) {
-        if (s_xid_map[i].xid == xid && s_xid_map[i].expires_s > now) return s_xid_map[i].chaddr;
+    /* ⚡ Bolt: Optimize xid_map_lookup by replacing O(N) array indexing with pointer arithmetic to save CPU cycles */
+    xid_entry_t *p = s_xid_map;
+    xid_entry_t *end = s_xid_map + XID_MAP_SIZE;
+    while (p < end) {
+        if (p->xid == xid && p->expires_s > now) return p->chaddr;
+        p++;
     }
     return NULL;
 }

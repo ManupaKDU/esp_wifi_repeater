@@ -237,3 +237,8 @@
 ## 2024-05-14 - Replace Modulo with Bitwise AND in SPI Driver
 **Learning:** The ESP8266 lacks a hardware division unit. Modulo by constant powers of 2 (e.g. `% 8`) invokes the software division subroutine which is slow and adds CPU overhead.
 **Action:** Replace `dout_bits % 8` with `dout_bits & 7` in `driver/spi.c`'s `spi_transaction` to avoid expensive software modulo operation in a hot hardware interaction path.
+
+## 2024-05-18 - Replacing FDB/XID map array indexing with pointer arithmetic
+**Learning:** The forwarding database (`fdb_lookup`, `fdb_insert`) and DHCP transaction map (`xid_map_lookup`, `xid_map_insert`) in `user/bridge.c` iterate over arrays on extremely hot paths (like every single bridged packet or DHCP packet). The original code used O(N) array indexing (e.g., `s_fdb[i].ip`), which forces the compiler to recompute the offset (`base_addr + i * sizeof(struct)`) on every iteration.
+**Action:** Replace `for` loops using array indices with `while` loops using pointer arithmetic (`fdb_entry_t *p = s_fdb; ... p++`). This eliminates per-iteration offset arithmetic, yielding faster and smaller machine code on embedded architectures like ESP8266 where `fdb_lookup` is on the critical hot path.
+
