@@ -270,3 +270,6 @@
 ## 2026-09-19 - Contextual Dynamic Help Text for Select Elements
 **Learning:** In minimal static interfaces, showing help text for all available `<select>` options simultaneously causes unnecessary cognitive load.
 **Action:** When a dropdown offers discrete paths (like choosing firmware), use JavaScript to dynamically update the helper text (`aria-describedby` linked) so it only explains the currently selected choice. Ensure the updated text container has `aria-live="polite"` so screen readers announce the change.
+## 2026-07-28 - Deferring Button Value Change in Form Submission
+**Learning:** When altering a submit button's value (e.g., to "Processing...") to provide synchronous visual feedback inside an `onsubmit` handler for a GET form, doing so synchronously alters the value that gets serialized and sent in the query parameters. If the backend relies on exact string matching for the button value, this breaks core functionality.
+**Action:** Always wrap both the `disabled = true` state and the `value = 'Processing...'` reassignment within a `setTimeout` to allow the browser to serialize the form's original state first.

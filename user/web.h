@@ -31,7 +31,7 @@ setTimeout(\"location.href = '/'\",10000);\
 }\
 </script>\
 <h2>STA Settings</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -57,7 +57,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>AP Settings</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -98,7 +98,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Lock Config</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='lock_device'>Lock Device:</label></td>\
@@ -115,7 +115,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Device Management</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td>Reset Device:</td>\
@@ -124,7 +124,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </table>\
 </form>\
 </div>\
-<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}});}</script>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}});}</script>\
 </body>\
 </html>\
 "
@@ -159,7 +159,7 @@ setTimeout(\"location.href = '/'\",10000);\
 }\
 </script>\
 <h2>STA Settings</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='repeater_sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -178,7 +178,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>AP Settings</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='repeater_ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
@@ -212,7 +212,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Lock Config</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td><label for='repeater_lock_device'>Lock Device:</label></td>\
@@ -229,7 +229,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </form>\
 \
 <h2>Device Management</h2>\
-<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
+<form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
 <td>Reset Device:</td>\
@@ -238,7 +238,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </table>\
 </form>\
 </div>\
-<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}});}</script>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}});}</script>\
 </body>\
 </html>\
 "
@@ -287,7 +287,7 @@ setTimeout(\"location.href = '/'\",1000);\
 </small>\
 </form>\
 </div>\
-<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){b.value='Processing...';setTimeout(function(){b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}});}</script>\
+<script>for(var i=0;i<document.forms.length;i++){document.forms[i].addEventListener('submit',function(){var b=this.querySelector('input[type=\"submit\"]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}});}</script>\
 </body>\
 </html>\
 "
