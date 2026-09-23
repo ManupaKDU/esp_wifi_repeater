@@ -157,7 +157,6 @@
 ## 2025-02-12 - Prevent duplicate submissions on GET forms
 **Learning:** In embedded HTML interfaces where form submissions trigger synchronous blocking actions via GET requests (like device restarts or network reconnections), providing immediate UI feedback by disabling the submit button and updating its text (e.g., to 'Processing...') explicitly communicates progress. However, disabling it synchronously (e.g., `b.disabled = true;`) inside the `onsubmit` event handler excludes its name and value from the URL query parameters.
 **Action:** To retain the button's data while disabling it, wrap the disable action in a brief timeout (e.g., `setTimeout(() => b.disabled = true, 10);`).
-<<<<<<< HEAD
 ## 2026-08-01 - [Missing Required Indicator]
 **Learning:** Inconsistent visual required indicators (`<span aria-hidden='true'>*</span>`) across forms with `required` inputs can confuse users, especially in embedded UIs.
 **Action:** Always ensure visual required indicators match the input's HTML5 `required` attribute.
@@ -211,7 +210,6 @@
 ## 2026-08-16 - [Disabled State Cursor Specificity]
 **Learning:** CSS Specificity: When applying custom cursor styles (like `cursor: pointer;`) to element selectors (e.g., `input[type='submit']` which has specificity 0,1,1), it overrides pseudo-class selectors (like `:disabled` which has specificity 0,1,0) appearing earlier or at the same level. This causes disabled elements to still show a pointer cursor, breaking UX affordance.
 **Action:** Always append `!important` to the `cursor` property in the `:disabled` rule (e.g., `cursor: not-allowed !important;`) to ensure the state overrides any element-specific cursor styles.
-<<<<<<< HEAD
 ## 2024-05-13 - Focus/Cursor styling improvements
 
 **Learning:** This repository has an embedded HTML configuration page in `user/web.h`. It previously lacked pointer cursors for interactive elements which hurts UX affordance, especially because disabled buttons have default cursors. Also focus-visible wasn't highlighted properly.
@@ -273,3 +271,8 @@
 ## 2024-05-24 - Dynamic Dropdown Helper Text
 **Learning:** When a native `<select>` element toggles states that change requirements (like Open vs WPA2 security toggling password requirements), screen reader users are often left without context if the helper text remains static. The `aria-describedby` helper text continues to say "WPA2 requires password" even when "Open" is selected, which is confusing.
 **Action:** Use JavaScript to dynamically update the innerHTML of the `aria-describedby` helper text to match the currently selected option (e.g., from "WPA2 requires password" to "No password required"). Wrap it in an element with `aria-live='polite'` so the screen reader announces the updated context when the user changes the dropdown selection.
+
+## 2026-07-28 - Deferring Button Value Change in Form Submission
+**Learning:** When altering a submit button's value (e.g., to "Processing...") to provide synchronous visual feedback inside an `onsubmit` handler for a GET form, doing so synchronously alters the value that gets serialized and sent in the query parameters. If the backend relies on exact string matching for the button value, this breaks core functionality.
+**Action:** Always wrap both the `disabled = true` state and the `value = 'Processing...'` reassignment within a `setTimeout` to allow the browser to serialize the form's original state first.
+
