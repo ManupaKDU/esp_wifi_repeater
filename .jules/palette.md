@@ -276,3 +276,6 @@
 **Learning:** When altering a submit button's value (e.g., to "Processing...") to provide synchronous visual feedback inside an `onsubmit` handler for a GET form, doing so synchronously alters the value that gets serialized and sent in the query parameters. If the backend relies on exact string matching for the button value, this breaks core functionality.
 **Action:** Always wrap both the `disabled = true` state and the `value = 'Processing...'` reassignment within a `setTimeout` to allow the browser to serialize the form's original state first.
 
+## 2024-09-24 - Add basic primary button class and styling for submit buttons
+**Learning:** Native unstyled submit buttons in basic HTML forms lack affordance and can feel clunky. Applying basic button styles and active states makes them feel much better, but they need to inherit font styles properly to look good.
+**Action:** Adding some custom CSS styles to `<input type='submit'>` buttons inside the global `<style>` tags in `user/web.h`. Adding a primary color to default buttons helps call to action, keeping accessibility in mind (e.g. good contrast and focus states).
