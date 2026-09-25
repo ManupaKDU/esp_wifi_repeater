@@ -242,3 +242,7 @@
 **Learning:** The forwarding database (`fdb_lookup`, `fdb_insert`) and DHCP transaction map (`xid_map_lookup`, `xid_map_insert`) in `user/bridge.c` iterate over arrays on extremely hot paths (like every single bridged packet or DHCP packet). The original code used O(N) array indexing (e.g., `s_fdb[i].ip`), which forces the compiler to recompute the offset (`base_addr + i * sizeof(struct)`) on every iteration.
 **Action:** Replace `for` loops using array indices with `while` loops using pointer arithmetic (`fdb_entry_t *p = s_fdb; ... p++`). This eliminates per-iteration offset arithmetic, yielding faster and smaller machine code on embedded architectures like ESP8266 where `fdb_lookup` is on the critical hot path.
 
+
+## 2024-05-30 - Calculate CIDR prefix lengths using popcount
+**Learning:** C/ESP8266 Performance Pattern: When calculating CIDR prefix lengths from a 32-bit subnet mask, an O(N) shift-and-count `for` loop forces the compiler to re-evaluate the bitwise shift, loop condition, and variable increment on every single iteration.
+**Action:** Replace O(N) shift-and-count `for` loops with the O(1) compiler built-in `__builtin_popcount(mask)`. This directly yields the correct length for contiguous netmasks and saves CPU cycles without sacrificing readability.
