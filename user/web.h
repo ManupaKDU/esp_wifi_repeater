@@ -11,7 +11,7 @@
 </head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
-<div id='status_msg' role='status' style='display:none'></div>\
+<div id='status_msg' role='status' style='display:none; padding: 12px; border-radius: 4px; text-align: center; font-weight: 600; margin-bottom: 16px; background: rgba(128, 128, 128, 0.15);'></div>\
 <div id='config'>\
 <script>\
 var q = window.location.search;\
@@ -139,7 +139,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </head>\
 <body>\
 <h1>ESP WiFi Repeater Config</h1>\
-<div id='status_msg' role='status' style='display:none'></div>\
+<div id='status_msg' role='status' style='display:none; padding: 12px; border-radius: 4px; text-align: center; font-weight: 600; margin-bottom: 16px; background: rgba(128, 128, 128, 0.15);'></div>\
 <div id='config'>\
 <script>\
 var q = window.location.search;\
@@ -254,7 +254,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </head>\
 <body>\
 <h1>ESP WiFi NAT Router Config</h1>\
-<div id='status_msg' role='status' style='display:none'></div>\
+<div id='status_msg' role='status' style='display:none; padding: 12px; border-radius: 4px; text-align: center; font-weight: 600; margin-bottom: 16px; background: rgba(128, 128, 128, 0.15);'></div>\
 <div id='config'>\
 <script>\
 if (window.location.search.substr(1) != '')\
