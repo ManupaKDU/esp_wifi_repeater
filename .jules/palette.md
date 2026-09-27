@@ -282,3 +282,6 @@
 ## 2024-09-26 - [Status Message Affordance]
 **Learning:** Status messages (`<div id='status_msg'>`) in minimal HTML interfaces lack default visual affordance, causing them to blend into the background and go unnoticed by users when they appear (e.g., during "Applying settings...").
 **Action:** Always add inline CSS to status messages (e.g., `padding: 12px; border-radius: 4px; text-align: center; font-weight: 600; margin-bottom: 16px; background: rgba(128, 128, 128, 0.15);`) to ensure they stand out visually against both light and dark backgrounds, providing clear feedback to the user.
+## 2026-09-27 - Increased Button Color Contrast
+**Learning:** Common default framework colors (like #007bff blue) often fail WCAG AA contrast ratios (4.5:1) against white text, producing a ratio of ~3.98:1.
+**Action:** Always verify color contrast of primary buttons. Darkening the base color (e.g., to #005cbf) ensures the UI is accessible while preserving the intended brand aesthetic.
