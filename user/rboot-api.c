@@ -138,7 +138,7 @@ bool ICACHE_FLASH_ATTR rboot_write_flash(rboot_write_status *status, uint8 *data
 	// calculate length, must be multiple of 4
 	// save any remaining bytes for next go
 	len += status->extra_count;
-	status->extra_count = len % 4;
+	status->extra_count = len & 3; /* ⚡ Bolt: Replaced % 4 with & 3 to avoid expensive software division on ESP8266 */
 	len -= status->extra_count;
 	os_memcpy(status->extra_bytes, buffer + len, status->extra_count);
 

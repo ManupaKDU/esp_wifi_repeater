@@ -246,3 +246,7 @@
 ## 2024-05-30 - Calculate CIDR prefix lengths using popcount
 **Learning:** C/ESP8266 Performance Pattern: When calculating CIDR prefix lengths from a 32-bit subnet mask, an O(N) shift-and-count `for` loop forces the compiler to re-evaluate the bitwise shift, loop condition, and variable increment on every single iteration.
 **Action:** Replace O(N) shift-and-count `for` loops with the O(1) compiler built-in `__builtin_popcount(mask)`. This directly yields the correct length for contiguous netmasks and saves CPU cycles without sacrificing readability.
+
+## 2024-05-18 - Replace Modulo with Bitwise AND for Power-of-2 Constants
+**Learning:** The ESP8266 lacks a hardware division unit. Performing modulo operations by constant powers of 2 (like `% 4`) invokes slow software division subroutines.
+**Action:** Replace modulo by powers of 2 (e.g., `len % 4`) with bitwise AND (`len & 3`) in files like `user/rboot-api.c` to prevent unnecessary CPU overhead during flash write loops, maintaining equivalence.
