@@ -88,6 +88,18 @@
       font-size: 12px;
       color: #546e7a;
     }
+
+    .unsupported-msg {
+      display: inline-block;
+      background-color: #ffebee;
+      color: #c62828;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 15px;
+      border: 1px solid #ef9a9a;
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -109,6 +121,10 @@
 
   <esp-web-install-button id="install-button" manifest="manifest.json">
     <button slot="activate">Connect & Install</button>
+    <div slot="unsupported" class="unsupported-msg">
+      ⚠️ WebUSB is not supported by your browser.<br>
+      Please use Google Chrome or Microsoft Edge.
+    </div>
   </esp-web-install-button>
 
   <div class="footer">
