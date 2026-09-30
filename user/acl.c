@@ -71,8 +71,9 @@ acl_entry *my_entry;
     my_entry->dest = dest & d_mask;
     my_entry->d_mask = d_mask;
     my_entry->proto = proto;
-    my_entry->s_port = s_port;
-    my_entry->d_port = d_port;
+    /* ⚡ Bolt: Store ports in network byte order at configuration time to completely eliminate byte swapping during packet processing */
+    my_entry->s_port = htons(s_port);
+    my_entry->d_port = htons(d_port);
     my_entry->allow = allow;
     my_entry->hit_count = 0;
 
@@ -129,16 +130,18 @@ uint8_t allow;
 	if (p->len < sizeof(struct eth_hdr)+sizeof(struct ip_hdr)+sizeof(struct udp_hdr))
 	    return ACL_DENY;
 	udp_h = (struct udp_hdr *)&packet[sizeof(struct eth_hdr)+sizeof(struct ip_hdr)];
-	src_port = ntohs(udp_h->src);
-	dest_port = ntohs(udp_h->dest);
+	/* ⚡ Bolt: Removed redundant per-packet ntohs conversion, ports are extracted directly in network byte order */
+	src_port = udp_h->src;
+	dest_port = udp_h->dest;
 	break;
 
     case IP_PROTO_TCP:
 	if (p->len < sizeof(struct eth_hdr)+sizeof(struct ip_hdr)+sizeof(struct tcp_hdr))
 	    return ACL_DENY;
 	tcp_h = (struct tcp_hdr *)&packet[sizeof(struct eth_hdr)+sizeof(struct ip_hdr)];
-	src_port = ntohs(tcp_h->src);
-	dest_port = ntohs(tcp_h->dest);
+	/* ⚡ Bolt: Removed redundant per-packet ntohs conversion, ports are extracted directly in network byte order */
+	src_port = tcp_h->src;
+	dest_port = tcp_h->dest;
 	break;
 
     case IP_PROTO_ICMP:
@@ -175,7 +178,7 @@ uint8_t allow;
 
 done:
     if (!(allow & ACL_ALLOW) && my_deny_cb != NULL)
-	allow = my_deny_cb(proto, ip_h->src.addr, src_port, ip_h->dest.addr, dest_port, allow);
+	allow = my_deny_cb(proto, ip_h->src.addr, ntohs(src_port), ip_h->dest.addr, ntohs(dest_port), allow);
     if (allow & ACL_ALLOW) acl_allow_count++; else acl_deny_count++;
 //    os_printf(" allow: %d\r\n",  allow);
     return allow;
@@ -229,9 +232,9 @@ uint8_t line[80], addr1[21], addr2[21], port1[6], port2[6];
     for(i=0; i<acl_freep[acl_no]; i++) {
 	my_entry = &acl[acl_no][i];
 	addr2str(addr1, my_entry->src, my_entry->s_mask);
-	port2str(port1, my_entry->s_port);
+	port2str(port1, ntohs(my_entry->s_port));
 	addr2str(addr2, my_entry->dest, my_entry->d_mask);
-	port2str(port2, my_entry->d_port);
+	port2str(port2, ntohs(my_entry->d_port));
 	int line_len;
 	if (my_entry->proto != 0)
 	    line_len = os_sprintf(line, "%s %s:%s %s:%s %s%s (%d hits)\r\n",
