@@ -83,6 +83,16 @@
       opacity: 0.6;
       background: #3f51b5;
     }
+    .unsupported-msg {
+      display: inline-block;
+      background-color: #ffebee;
+      color: #c62828;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid #ffcdd2;
+    }
     .footer {
       margin-top: 30px;
       font-size: 12px;
@@ -107,8 +117,12 @@
     <strong>NAT Router:</strong> Creates a private, isolated subnet.
   </div>
 
-  <esp-web-install-button id="install-button" manifest="manifest.json">
+    <esp-web-install-button id="install-button" manifest="manifest.json">
     <button slot="activate">Connect & Install</button>
+    <span slot="unsupported" class="unsupported-msg">
+      ⚠️ Your browser does not support WebUSB.<br>
+      Please use Google Chrome or Microsoft Edge.
+    </span>
   </esp-web-install-button>
 
   <div class="footer">
