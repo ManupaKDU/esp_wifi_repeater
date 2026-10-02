@@ -78,6 +78,18 @@
       outline-offset: 2px;
       box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.25);
     }
+
+    button[slot="unsupported"] {
+      background: #3f51b5;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: not-allowed !important;
+      opacity: 0.6;
+    }
     button[slot="activate"]:disabled {
       cursor: not-allowed !important;
       opacity: 0.6;
@@ -108,7 +120,9 @@
   </div>
 
   <esp-web-install-button id="install-button" manifest="manifest.json">
+
     <button slot="activate">Connect & Install</button>
+    <button slot="unsupported" disabled title="WebUSB is not supported in this browser. Please use Chrome, Edge, or Opera.">Unsupported Browser</button>
   </esp-web-install-button>
 
   <div class="footer">
