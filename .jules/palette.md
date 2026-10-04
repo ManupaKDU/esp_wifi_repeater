@@ -282,3 +282,7 @@
 ## 2024-09-26 - [Status Message Affordance]
 **Learning:** Status messages (`<div id='status_msg'>`) in minimal HTML interfaces lack default visual affordance, causing them to blend into the background and go unnoticed by users when they appear (e.g., during "Applying settings...").
 **Action:** Always add inline CSS to status messages (e.g., `padding: 12px; border-radius: 4px; text-align: center; font-weight: 600; margin-bottom: 16px; background: rgba(128, 128, 128, 0.15);`) to ensure they stand out visually against both light and dark backgrounds, providing clear feedback to the user.
+
+## 2026-10-03 - Web Component WebUSB Unsupported Fallback
+**Learning:** When using web components that rely on modern browser APIs (like `esp-web-install-button` relying on WebUSB), users on unsupported browsers (like Firefox or Safari) often encounter a confusing blank space because the component silently fails to render its primary slot without triggering an explicit error.
+**Action:** Always proactively implement the component's fallback mechanism (e.g., `<div slot="unsupported">`) with clear, styled error messaging (e.g., using standard red alert colors) to provide actionable feedback instead of a broken UI state.

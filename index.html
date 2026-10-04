@@ -83,6 +83,16 @@
       opacity: 0.6;
       background: #3f51b5;
     }
+    div[slot="unsupported"] {
+      background: #ffebee;
+      color: #c62828;
+      padding: 12px 24px;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
     .footer {
       margin-top: 30px;
       font-size: 12px;
@@ -109,6 +119,7 @@
 
   <esp-web-install-button id="install-button" manifest="manifest.json">
     <button slot="activate">Connect & Install</button>
+    <div slot="unsupported">Your browser does not support WebUSB. Please use Chrome or Edge.</div>
   </esp-web-install-button>
 
   <div class="footer">
