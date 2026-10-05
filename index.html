@@ -109,6 +109,9 @@
 
   <esp-web-install-button id="install-button" manifest="manifest.json">
     <button slot="activate">Connect & Install</button>
+    <div slot="unsupported" style="color: #d32f2f; font-weight: 500; font-size: 14px; padding: 12px; border: 1px solid #ef5350; border-radius: 8px; background: #ffebee;">
+      <span aria-hidden="true">⚠️</span> Your browser does not support WebUSB.<br>Please use Google Chrome, Microsoft Edge, or Opera.
+    </div>
   </esp-web-install-button>
 
   <div class="footer">
