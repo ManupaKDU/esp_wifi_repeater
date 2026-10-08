@@ -285,3 +285,8 @@
 ## 2026-09-27 - Increased Button Color Contrast
 **Learning:** Common default framework colors (like #007bff blue) often fail WCAG AA contrast ratios (4.5:1) against white text, producing a ratio of ~3.98:1.
 **Action:** Always verify color contrast of primary buttons. Darkening the base color (e.g., to #005cbf) ensures the UI is accessible while preserving the intended brand aesthetic.
+
+## 2025-02-13 - Explicit Unsupported State for Web Components
+**Learning:** When using web components dependent on specific modern browser APIs (like `esp-web-install-button` and WebUSB), explicitly implement their fallback mechanisms (e.g., `slot="unsupported"`) with clear, actionable error messaging. Unsupported browsers (like Firefox or Safari) may otherwise fail silently and display a confusing blank space.
+**Action:** Always implement `slot="unsupported"` when using `esp-web-install-button` to ensure users on unsupported browsers receive proper feedback.
+

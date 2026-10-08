@@ -56,6 +56,7 @@
     }
     /* Style for the actual button inside the web component */
 
+    button[slot="unsupported"],
     button[slot="activate"] {
       background: #3f51b5;
       color: white;
@@ -78,6 +79,7 @@
       outline-offset: 2px;
       box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.25);
     }
+    button[slot="unsupported"],
     button[slot="activate"]:disabled {
       cursor: not-allowed !important;
       opacity: 0.6;
@@ -109,6 +111,7 @@
 
   <esp-web-install-button id="install-button" manifest="manifest.json">
     <button slot="activate">Connect & Install</button>
+    <button slot="unsupported" disabled>Browser Unsupported</button>
   </esp-web-install-button>
 
   <div class="footer">
