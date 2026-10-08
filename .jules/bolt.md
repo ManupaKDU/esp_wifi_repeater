@@ -249,3 +249,7 @@
 ## 2026-08-16 - Pre-calculate Network Byte Order Constants at Configuration Time
 **Learning:** C Networking Performance Pattern: On embedded systems, `ntohs()` or `htons()` inside a hot packet processing loop (like an ACL checker or routing table) consumes CPU cycles per packet. If packets are compared against statically configured rule ports or addresses, moving the `htons` conversion to the rule configuration phase (e.g. `acl_add`) completely eliminates the byte-swapping overhead on the hot path.
 **Action:** When implementing packet matching logic (firewalls, routers, packet sniffers), store all rule constants in network byte order in memory. Extract the raw network byte order headers directly from the incoming packet buffer and perform a direct binary comparison. Only revert to host byte order (`ntohs`) when printing logs or passing the data to higher-level application logic.
+
+## 2024-10-04 - Replace Software Modulo with Bitwise AND in Flash Routines
+**Learning:** C/ESP8266 Performance Pattern: Modulo by constant powers of 2 (e.g. `% 4`) invokes the software division subroutine on the ESP8266, which is slow and adds CPU overhead, especially in routines doing block calculations like OTA and flash updates.
+**Action:** Replace `len % 4` with `len & 3` in `user/rboot-api.c` to avoid expensive software modulo operation in a flash hardware interaction path.
