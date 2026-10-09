@@ -253,3 +253,6 @@
 ## 2024-10-04 - Replace Software Modulo with Bitwise AND in Flash Routines
 **Learning:** C/ESP8266 Performance Pattern: Modulo by constant powers of 2 (e.g. `% 4`) invokes the software division subroutine on the ESP8266, which is slow and adds CPU overhead, especially in routines doing block calculations like OTA and flash updates.
 **Action:** Replace `len % 4` with `len & 3` in `user/rboot-api.c` to avoid expensive software modulo operation in a flash hardware interaction path.
+## 2024-05-18 - Avoid atoi in hot loop parsing
+**Learning:** For CIDR notation parsing, using `atoi` adds unnecessary overhead. Inline integer parsing (`val = val * 10 + (char - '0')`) avoids function call overhead and is measurably faster.
+**Action:** Use inline pointer parsing for integers in small bounded networking parsers to save CPU cycles.
