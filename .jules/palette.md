@@ -290,3 +290,6 @@
 **Learning:** When using web components dependent on specific modern browser APIs (like `esp-web-install-button` and WebUSB), explicitly implement their fallback mechanisms (e.g., `slot="unsupported"`) with clear, actionable error messaging. Unsupported browsers (like Firefox or Safari) may otherwise fail silently and display a confusing blank space.
 **Action:** Always implement `slot="unsupported"` when using `esp-web-install-button` to ensure users on unsupported browsers receive proper feedback.
 
+## 2024-05-26 - [Disabled Web Component Fallback Affordance]
+**Learning:** When using web components dependent on specific modern browser APIs (like `esp-web-install-button` and WebUSB), users on unsupported browsers see a disabled "Browser Unsupported" button. Without a tooltip, users are forced to hunt for footer text to understand *why* their browser is unsupported and what to do.
+**Action:** Always add a descriptive `title` attribute directly to the fallback `slot="unsupported"` button (e.g., `title="WebUSB is not supported... Use Chrome"`) so users immediately understand the problem when hovering over or focusing the disabled element.
