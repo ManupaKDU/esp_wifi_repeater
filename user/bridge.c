@@ -401,6 +401,14 @@ static bool ICACHE_FLASH_ATTR mdns_match_hostname(const uint8_t *body, uint16_t 
         if (len == 0) break;
         if ((len & 0xC0) != 0) return false;
         if (p + len > body_len) return false;
+
+        /* ⚡ Bolt: Avoid redundant string comparisons when a label has already failed to match */
+        if (!match) {
+            p += len;
+            label_idx++;
+            continue;
+        }
+
         if (label_idx == 0) {
             if (len != MDNS_HOSTNAME_LEN || !label_iequal(body + p, MDNS_HOSTNAME, len)) match = false;
         } else if (label_idx == 1) {

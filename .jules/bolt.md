@@ -253,3 +253,6 @@
 ## 2024-10-04 - Replace Software Modulo with Bitwise AND in Flash Routines
 **Learning:** C/ESP8266 Performance Pattern: Modulo by constant powers of 2 (e.g. `% 4`) invokes the software division subroutine on the ESP8266, which is slow and adds CPU overhead, especially in routines doing block calculations like OTA and flash updates.
 **Action:** Replace `len % 4` with `len & 3` in `user/rboot-api.c` to avoid expensive software modulo operation in a flash hardware interaction path.
+## 2024-05-18 - Early return from parsing when match fails
+**Learning:** In string parsing functions that iterate over several segments to check for an exact match (e.g. `mdns_match_hostname`), continuing to parse and call comparison functions (`label_iequal`) after a mismatch has already been determined wastes CPU cycles.
+**Action:** Add an early continue/skip condition to string sequence parsers. Once the `match` flag becomes false, skip the expensive comparison logic for the remaining segments.
