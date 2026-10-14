@@ -880,7 +880,14 @@ void ICACHE_FLASH_ATTR parse_IP_addr(uint8_t *str, uint32_t *addr, uint32_t *mas
     if (str[i] != 0)
     {
         str[i] = 0;
-        *mask <<= (32 - atoi(&str[i + 1]));
+        // ⚡ Bolt: Inline integer parsing to avoid atoi overhead
+        uint32_t val = 0;
+        char *p = (char *)&str[i + 1];
+        while (*p >= '0' && *p <= '9') {
+            val = val * 10 + (*p - '0');
+            p++;
+        }
+        *mask <<= (32 - val);
     }
     *mask = htonl(*mask);
     *addr = ipaddr_addr(str);

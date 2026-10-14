@@ -59,7 +59,7 @@
 **Action:** Created `mqtt_publish_str_len` to directly accept a length argument. Update helper functions like `mqtt_publish_int` to capture the return value of `os_sprintf` (which returns the length) and pass it directly to `mqtt_publish_str_len`, eliminating the redundant `os_strlen` overhead.
 
 
-## $(date +%Y-%m-%d) - Avoiding hardcoded string lengths for micro-optimizations
+## 2026-10-14 - Avoiding hardcoded string lengths for micro-optimizations
 **Learning:** Do not attempt to micro-optimize string literal lengths by hardcoding integer values (e.g., `17`) or using manual calculations like `sizeof("...") - 1` in place of `os_strlen`. This creates fragile code and severe maintainability hazards, especially since compilers often optimize literal lengths automatically. Furthermore, avoid micro-optimizations on absolute cold paths (e.g., just before a `system_restart()`) as they violate the core performance directives by introducing complexity without measurable runtime benefits.
 **Action:** When seeking string calculation optimizations, focus on caching dynamically calculated lengths that are already returned by upstream formatting functions (like `os_sprintf`) on hot paths, rather than trying to optimize literal lengths or cold paths.
 
@@ -253,3 +253,7 @@
 ## 2024-10-04 - Replace Software Modulo with Bitwise AND in Flash Routines
 **Learning:** C/ESP8266 Performance Pattern: Modulo by constant powers of 2 (e.g. `% 4`) invokes the software division subroutine on the ESP8266, which is slow and adds CPU overhead, especially in routines doing block calculations like OTA and flash updates.
 **Action:** Replace `len % 4` with `len & 3` in `user/rboot-api.c` to avoid expensive software modulo operation in a flash hardware interaction path.
+
+## 2026-10-14 - [Replace atoi with inline integer parsing]
+**Learning:** For parsing small integers from strings (like CIDR lengths or network ports), avoid using `atoi()` as it adds unnecessary function call overhead.
+**Action:** Use inline integer parsing (e.g., `val = val * 10 + (*p - '0')`) within a single-pass loop to measurably save CPU cycles.
