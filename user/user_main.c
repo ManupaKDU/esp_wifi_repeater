@@ -864,8 +864,7 @@ void ICACHE_FLASH_ATTR scan_done(void *arg, STATUS status)
 
 void ICACHE_FLASH_ATTR parse_IP_addr(uint8_t *str, uint32_t *addr, uint32_t *mask)
 {
-    int i;
-    uint32_t net;
+    /* ⚡ Bolt: Replaced expensive atoi() and index math with a fast single-pass inline parser */
     if (strcmp(str, "any") == 0)
     {
         *addr = 0;
@@ -873,14 +872,21 @@ void ICACHE_FLASH_ATTR parse_IP_addr(uint8_t *str, uint32_t *addr, uint32_t *mas
         return;
     }
 
-    for (i = 0; str[i] != 0 && str[i] != '/'; i++)
-        ;
+    uint8_t *p = str;
+    while (*p != '\0' && *p != '/') {
+        p++;
+    }
 
     *mask = 0xffffffff;
-    if (str[i] != 0)
-    {
-        str[i] = 0;
-        *mask <<= (32 - atoi(&str[i + 1]));
+    if (*p == '/') {
+        *p = '\0';
+        p++;
+        uint32_t cidr = 0;
+        while (*p >= '0' && *p <= '9') {
+            cidr = (cidr * 10) + (*p - '0');
+            p++;
+        }
+        *mask <<= (32 - cidr);
     }
     *mask = htonl(*mask);
     *addr = ipaddr_addr(str);
