@@ -256,3 +256,6 @@
 ## 2024-05-18 - Avoid atoi in hot loop parsing
 **Learning:** For CIDR notation parsing, using `atoi` adds unnecessary overhead. Inline integer parsing (`val = val * 10 + (char - '0')`) avoids function call overhead and is measurably faster.
 **Action:** Use inline pointer parsing for integers in small bounded networking parsers to save CPU cycles.
+## 2024-05-18 - Early return from parsing when match fails
+**Learning:** In string parsing functions that iterate over several segments to check for an exact match (e.g. `mdns_match_hostname`), continuing to parse and call comparison functions (`label_iequal`) after a mismatch has already been determined wastes CPU cycles.
+**Action:** Add an early continue/skip condition to string sequence parsers. Once the `match` flag becomes false, skip the expensive comparison logic for the remaining segments.
