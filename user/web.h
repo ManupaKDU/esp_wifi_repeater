@@ -39,7 +39,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='sta_password'>Password:</label></td>\
-<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='sta_password' aria-label='Toggle STA password visibility' title='Toggle password visibility' onclick=\"document.getElementById('sta_password').type = this.checked ? 'text' : 'password'; document.getElementById('sta_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='sta_show_text' aria-hidden='true'>Show</span></label></td>\
+<td><input id='sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='Optional' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='sta_password' aria-label='Toggle STA password visibility' title='Toggle password visibility' onclick=\"document.getElementById('sta_password').type = this.checked ? 'text' : 'password'; document.getElementById('sta_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='sta_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
 <td><label for='sta_am'>Automesh:</label></td>\
@@ -167,7 +167,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 <tr>\
 <td><label for='repeater_sta_password'>Password:</label></td>\
-<td><input id='repeater_sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='WiFi Password' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='repeater_sta_password' aria-label='Toggle STA password visibility' title='Toggle password visibility' onclick=\"document.getElementById('repeater_sta_password').type = this.checked ? 'text' : 'password'; document.getElementById('repeater_sta_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='repeater_sta_show_text' aria-hidden='true'>Show</span></label></td>\
+<td><input id='repeater_sta_password' type='password' name='password' value='%s' maxlength='63' placeholder='Optional' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='repeater_sta_password' aria-label='Toggle STA password visibility' title='Toggle password visibility' onclick=\"document.getElementById('repeater_sta_password').type = this.checked ? 'text' : 'password'; document.getElementById('repeater_sta_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='repeater_sta_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
 <td></td>\
