@@ -294,3 +294,6 @@
 ## 2024-05-24 - [Tooltip for Unsupported State]
 **Learning:** When a web component's fallback button (e.g., `slot="unsupported"`) is disabled due to unsupported browser APIs, explicitly add a descriptive `title` attribute. This provides a tooltip so users immediately understand the reason for the disabled state upon hover or focus, rather than having to hunt for context in surrounding text.
 **Action:** Always add a descriptive `title` attribute to disabled fallback elements to explain why they are disabled and what action is required.
+## 2024-05-25 - [Optional Field Placeholder Clarification]
+**Learning:** In minimal HTML configuration interfaces (like embedded C macros), using a placeholder that repeats the input's purpose (e.g., `placeholder='WiFi Password'` on a password field) provides no new information and can mislead users into thinking an optional field is required (e.g., when connecting to open networks).
+**Action:** When a field is optional, use `placeholder='Optional'` to explicitly communicate that the field can be left blank, reducing cognitive load and uncertainty without cluttering the UI with additional text or helper labels.
