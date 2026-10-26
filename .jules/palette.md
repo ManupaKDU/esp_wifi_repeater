@@ -294,3 +294,7 @@
 ## 2024-05-24 - [Tooltip for Unsupported State]
 **Learning:** When a web component's fallback button (e.g., `slot="unsupported"`) is disabled due to unsupported browser APIs, explicitly add a descriptive `title` attribute. This provides a tooltip so users immediately understand the reason for the disabled state upon hover or focus, rather than having to hunt for context in surrounding text.
 **Action:** Always add a descriptive `title` attribute to disabled fallback elements to explain why they are disabled and what action is required.
+
+## 2024-05-25 - [Visual vs HTML5 Required Indicators]
+**Learning:** When adding a visual required indicator (such as an asterisk `*` with `<span aria-hidden='true'>*</span>`) to a form field `<label>`, it is critical to ensure the corresponding input field also has the HTML5 `required` attribute natively. A visual-only indicator is insufficient and can lead to broken validations and inconsistent screen reader context.
+**Action:** Always verify that input fields matching a required label visually contain the `required` attribute natively.
