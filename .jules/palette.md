@@ -294,6 +294,6 @@
 ## 2024-05-24 - [Tooltip for Unsupported State]
 **Learning:** When a web component's fallback button (e.g., `slot="unsupported"`) is disabled due to unsupported browser APIs, explicitly add a descriptive `title` attribute. This provides a tooltip so users immediately understand the reason for the disabled state upon hover or focus, rather than having to hunt for context in surrounding text.
 **Action:** Always add a descriptive `title` attribute to disabled fallback elements to explain why they are disabled and what action is required.
-## 2026-08-11 - Enforce Required Constraint on Password Inputs
-**Learning:** In the embedded configuration page for `lock_page.html`, a visual required indicator (`<span aria-hidden='true'>*</span>`) is shown next to the "Password" label. However, the associated input field (`<input id='unlock_password'>`) lacked the HTML5 `required` attribute. This allows the form to be submitted while empty and bypassing native client-side validation logic. It also prevented screen readers from identifying the field as required.
-**Action:** Always ensure any field visibly marked as required has the corresponding HTML5 `required` attribute on its native input element. Use native attributes over visual-only decorators to satisfy accessibility (a11y) standards.
+## 2024-05-18 - [Add Placeholders to Optional Inputs]
+**Learning:** In embedded configuration pages where space is extremely limited and additional help text might clutter the UI, using `placeholder='Optional'` explicitly informs users they can leave the field blank (e.g. for an open WiFi network). This simple UX enhancement reduces user uncertainty without requiring extra structural HTML.
+**Action:** When an input is functionally optional but visually lacks distinct context (like an open network password field), add an explicit 'Optional' placeholder rather than relying solely on the absence of a required indicator (`*`).
