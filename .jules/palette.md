@@ -297,3 +297,6 @@
 ## 2024-05-25 - [Optional Field Placeholder Clarification]
 **Learning:** In minimal HTML configuration interfaces (like embedded C macros), using a placeholder that repeats the input's purpose (e.g., `placeholder='WiFi Password'` on a password field) provides no new information and can mislead users into thinking an optional field is required (e.g., when connecting to open networks).
 **Action:** When a field is optional, use `placeholder='Optional'` to explicitly communicate that the field can be left blank, reducing cognitive load and uncertainty without cluttering the UI with additional text or helper labels.
+## 2026-10-27 - Dynamic Attributes for Disabled Inputs
+**Learning:** When dynamically disabling a form input field (such as a password field changing to 'Open' security), cognitive dissonance and native validation conflicts occur if the field remains marked as `required` or retains a placeholder that implies input is needed (e.g., "Min 8 chars").
+**Action:** When toggling the `disabled` state on an input via JavaScript, always simultaneously toggle the `required` attribute off (if applicable) and update its `placeholder` to clearly communicate its state (e.g., 'Not required'). This ensures native HTML5 validation does not block form submission and provides a consistent mental model for users.
