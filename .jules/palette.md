@@ -303,3 +303,6 @@
 ## 2024-10-27 - Dynamic required and placeholder attributes for dynamically disabled fields
 **Learning:** When a form field (like a password input) is dynamically disabled (e.g., when 'Open' security is selected instead of 'WPA2'), leaving the `required` attribute active and keeping a placeholder like 'Min 8 chars' creates cognitive dissonance and accessibility issues. Screen readers may announce the field in a confusing state, and the UI implies an action is needed on a field the user cannot interact with.
 **Action:** Always dynamically toggle the HTML5 `required` attribute (e.g., `input.required = !isDisabled`) and explicitly update the `placeholder` (e.g., to 'Not required') to match the new semantic and visual state of the disabled input.
+## 2026-11-03 - Submit Button Active State Affordance
+**Learning:** Interactive buttons (like `input[type='submit']`) lack default visual affordance for the physical act of clicking or tapping in unstyled HTML forms. While hover states and custom colors help, the lack of tactile feedback during the actual click makes the interface feel unresponsive.
+**Action:** Always ensure an explicit `:active` state is defined (e.g., `transform: scale(0.98);` or a darkened background) for primary buttons to provide immediate tactile visual feedback and improve perceived responsiveness.
