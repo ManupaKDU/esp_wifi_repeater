@@ -441,6 +441,8 @@ First config of the repeater mode version is basically as simple as for the NAT 
 
 Once the STA ssid is defined, the repeater will no longer run its own DHCP server, but receives its IP from the upstream DHCP (no more 192.168.4.1). In order to connect to its web page ot the remote console, you can use the name "esp-wifi-repeater.local", if your client support mDNS, or you have to look up the assigned address in your upstream router (or the serial console with "show stats"). You can always reset the ESP via the console and "reset factory".
 
+The upstream DHCP server must be a regular router (or any server that answers by broadcast). Chaining the repeater behind another ESP in NAT mode does not work yet, because the ESP's DHCP server only answers its own directly associated stations.
+
 ### Key Contrast Summary
 
 | Feature | NAT Router | Layer 2 Bridge |
@@ -450,6 +452,33 @@ Once the STA ssid is defined, the repeater will no longer run its own DHCP serve
 | **Discovery (mDNS/UPnP)** | Often blocked/difficult | Fully supported (Transparent) |
 | **Upstream Visibility** | Client identity hidden (NAT) | Client identity preserved |
 | **Implementation** | Standard networking | Advanced proxying (Proxy ARP/Snooping) |
+
+# Status JSON (Home Assistant)
+
+`http://<ip>/stats.json` (web port, same network access rules as the config page; also served while the config page is locked, as it contains no secrets) returns read-only status:
+
+```json
+{"version":"V2.2.19","uptime_s":3600,"reset_reason":0,"free_heap":21000,"vdd_mv":3300,
+ "connected":true,"rssi":-61,"bssid":"aa:bb:cc:dd:ee:ff","channel":6,"sta_ip":"192.168.1.50",
+ "clients":2,"kib_in":1024,"kib_out":512,"packets_in":9000,"packets_out":7000,"min_free_heap":19500,
+ "fdb_clients":2,"tx_err_sta":0,"tx_err_ap":0,"alloc_fail":0}
+```
+
+`rssi` is `null` while not connected. `reset_reason` is the SDK `rst_info` reason (0 power-on, 1 HW watchdog, 2 exception, 3 SW watchdog, 4 soft restart, 6 external reset). `min_free_heap` is the lowest free heap seen since boot (sampled every second). Bridge variant only: `fdb_clients` counts clients learned in the FDB; `tx_err_sta` / `tx_err_ap` count bridged frames the Wi-Fi driver refused on that side (TX queue full) and `alloc_fail` failed frame copies, all since boot. Example Home Assistant config:
+
+```yaml
+rest:
+  - resource: http://192.168.1.50/stats.json
+    scan_interval: 30
+    sensor:
+      - { name: Repeater RSSI, value_template: "{{ value_json.rssi }}", unit_of_measurement: dBm, device_class: signal_strength }
+      - { name: Repeater clients, value_template: "{{ value_json.clients }}" }
+      - { name: Repeater uptime, value_template: "{{ value_json.uptime_s }}", unit_of_measurement: s, device_class: duration }
+      - { name: Repeater free heap, value_template: "{{ value_json.free_heap }}", unit_of_measurement: B }
+      - { name: Repeater data in, value_template: "{{ value_json.kib_in }}", unit_of_measurement: KiB, state_class: total_increasing }
+    binary_sensor:
+      - { name: Repeater uplink, value_template: "{{ value_json.connected }}", device_class: connectivity }
+```
 
 # Building and Flashing
 For direct flashing of the pre-compiled binaries onto the device use the [Web-Installer](https://martin-ger.github.io/esp_wifi_repeater/). 
