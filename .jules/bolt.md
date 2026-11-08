@@ -266,3 +266,7 @@
 ## 2026-11-06 - Replace Modulo with Subtraction
 **Learning:** C/ESP8266 Performance Pattern: Because the ESP8266 lacks a hardware divider, modulo operations (e.g., `% 1000000`) invoke expensive software subroutines. When the quotient of the same division is already calculated, replacing the modulo with equivalent subtraction (e.g., `rem = val - (quot * 1000000)`) measurably improves performance on this architecture.
 **Action:** Replace expensive modulo operations with subtraction where the quotient is already available.
+
+## 2026-08-16 - Replace Software Modulo with Subtraction (Hardware Multiplication)
+**Learning:** C/ESP8266 Performance Pattern: Because the ESP8266 lacks a hardware divider, modulo operations (e.g., `% 1000000`) invoke expensive software subroutines. Since the ESP8266 has hardware support for multiplication, when the quotient of the same division is already calculated, replace the modulo with equivalent multiplication and subtraction (e.g., `rem = val - (quot * 1000000)`) to measurably improve performance.
+**Action:** Replace `val % 1000000` with `val - ((val / 1000000) * 1000000)` in hot paths when avoiding modulo.
