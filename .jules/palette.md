@@ -306,3 +306,6 @@
 ## 2026-11-02 - Correct Page Titles for Alternative Compilation Variants
 **Learning:** When HTML is embedded inside C macros, different compilation variants (like NAT Router vs. WiFi Repeater) often share chunks of HTML layout. Forgetting to conditionally update the `<title>` and `<h1>` tags for the alternate variants can cause severe user confusion (e.g., users connecting to a "Repeater" interface but seeing "NAT Router Config"). Additionally, shared utility pages (like a lock screen) should use generic titles (e.g., "Device Config") rather than mode-specific titles.
 **Action:** When working with embedded HTML macros, ensure that page titles (`<title>`, `<h1>`, and `document.title`) accurately reflect the specific firmware variant being served, or are made generically applicable for shared pages.
+## 2024-11-03 - [Active State Affordance]
+**Learning:** Native unstyled buttons (like `input[type='submit']`) and even custom-styled ones without an `:active` state lack the tactile visual feedback users expect during the physical act of clicking or tapping.
+**Action:** Always verify that interactive buttons include an explicit `:active` state (e.g., `transform: scale(0.98);`) to provide immediate, satisfying visual feedback during interaction.
