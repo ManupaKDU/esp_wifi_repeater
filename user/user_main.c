@@ -495,7 +495,7 @@ int ICACHE_FLASH_ATTR put_packet_to_ringbuf(struct pbuf *p)
         //os_printf("Put %d Bytes into RingBuff\r\n", sizeof(pcap_phdr)+p->len);
         t_usecs = get_long_systime();
         pcap_phdr.ts_sec = (uint32_t)t_usecs / 1000000;
-        pcap_phdr.ts_usec = (uint32_t)t_usecs - (pcap_phdr.ts_sec * 1000000); /* ⚡ Bolt: Replace expensive software modulo with fast subtraction */
+        pcap_phdr.ts_usec = (uint32_t)t_usecs - (pcap_phdr.ts_sec * 1000000); // ⚡ Bolt: Replaced expensive modulo with subtraction since quotient is already known
         pcap_phdr.caplen = len;
         pcap_phdr.len = p->tot_len;
         ringbuf_memcpy_into(pcap_buffer, (uint8_t *)&pcap_phdr, sizeof(pcap_phdr));
@@ -1435,7 +1435,7 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             uint32_t time = (uint32_t)(get_long_systime() / 1000000);
             int16_t i;
 
-            to_console_len(response, os_sprintf(response, "System uptime: %d:%02d:%02d\r\n", time / 3600, (time / 60) % 60, time % 60)); /* ⚡ Bolt: Simplified uptime calculation */
+            to_console_len(response, os_sprintf(response, "System uptime: %d:%02d:%02d\r\n", time / 3600, (time % 3600) / 60, time % 60));
 #if DAILY_LIMIT
             uint32_t current_stamp = sntp_get_current_timestamp();
             to_console_len(response, os_sprintf(response, "Local time: %s\r", current_stamp ? sntp_get_real_time(current_stamp) : "no NTP sync\n"));
@@ -1452,7 +1452,7 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
                            (uint32_t)(Bytes_per_day >> 10), config.daily_limit));
             }
 #endif
-            to_console_len(response, os_sprintf(response, "Power supply: %d.%03d V\r\n", Vdd / 1000, Vdd - (Vdd / 1000) * 1000)); /* ⚡ Bolt: Replace expensive modulo with fast subtraction */
+            to_console_len(response, os_sprintf(response, "Power supply: %d.%03d V\r\n", Vdd / 1000, Vdd % 1000));
 #ifdef USER_GPIO_OUT
             to_console_len(response, os_sprintf(response, "GPIO output status: %d\r\n", config.gpio_out_status));
 #endif

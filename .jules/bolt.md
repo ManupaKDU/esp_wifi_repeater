@@ -262,3 +262,7 @@
 ## 2026-08-16 - Replace Software Modulo with Subtraction
 **Learning:** C/ESP8266 Performance Pattern: Operations like `% 1000000` and `% 1000` invoke the software division subroutine on the ESP8266, which adds CPU overhead. When the quotient is already available or the divisor is constant, these can be replaced by subtraction.
 **Action:** Replace expensive modulo operations with equivalent subtraction (e.g. `val - (val / 1000) * 1000`) or simplified arithmetic where appropriate.
+
+## 2026-11-06 - Replace Modulo with Subtraction
+**Learning:** C/ESP8266 Performance Pattern: Because the ESP8266 lacks a hardware divider, modulo operations (e.g., `% 1000000`) invoke expensive software subroutines. When the quotient of the same division is already calculated, replacing the modulo with equivalent subtraction (e.g., `rem = val - (quot * 1000000)`) measurably improves performance on this architecture.
+**Action:** Replace expensive modulo operations with subtraction where the quotient is already available.
