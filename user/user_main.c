@@ -495,7 +495,7 @@ int ICACHE_FLASH_ATTR put_packet_to_ringbuf(struct pbuf *p)
         //os_printf("Put %d Bytes into RingBuff\r\n", sizeof(pcap_phdr)+p->len);
         t_usecs = get_long_systime();
         pcap_phdr.ts_sec = (uint32_t)t_usecs / 1000000;
-        pcap_phdr.ts_usec = (uint32_t)t_usecs % 1000000;
+        pcap_phdr.ts_usec = (uint32_t)t_usecs - (pcap_phdr.ts_sec * 1000000); // ⚡ Bolt: Replaced expensive modulo with subtraction since quotient is already known
         pcap_phdr.caplen = len;
         pcap_phdr.len = p->tot_len;
         ringbuf_memcpy_into(pcap_buffer, (uint8_t *)&pcap_phdr, sizeof(pcap_phdr));
