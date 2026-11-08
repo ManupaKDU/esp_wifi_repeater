@@ -312,3 +312,6 @@
 ## 2026-11-03 - Submit Button Active State Affordance
 **Learning:** Interactive buttons (like `input[type='submit']`) lack default visual affordance for the physical act of clicking or tapping in unstyled HTML forms. While hover states and custom colors help, the lack of tactile feedback during the actual click makes the interface feel unresponsive.
 **Action:** Always ensure an explicit `:active` state is defined (e.g., `transform: scale(0.98);` or a darkened background) for primary buttons to provide immediate tactile visual feedback and improve perceived responsiveness.
+## 2024-05-18 - Added :active state to Submit Buttons
+**Learning:** Interactive buttons (like `input[type='submit']`) lack default visual affordance for the physical act of clicking or tapping. Always ensure an explicit `:active` state is defined (e.g., `transform: scale(0.98);` or a darkened background) to provide immediate tactile visual feedback.
+**Action:** When implementing or reviewing CSS for interactive buttons, verify that an `:active` state is present to enhance tactile feedback.
