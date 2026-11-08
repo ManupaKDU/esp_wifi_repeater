@@ -303,3 +303,18 @@
 ## 2024-10-27 - Dynamic required and placeholder attributes for dynamically disabled fields
 **Learning:** When a form field (like a password input) is dynamically disabled (e.g., when 'Open' security is selected instead of 'WPA2'), leaving the `required` attribute active and keeping a placeholder like 'Min 8 chars' creates cognitive dissonance and accessibility issues. Screen readers may announce the field in a confusing state, and the UI implies an action is needed on a field the user cannot interact with.
 **Action:** Always dynamically toggle the HTML5 `required` attribute (e.g., `input.required = !isDisabled`) and explicitly update the `placeholder` (e.g., to 'Not required') to match the new semantic and visual state of the disabled input.
+## 2026-11-02 - Correct Page Titles for Alternative Compilation Variants
+**Learning:** When HTML is embedded inside C macros, different compilation variants (like NAT Router vs. WiFi Repeater) often share chunks of HTML layout. Forgetting to conditionally update the `<title>` and `<h1>` tags for the alternate variants can cause severe user confusion (e.g., users connecting to a "Repeater" interface but seeing "NAT Router Config"). Additionally, shared utility pages (like a lock screen) should use generic titles (e.g., "Device Config") rather than mode-specific titles.
+**Action:** When working with embedded HTML macros, ensure that page titles (`<title>`, `<h1>`, and `document.title`) accurately reflect the specific firmware variant being served, or are made generically applicable for shared pages.
+## 2024-11-03 - [Active State Affordance]
+**Learning:** Native unstyled buttons (like `input[type='submit']`) and even custom-styled ones without an `:active` state lack the tactile visual feedback users expect during the physical act of clicking or tapping.
+**Action:** Always verify that interactive buttons include an explicit `:active` state (e.g., `transform: scale(0.98);`) to provide immediate, satisfying visual feedback during interaction.
+## 2026-11-03 - Submit Button Active State Affordance
+**Learning:** Interactive buttons (like `input[type='submit']`) lack default visual affordance for the physical act of clicking or tapping in unstyled HTML forms. While hover states and custom colors help, the lack of tactile feedback during the actual click makes the interface feel unresponsive.
+**Action:** Always ensure an explicit `:active` state is defined (e.g., `transform: scale(0.98);` or a darkened background) for primary buttons to provide immediate tactile visual feedback and improve perceived responsiveness.
+## 2024-05-18 - Added :active state to Submit Buttons
+**Learning:** Interactive buttons (like `input[type='submit']`) lack default visual affordance for the physical act of clicking or tapping. Always ensure an explicit `:active` state is defined (e.g., `transform: scale(0.98);` or a darkened background) to provide immediate tactile visual feedback.
+**Action:** When implementing or reviewing CSS for interactive buttons, verify that an `:active` state is present to enhance tactile feedback.
+## 2026-10-27 - Submit Button Active State Affordance
+**Learning:** Interactive buttons (like `input[type='submit']`) lack default visual affordance for the physical act of clicking or tapping. Users may feel the interface is unresponsive if there is no immediate tactile visual feedback on click.
+**Action:** Always ensure an explicit `:active` state is defined (e.g., `transform: scale(0.98);` or a darkened background) on primary buttons to provide immediate tactile visual feedback.
