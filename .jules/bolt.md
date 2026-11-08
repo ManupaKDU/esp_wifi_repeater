@@ -259,3 +259,6 @@
 ## 2024-05-18 - Early return from parsing when match fails
 **Learning:** In string parsing functions that iterate over several segments to check for an exact match (e.g. `mdns_match_hostname`), continuing to parse and call comparison functions (`label_iequal`) after a mismatch has already been determined wastes CPU cycles.
 **Action:** Add an early continue/skip condition to string sequence parsers. Once the `match` flag becomes false, skip the expensive comparison logic for the remaining segments.
+## 2026-08-16 - Replace Software Modulo with Subtraction
+**Learning:** C/ESP8266 Performance Pattern: Operations like `% 1000000` and `% 1000` invoke the software division subroutine on the ESP8266, which adds CPU overhead. When the quotient is already available or the divisor is constant, these can be replaced by subtraction.
+**Action:** Replace expensive modulo operations with equivalent subtraction (e.g. `val - (val / 1000) * 1000`) or simplified arithmetic where appropriate.
