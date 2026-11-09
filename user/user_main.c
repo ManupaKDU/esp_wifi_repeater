@@ -3400,7 +3400,7 @@ static void ICACHE_FLASH_ATTR web_send_stats_json(struct espconn *pespconn)
         os_sprintf(rssi_str, "%d", rssi);
     else
         os_strcpy(rssi_str, "null");
-    mac_2_buff(bssid_str, uplink_bssid);
+    os_sprintf(bssid_str, MACSTR, MAC2STR(uplink_bssid));
 
     os_sprintf(buf, "HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nCache-Control: no-cache\r\n\r\n"
                     "{\"version\":\"%s\",\"uptime_s\":%u,\"reset_reason\":%d,\"free_heap\":%u,\"vdd_mv\":%u,"
