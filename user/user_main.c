@@ -1437,12 +1437,11 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
             uint32_t time = (uint32_t)(get_long_systime() / 1000000);
             int16_t i;
 
+            uint32_t hours = time / 3600;
             /* ⚡ Bolt: Replace expensive software modulo with equivalent multiplication and subtraction since the quotient is already calculated */
-            uint32_t t_h = time / 3600;
-            uint32_t t_rem = time - (t_h * 3600);
-            uint32_t t_m = t_rem / 60;
-            uint32_t t_s = t_rem - (t_m * 60);
-            to_console_len(response, os_sprintf(response, "System uptime: %d:%02d:%02d\r\n", t_h, t_m, t_s));
+            uint32_t time_rem = time - (hours * 3600);
+            uint32_t mins = time_rem / 60;
+            to_console_len(response, os_sprintf(response, "System uptime: %d:%02d:%02d\r\n", hours, mins, time_rem - (mins * 60)));
 #if DAILY_LIMIT
             uint32_t current_stamp = sntp_get_current_timestamp();
             to_console_len(response, os_sprintf(response, "Local time: %s\r", current_stamp ? sntp_get_real_time(current_stamp) : "no NTP sync\n"));
@@ -1459,10 +1458,9 @@ to_console_len(response, os_sprintf_flash(response, "set [network|dns|ip|netmask
                            (uint32_t)(Bytes_per_day >> 10), config.daily_limit));
             }
 #endif
+            uint32_t Vdd_v = Vdd / 1000;
             /* ⚡ Bolt: Replace expensive software modulo with equivalent multiplication and subtraction since the quotient is already calculated */
-            uint32_t v_v = Vdd / 1000;
-            uint32_t v_mv = Vdd - (v_v * 1000);
-            to_console_len(response, os_sprintf(response, "Power supply: %d.%03d V\r\n", v_v, v_mv));
+            to_console_len(response, os_sprintf(response, "Power supply: %d.%03d V\r\n", Vdd_v, Vdd - (Vdd_v * 1000)));
 #ifdef USER_GPIO_OUT
             to_console_len(response, os_sprintf(response, "GPIO output status: %d\r\n", config.gpio_out_status));
 #endif
@@ -3408,7 +3406,7 @@ static void ICACHE_FLASH_ATTR web_send_stats_json(struct espconn *pespconn)
         os_sprintf(rssi_str, "%d", rssi);
     else
         os_strcpy(rssi_str, "null");
-    mac_2_buff(bssid_str, uplink_bssid);
+    os_sprintf(bssid_str, MACSTR, MAC2STR(uplink_bssid));
 
     os_sprintf(buf, "HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nCache-Control: no-cache\r\n\r\n"
                     "{\"version\":\"%s\",\"uptime_s\":%u,\"reset_reason\":%d,\"free_heap\":%u,\"vdd_mv\":%u,"

@@ -318,3 +318,6 @@
 ## 2026-10-27 - Submit Button Active State Affordance
 **Learning:** Interactive buttons (like `input[type='submit']`) lack default visual affordance for the physical act of clicking or tapping. Users may feel the interface is unresponsive if there is no immediate tactile visual feedback on click.
 **Action:** Always ensure an explicit `:active` state is defined (e.g., `transform: scale(0.98);` or a darkened background) on primary buttons to provide immediate tactile visual feedback.
+## 2026-11-04 - Disabled Input Label Affordance
+**Learning:** Using `label:has(input:disabled)` only styles the label that directly wraps a disabled input. However, in table-based forms, the primary descriptive `<label for="...">` is often in a separate `<td>` and fails to inherit the disabled visual affordance, causing user confusion.
+**Action:** When working with table-structured forms, use `tr:has(input:disabled) label` to ensure all associated labels within the same row (both the `for=` label and any wrapper labels) correctly receive the disabled state (`opacity: 0.6; cursor: not-allowed; pointer-events: none;`).
