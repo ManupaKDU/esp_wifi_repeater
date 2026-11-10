@@ -3400,11 +3400,9 @@ static void ICACHE_FLASH_ATTR web_send_stats_json(struct espconn *pespconn)
         os_sprintf(rssi_str, "%d", rssi);
     else
         os_strcpy(rssi_str, "null");
-    mac_2_buff(bssid_str, uplink_bssid);
-
     os_sprintf(buf, "HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nCache-Control: no-cache\r\n\r\n"
                     "{\"version\":\"%s\",\"uptime_s\":%u,\"reset_reason\":%d,\"free_heap\":%u,\"vdd_mv\":%u,"
-                    "\"connected\":%s,\"rssi\":%s,\"bssid\":\"%s\",\"channel\":%d,\"sta_ip\":\"" IPSTR "\","
+                    "\"connected\":%s,\"rssi\":%s,\"bssid\":\"" MACSTR "\",\"channel\":%d,\"sta_ip\":\"" IPSTR "\","
                     "\"clients\":%d,\"kib_in\":%u,\"kib_out\":%u,\"packets_in\":%u,\"packets_out\":%u,"
                     "\"min_free_heap\":%u"
 #ifdef REPEATER_MODE
