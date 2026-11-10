@@ -34,7 +34,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
-<td><label for='sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><label for='sta_ssid'>SSID <span aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='sta_ssid' type='text' name='ssid' value='%s' required maxlength='32' placeholder='e.g. MyHomeWiFi' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
@@ -60,11 +60,11 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
-<td><label for='ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><label for='ap_ssid'>SSID <span aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='ap_ssid' type='text' name='ap_ssid' value='%s' required maxlength='32' placeholder='e.g. ESP_Repeater' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
-<td><label for='ap_password'>Password <span id='ap_pwd_req' aria-hidden='true'>*</span>:</label></td>\
+<td><label for='ap_password'>Password <span id='ap_pwd_req' aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='ap_show' type='checkbox' aria-controls='ap_password' aria-label='Toggle AP password visibility' title='Toggle password visibility' onclick=\"document.getElementById('ap_password').type = this.checked ? 'text' : 'password'; document.getElementById('ap_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='ap_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
@@ -80,7 +80,7 @@ setTimeout(\"location.href = '/'\",10000);\
 </td>\
 </tr>\
 <tr>\
-<td><label for='ap_network'>Subnet <span aria-hidden='true'>*</span>:</label></td>\
+<td><label for='ap_network'>Subnet <span aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='ap_network' type='text' name='network' value='%d.%d.%d.%d' required pattern='^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$' title='Valid IPv4 address' aria-describedby='ap_network_help' inputmode='decimal' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
@@ -162,7 +162,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
-<td><label for='repeater_sta_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><label for='repeater_sta_ssid'>SSID <span aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='repeater_sta_ssid' type='text' name='ssid' value='%s' required maxlength='32' placeholder='e.g. MyHomeWiFi' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
@@ -181,11 +181,11 @@ setTimeout(\"location.href = '/'\",10000);\
 <form action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]');if(b){setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);}\">\
 <table role='presentation'>\
 <tr>\
-<td><label for='repeater_ap_ssid'>SSID <span aria-hidden='true'>*</span>:</label></td>\
+<td><label for='repeater_ap_ssid'>SSID <span aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='repeater_ap_ssid' type='text' name='ap_ssid' value='%s' required maxlength='32' placeholder='e.g. ESP_Repeater' autocorrect='off' autocapitalize='none' spellcheck='false'/></td>\
 </tr>\
 <tr>\
-<td><label for='repeater_ap_password'>Password <span id='repeater_ap_pwd_req' aria-hidden='true'>*</span>:</label></td>\
+<td><label for='repeater_ap_password'>Password <span id='repeater_ap_pwd_req' aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='repeater_ap_password' type='password' name='ap_password' value='%s' required minlength='8' maxlength='63' placeholder='Min 8 chars' aria-describedby='repeater_ap_pwd_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input id='repeater_ap_show' type='checkbox' aria-controls='repeater_ap_password' aria-label='Toggle AP password visibility' title='Toggle password visibility' onclick=\"document.getElementById('repeater_ap_password').type = this.checked ? 'text' : 'password'; document.getElementById('repeater_ap_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='repeater_ap_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
@@ -273,7 +273,7 @@ setTimeout(\"location.href = '/'\",1000);\
 <form autocomplete='off' action='' method='GET' onsubmit=\"var b=this.querySelector('input[type=submit]'); setTimeout(function(){b.value='Processing...';b.disabled=true;b.style.setProperty('cursor','wait','important');},10);\">\
 <table role='presentation'>\
 <tr>\
-<td><label for='unlock_password'>Password <span aria-hidden='true'>*</span>:</label></td>\
+<td><label for='unlock_password'>Password <span aria-hidden='true' title='Required'>*</span>:</label></td>\
 <td><input id='unlock_password' type='password' name='unlock_password' autofocus required maxlength='63' placeholder='STA password' aria-describedby='unlock_help' autocorrect='off' autocapitalize='none' spellcheck='false'/> <label><input type='checkbox' aria-controls='unlock_password' aria-label='Toggle unlock password visibility' title='Toggle password visibility' onclick=\"document.getElementById('unlock_password').type = this.checked ? 'text' : 'password'; document.getElementById('unlock_show_text').innerHTML = this.checked ? 'Hide' : 'Show'\"> <span id='unlock_show_text' aria-hidden='true'>Show</span></label></td>\
 </tr>\
 <tr>\
